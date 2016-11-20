@@ -1,0 +1,47 @@
+﻿<Page
+    x:Class="StylusAppU.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:StylusAppU"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:StylusAppU.ViewModel"
+    xmlns:view="using:StylusAppU.View"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance vm:MainViewModel}">
+
+    <Grid Background="LightGray">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel 
+            Orientation="Horizontal">
+
+            <Button 
+                Margin="5"
+                Background="White"
+                Command="{Binding SaveCommand}"
+                CommandParameter="{Binding ElementName=Canvas}"
+                Content="Save" />
+
+            <Button 
+                Margin="5"
+                Background="White"
+                Command="{Binding LoadCommand}"
+                CommandParameter="{Binding ElementName=Canvas}"
+                Content="Load" />
+
+            <Button 
+                Margin="5"
+                Background="White"
+                Command="{Binding CreateNotebookCommand}"
+                Content="Create Notebook" />
+
+        </StackPanel>
+
+        <view:PageView />
+
+    </Grid>
+</Page>
