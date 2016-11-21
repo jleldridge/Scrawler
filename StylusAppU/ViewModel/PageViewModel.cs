@@ -1,5 +1,7 @@
-﻿using StylusAppU.Data.Data;
+﻿using System;
+using StylusAppU.Data.Data;
 using Utils.ViewModel;
+using Windows.Storage;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -39,7 +41,19 @@ namespace StylusAppU.ViewModel
         }
 
         public async void LoadStrokes()
-        {   
+        {
+            if (!string.IsNullOrWhiteSpace(_page.InkFileName))
+            {
+                var file = await ApplicationData.Current.LocalFolder.TryGetItemAsync(_page.InkFileName);
+                if (file != null)
+                {
+                    // todo load strokes from _page
+                }
+                else
+                {
+                    StrokeContainer = new InkStrokeContainer();
+                }
+            }
         }
 
         public async void SaveStrokes()

@@ -9,10 +9,48 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance vm:NotebookViewModel}">
 
+    <UserControl.Resources>
+        <ResourceDictionary>
+
+            <Style TargetType="Button">
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="Background" Value="White" />
+            </Style>
+            
+            <Style TargetType="TextBlock">
+                <Setter Property="Margin" Value="5" />
+            </Style>
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
     <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         
         <local:PageView 
             DataContext="{Binding CurrentPage}"/>
+
+        <StackPanel 
+            HorizontalAlignment="Center"
+            Orientation="Horizontal"
+            Grid.Row="1">
+
+            <Button
+                Content="Previous Page" 
+                Command="{Binding PreviousPageCommand}"/>
+
+            <TextBlock 
+                Text="{Binding CurrentPageNumber}"/>
+
+            <Button
+                Content="Next Page" 
+                Command="{Binding NextPageCommand}"/>
+
+        </StackPanel>
         
     </Grid>
     

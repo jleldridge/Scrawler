@@ -1,4 +1,5 @@
 ﻿using StylusAppU.Data.Data;
+using Utils.Commands;
 using Utils.ViewModel;
 
 namespace StylusAppU.ViewModel
@@ -7,6 +8,9 @@ namespace StylusAppU.ViewModel
     {
         private Notebook _notebook;
         private int _currentPageNumber;
+
+        private RelayCommand _prevPageCommand;
+        private RelayCommand _nextPageCommand;
 
         public NotebookViewModel(Notebook notebook)
         {
@@ -38,6 +42,46 @@ namespace StylusAppU.ViewModel
                 OnPropertyChanged();
                 OnPropertyChanged("CurrentPage");
             }
+        }
+
+        public RelayCommand PreviousPageCommand
+        {
+            get
+            {
+                return _prevPageCommand ?? (_prevPageCommand = new RelayCommand(
+                _ =>
+                {
+                    if (_currentPageNumber > 0)
+                    {
+                        CurrentPageNumber--;
+                    }
+                }));
+            }
+        }
+
+        public RelayCommand NextPageCommand
+        {
+            get
+            {
+                return _nextPageCommand ?? (_nextPageCommand = new RelayCommand(
+                    _ => 
+                    {
+                        if (_currentPageNumber < _notebook.Pages.Count - 1)
+                        {
+                            CurrentPageNumber++;
+                        }
+                        else if (_currentPageNumber == _notebook.Pages.Count - 1)
+                        {
+                            CreateNewPage();
+                        }
+                    }));
+            }
+        }
+
+        public void CreateNewPage()
+        {
+            _notebook.AddPage();
+            CurrentPageNumber = _notebook.Pages.Count;
         }
     }
 }
