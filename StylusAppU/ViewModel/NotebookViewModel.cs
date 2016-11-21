@@ -1,4 +1,6 @@
 ﻿using StylusAppU.Data.Data;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Utils.Commands;
 using Utils.ViewModel;
 
@@ -15,6 +17,11 @@ namespace StylusAppU.ViewModel
         public NotebookViewModel(Notebook notebook)
         {
             _notebook = notebook;
+            Pages = new ObservableCollection<PageViewModel>();
+            foreach (var page in _notebook.Pages)
+            {
+                Pages.Add(new PageViewModel(page));
+            }
         }
 
         public string Name
@@ -29,8 +36,12 @@ namespace StylusAppU.ViewModel
 
         public PageViewModel CurrentPage
         {
-            get { return new PageViewModel(_notebook.Pages[_currentPageNumber]); }
+            // be sure to use field for indexing, since it is 0 based
+            // and property is 1 based.
+            get { return Pages[_currentPageNumber]; }
         }
+
+        public ObservableCollection<PageViewModel> Pages { get; private set; }
 
         // expose the property as 1 based for display, but keep the field zero-based for indexing.
         public int CurrentPageNumber
@@ -81,6 +92,7 @@ namespace StylusAppU.ViewModel
         public void CreateNewPage()
         {
             _notebook.AddPage();
+            Pages.Add(new PageViewModel(_notebook.Pages.Last()));
             CurrentPageNumber = _notebook.Pages.Count;
         }
     }
