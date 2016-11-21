@@ -102,6 +102,9 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\NotebookViewModel.cs" />
     <Compile Include="ViewModel\PageViewModel.cs" />
+    <Compile Include="View\NotebookView.xaml.cs">
+      <DependentUpon>NotebookView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\PageView.xaml.cs">
       <DependentUpon>PageView.xaml</DependentUpon>
     </Compile>
@@ -129,6 +132,10 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\NotebookView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\PageView.xaml">
       <SubType>Designer</SubType>
