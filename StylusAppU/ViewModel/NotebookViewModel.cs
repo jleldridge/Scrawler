@@ -36,6 +36,7 @@ namespace StylusAppU.ViewModel
             {
                 _currentPageNumber = value - 1;
                 OnPropertyChanged();
+                OnPropertyChanged("CurrentPage");
             }
         }
     }

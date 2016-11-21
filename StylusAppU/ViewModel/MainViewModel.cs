@@ -44,11 +44,6 @@ namespace StylusAppU.ViewModel
             CurrentNotebook = new NotebookViewModel(notebook);
         }
 
-        public void UpdateCurrentPage()
-        {
-            
-        }
-
         private async void SaveNotebook(object commandArg)
         {
         }
