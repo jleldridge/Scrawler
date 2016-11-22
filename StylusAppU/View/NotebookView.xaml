@@ -14,11 +14,15 @@
 
             <Style TargetType="Button">
                 <Setter Property="Margin" Value="5" />
-                <Setter Property="Background" Value="White" />
+                <Setter Property="Background" Value="ForestGreen" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
             
             <Style TargetType="TextBlock">
                 <Setter Property="Margin" Value="5" />
+                <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
 
         </ResourceDictionary>
@@ -35,19 +39,26 @@
             DataContext="{Binding CurrentPage}"/>
 
         <StackPanel 
+            Background="CadetBlue"
             HorizontalAlignment="Center"
             Orientation="Horizontal"
             Grid.Row="1">
 
             <Button
-                Content="Previous Page" 
+                Width="75"
+                Content="&lt;"
                 Command="{Binding PreviousPageCommand}"/>
 
-            <TextBlock 
+            <TextBlock
+                Width="50"
+                Height="30"
+                TextAlignment="Center"
+                FontWeight="Bold"
                 Text="{Binding CurrentPageNumber}"/>
 
             <Button
-                Content="Next Page" 
+                Width="75"
+                Content="&gt;"
                 Command="{Binding NextPageCommand}"/>
 
         </StackPanel>

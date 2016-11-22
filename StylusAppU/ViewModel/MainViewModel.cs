@@ -12,6 +12,7 @@ namespace StylusAppU.ViewModel
 
         public MainViewModel()
         {
+            CreateNewNotebook();
         }
 
         public NotebookViewModel CurrentNotebook
@@ -37,7 +38,7 @@ namespace StylusAppU.ViewModel
             }
         }
 
-        private async void CreateNewNotebook()
+        private void CreateNewNotebook()
         {
             var notebook = new Notebook("NewNotebook");
             notebook.AddPage();
