@@ -1,4 +1,5 @@
 ﻿using StylusAppU.Data.Data;
+using StylusAppU.Data.Serialization;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Utils.Commands;
@@ -10,6 +11,7 @@ namespace StylusAppU.ViewModel
     {
         private Notebook _notebook;
         private int _currentPageNumber;
+        private NotebookSerializer _notebookSerializer;
 
         private RelayCommand _prevPageCommand;
         private RelayCommand _nextPageCommand;
@@ -22,6 +24,9 @@ namespace StylusAppU.ViewModel
             {
                 Pages.Add(new PageViewModel(page));
             }
+
+            _notebookSerializer = new NotebookSerializer(notebook);
+            _notebookSerializer.InitializeLocalNotebookFolder();
         }
 
         public string Name
