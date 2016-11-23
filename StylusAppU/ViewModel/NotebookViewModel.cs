@@ -1,4 +1,5 @@
-﻿using StylusAppU.Data.Data;
+﻿using System;
+using StylusAppU.Data.Data;
 using StylusAppU.Data.Serialization;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -27,6 +28,22 @@ namespace StylusAppU.ViewModel
 
             _notebookSerializer = new NotebookSerializer(notebook);
             _notebookSerializer.InitializeLocalNotebookFolder();
+        }
+
+        public NotebookViewModel(NotebookSerializer notebookSerializer)
+        {
+            _notebookSerializer = notebookSerializer;
+            _notebook = notebookSerializer.Notebook;
+            Pages = new ObservableCollection<PageViewModel>();
+            foreach (var page in _notebook.Pages)
+            {
+                Pages.Add(new PageViewModel(page));
+            }
+        }
+
+        public Guid NotebookGuid
+        {
+            get { return _notebook.Guid; }
         }
 
         public string Name
@@ -99,6 +116,16 @@ namespace StylusAppU.ViewModel
             _notebook.AddPage();
             Pages.Add(new PageViewModel(_notebook.Pages.Last()));
             CurrentPageNumber = _notebook.Pages.Count;
+        }
+
+        public void SaveNotebook()
+        {
+            _notebookSerializer.SaveNotebook();
+            for (int i = 0; i < Pages.Count; i++)
+            {
+                var page = _notebook.Pages[i];
+                _notebookSerializer.SavePage(page, Pages[i].StrokeContainer);
+            }
         }
     }
 }

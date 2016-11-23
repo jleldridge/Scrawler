@@ -1,5 +1,7 @@
 ﻿using StylusAppU.Data.Data;
 using System.Windows.Input;
+using Windows.Storage;
+using StylusAppU.Data.Serialization;
 using Utils.Commands;
 using Utils.ViewModel;
 
@@ -12,7 +14,17 @@ namespace StylusAppU.ViewModel
 
         public MainViewModel()
         {
-            CreateNewNotebook();
+            if (ApplicationData.Current.LocalSettings.Values.ContainsKey(NotebookSerializer.CurrentNotebookKey))
+            {
+                var notebookGuid = ApplicationData.Current.LocalSettings.Values[NotebookSerializer.CurrentNotebookKey] as string;
+                var notebookSerializer = new NotebookSerializer(notebookGuid);
+                CurrentNotebook = new NotebookViewModel(notebookSerializer);
+            }
+            else
+            {
+                CreateNewNotebook();
+                ApplicationData.Current.LocalSettings.Values.Add(NotebookSerializer.CurrentNotebookKey, CurrentNotebook.NotebookGuid.ToString());
+            }
         }
 
         public NotebookViewModel CurrentNotebook
@@ -47,6 +59,7 @@ namespace StylusAppU.ViewModel
 
         private async void SaveNotebook(object commandArg)
         {
+            CurrentNotebook.SaveNotebook();
         }
 
         public async void LoadNotebook(object commandParam)

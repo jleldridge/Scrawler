@@ -16,13 +16,36 @@ namespace StylusAppU.Data.Serialization
     {
         public static readonly string InkMetadataSubfolderName = ".ink";
         public static readonly string BackgroundMetadataSubfolderName = ".backgrounds";
+        public static readonly string NotebookFileName = "Notebook.json";
+        public static readonly string CurrentNotebookKey = "CurrentNotebook";
+
         private Notebook _notebook;
         private StorageFolder _notebookFolder, _inkMetadataFolder, _backgroundMetadataFolder;
+
+        #region Constructor
 
         public NotebookSerializer(Notebook notebook)
         {
             _notebook = notebook;
         }
+
+        public NotebookSerializer(string localNotebookFolderPath)
+        {
+            var appFolder = ApplicationData.Current.LocalFolder;
+            _notebookFolder = appFolder.GetFolderAsync(localNotebookFolderPath).GetResults();
+            var notebookFile = _notebookFolder.GetFileAsync(NotebookFileName).GetResults();
+            _notebook = DeserializeNotebook(notebookFile).Result;
+        }
+
+        #endregion
+
+        #region properties
+
+        public Notebook Notebook { get { return _notebook; } }
+
+        #endregion
+
+        #region Public Methods
 
         public async void InitializeLocalNotebookFolder()
         {
@@ -36,7 +59,7 @@ namespace StylusAppU.Data.Serialization
 
         public async void SaveNotebook()
         {
-            var notebookFile = await _notebookFolder.CreateFileAsync(_notebook.Name, CreationCollisionOption.ReplaceExisting);
+            var notebookFile = await _notebookFolder.CreateFileAsync(NotebookFileName, CreationCollisionOption.ReplaceExisting);
             SerializeNotebook(_notebook, notebookFile);
         }
 
@@ -48,14 +71,40 @@ namespace StylusAppU.Data.Serialization
             //var backgroundFile = await _inkMetadataFolder.CreateFileAsync(page.BackgroundFileName, CreationCollisionOption.ReplaceExisting);
         }
 
-        private static void SerializeNotebook(Notebook notebook, StorageFile file)
+        public async Task<InkStrokeContainer> LoadPage(Page page)
         {
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Notebook));
+            var inkFile = await _inkMetadataFolder.GetFileAsync(page.InkFileName);
+            var strokeContainer = await DeserializeInkCanvas(inkFile);
+
+            return strokeContainer;
         }
 
-        private static Notebook DeserializeNotebook(StorageFile file)
+        #endregion
+
+        #region Private Methods
+
+        private async void SerializeNotebook(Notebook notebook, StorageFile file)
         {
-            return null;
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Notebook));
+
+            var stream = await file.OpenStreamForWriteAsync();
+            serializer.WriteObject(stream, notebook);
+            await stream.FlushAsync();
+            stream.Dispose();
+        }
+
+        private async Task<Notebook> DeserializeNotebook(StorageFile file)
+        {
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Notebook));
+
+            var stream = await file.OpenStreamForWriteAsync();
+            var notebook = serializer.ReadObject(stream) as Notebook;
+            if (notebook == null)
+            {
+                throw new FileLoadException("Could not load a notebook from file.", file.Path);
+            }
+
+            return notebook;
         }
 
         private static async Task<bool> SerializeInkCanvas(InkStrokeContainer strokeContainer, StorageFile file)
@@ -87,16 +136,18 @@ namespace StylusAppU.Data.Serialization
             return true;
         }
 
-        private static async Task<InkStrokeContainer> DeserializeInkCanvas(ZipArchiveEntry file)
+        private static async Task<InkStrokeContainer> DeserializeInkCanvas(StorageFile file)
         {
             var strokeContainer = new InkStrokeContainer();
             // Open a file stream for reading.
             // Read from file.
-            using (var inputStream = file.Open().AsInputStream())
+            using (var inputStream = await file.OpenAsync(FileAccessMode.Read))
             {
                 await strokeContainer.LoadAsync(inputStream);
             }
             return strokeContainer;
         }
+
+        #endregion
     }
 }
