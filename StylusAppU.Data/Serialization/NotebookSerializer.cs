@@ -29,12 +29,8 @@ namespace StylusAppU.Data.Serialization
             _notebook = notebook;
         }
 
-        public NotebookSerializer(string localNotebookFolderPath)
+        public NotebookSerializer()
         {
-            var appFolder = ApplicationData.Current.LocalFolder;
-            _notebookFolder = appFolder.GetFolderAsync(localNotebookFolderPath).GetResults();
-            var notebookFile = _notebookFolder.GetFileAsync(NotebookFileName).GetResults();
-            _notebook = DeserializeNotebook(notebookFile).Result;
         }
 
         #endregion
@@ -46,6 +42,16 @@ namespace StylusAppU.Data.Serialization
         #endregion
 
         #region Public Methods
+
+        public async void LoadLocalNotebookFolder(string localNotebookFolderPath)
+        {
+            var appFolder = ApplicationData.Current.LocalFolder;
+            _notebookFolder = await appFolder.GetFolderAsync(localNotebookFolderPath);
+            _inkMetadataFolder = await _notebookFolder.GetFolderAsync(InkMetadataSubfolderName);
+            _backgroundMetadataFolder = await _notebookFolder.GetFolderAsync(BackgroundMetadataSubfolderName);
+            var notebookFile = await _notebookFolder.GetFileAsync(NotebookFileName);
+            _notebook = DeserializeNotebook(notebookFile).Result;
+        }
 
         public async void InitializeLocalNotebookFolder()
         {
@@ -63,7 +69,7 @@ namespace StylusAppU.Data.Serialization
             SerializeNotebook(_notebook, notebookFile);
         }
 
-        public async void SavePage(Page page, InkStrokeContainer strokeContainer)
+        public async Task SavePage(Page page, InkStrokeContainer strokeContainer)
         {
             var inkFile = await _inkMetadataFolder.CreateFileAsync(page.InkFileName, CreationCollisionOption.ReplaceExisting);
             await SerializeInkCanvas(strokeContainer, inkFile);
@@ -96,9 +102,12 @@ namespace StylusAppU.Data.Serialization
         private async Task<Notebook> DeserializeNotebook(StorageFile file)
         {
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Notebook));
+            Notebook notebook = null;
+            using (var stream = await file.OpenStreamForWriteAsync())
+            {
+                notebook = serializer.ReadObject(stream) as Notebook;
+            }
 
-            var stream = await file.OpenStreamForWriteAsync();
-            var notebook = serializer.ReadObject(stream) as Notebook;
             if (notebook == null)
             {
                 throw new FileLoadException("Could not load a notebook from file.", file.Path);
@@ -111,29 +120,27 @@ namespace StylusAppU.Data.Serialization
         {
             // Prevent updates to the file until updates are 
             // finalized with call to CompleteUpdatesAsync.
-            //CachedFileManager.DeferUpdates(file);
+            CachedFileManager.DeferUpdates(file);
             // Open a file stream for writing.
-            //using (IOutputStream outputStream = file.Open().AsOutputStream())
-            //{
-            //    // Write the ink strokes to the output stream.
-            //    await strokeContainer.SaveAsync(outputStream);
-            //    await outputStream.FlushAsync();
-            //}
-            //stream.Dispose();
+            using (var outputStream = file.OpenAsync(FileAccessMode.ReadWrite).GetResults().GetOutputStreamAt(0))
+            {
+                // Write the ink strokes to the output stream.
+                await strokeContainer.SaveAsync(outputStream);
+                await outputStream.FlushAsync();
+            }
 
             // Finalize write so other apps can update file.
-            //Windows.Storage.Provider.FileUpdateStatus status =
-            //    await CachedFileManager.CompleteUpdatesAsync(file);
+            Windows.Storage.Provider.FileUpdateStatus status =
+                await CachedFileManager.CompleteUpdatesAsync(file);
 
-            //if (status == Windows.Storage.Provider.FileUpdateStatus.Complete)
-            //{
-            //    return true;
-            //}
-            //else
-            //{
-            //    return false;
-            //}
-            return true;
+            if (status == Windows.Storage.Provider.FileUpdateStatus.Complete)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private static async Task<InkStrokeContainer> DeserializeInkCanvas(StorageFile file)

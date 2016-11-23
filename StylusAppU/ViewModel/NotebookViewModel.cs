@@ -23,7 +23,7 @@ namespace StylusAppU.ViewModel
             Pages = new ObservableCollection<PageViewModel>();
             foreach (var page in _notebook.Pages)
             {
-                Pages.Add(new PageViewModel(page));
+                Pages.Add(new PageViewModel(page, _notebookSerializer));
             }
 
             _notebookSerializer = new NotebookSerializer(notebook);
@@ -37,7 +37,7 @@ namespace StylusAppU.ViewModel
             Pages = new ObservableCollection<PageViewModel>();
             foreach (var page in _notebook.Pages)
             {
-                Pages.Add(new PageViewModel(page));
+                Pages.Add(new PageViewModel(page, _notebookSerializer));
             }
         }
 
@@ -114,17 +114,17 @@ namespace StylusAppU.ViewModel
         public void CreateNewPage()
         {
             _notebook.AddPage();
-            Pages.Add(new PageViewModel(_notebook.Pages.Last()));
+            Pages.Add(new PageViewModel(_notebook.Pages.Last(), _notebookSerializer));
             CurrentPageNumber = _notebook.Pages.Count;
         }
 
-        public void SaveNotebook()
+        public async void SaveNotebook()
         {
             _notebookSerializer.SaveNotebook();
             for (int i = 0; i < Pages.Count; i++)
             {
                 var page = _notebook.Pages[i];
-                _notebookSerializer.SavePage(page, Pages[i].StrokeContainer);
+                await _notebookSerializer.SavePage(page, Pages[i].StrokeContainer);
             }
         }
     }

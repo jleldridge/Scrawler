@@ -4,6 +4,7 @@ using Utils.ViewModel;
 using Windows.Storage;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Media.Imaging;
+using StylusAppU.Data.Serialization;
 
 namespace StylusAppU.ViewModel
 {
@@ -12,10 +13,12 @@ namespace StylusAppU.ViewModel
         private Page _page;
         private BitmapImage _backgroundImage;
         private InkStrokeContainer _strokeContainer;
+        private NotebookSerializer _notebookSerializer;
 
-        public PageViewModel(Page page)
+        public PageViewModel(Page page, NotebookSerializer notebookSerializer)
         {
             _page = page;
+            _notebookSerializer = notebookSerializer;
             LoadStrokes();
             LoadBackground();
         }
@@ -47,17 +50,13 @@ namespace StylusAppU.ViewModel
                 var file = await ApplicationData.Current.LocalFolder.TryGetItemAsync(_page.InkFileName);
                 if (file != null)
                 {
-                    // todo load strokes from _page
+                    StrokeContainer = await _notebookSerializer.LoadPage(_page);
                 }
                 else
                 {
                     StrokeContainer = new InkStrokeContainer();
                 }
             }
-        }
-
-        public async void SaveStrokes()
-        {
         }
 
         public void LoadBackground()
