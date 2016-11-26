@@ -20,8 +20,7 @@ namespace StylusAppU.ViewModel
         {
             _page = page;
             _notebookSerializer = notebookSerializer;
-            LoadStrokes();
-            LoadBackground();
+            //LoadBackground();
         }
 
         public BitmapImage BackgroundImage

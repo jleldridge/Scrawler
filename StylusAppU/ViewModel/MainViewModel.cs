@@ -80,6 +80,7 @@ namespace StylusAppU.ViewModel
                 var notebookSerializer = new NotebookSerializer();
                 await notebookSerializer.LoadLocalNotebookFolder(notebookGuid);
                 CurrentNotebook = new NotebookViewModel(notebookSerializer);
+                await CurrentNotebook.LoadPages();
             }
         }
     }

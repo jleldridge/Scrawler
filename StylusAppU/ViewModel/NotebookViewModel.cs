@@ -36,10 +36,6 @@ namespace StylusAppU.ViewModel
             _notebookSerializer = notebookSerializer;
             _notebook = notebookSerializer.Notebook;
             Pages = new ObservableCollection<PageViewModel>();
-            foreach (var page in _notebook.Pages)
-            {
-                Pages.Add(new PageViewModel(page, _notebookSerializer));
-            }
         }
 
         public Guid NotebookGuid
@@ -109,6 +105,19 @@ namespace StylusAppU.ViewModel
                             CreateNewPage();
                         }
                     }));
+            }
+        }
+
+        public async Task LoadPages()
+        {
+            foreach (var page in _notebook.Pages)
+            {
+                Pages.Add(new PageViewModel(page, _notebookSerializer));
+            }
+
+            foreach (var page in Pages)
+            {
+                await page.LoadStrokes();
             }
         }
 
