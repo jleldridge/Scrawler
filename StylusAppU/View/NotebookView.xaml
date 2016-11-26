@@ -56,6 +56,20 @@
                 FontWeight="Bold"
                 Text="{Binding CurrentPageNumber}"/>
 
+            <TextBlock
+                Width="50"
+                Height="30"
+                TextAlignment="Center"
+                FontWeight="Bold"
+                Text=" of "/>
+
+            <TextBlock
+                Width="50"
+                Height="30"
+                TextAlignment="Center"
+                FontWeight="Bold"
+                Text="{Binding Pages.Count}"/>
+
             <Button
                 Width="75"
                 Content="&gt;"

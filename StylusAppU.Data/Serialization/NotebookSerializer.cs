@@ -50,7 +50,7 @@ namespace StylusAppU.Data.Serialization
             _inkMetadataFolder = await _notebookFolder.GetFolderAsync(InkMetadataSubfolderName);
             _backgroundMetadataFolder = await _notebookFolder.GetFolderAsync(BackgroundMetadataSubfolderName);
             var notebookFile = await _notebookFolder.GetFileAsync(NotebookFileName);
-            _notebook = DeserializeNotebook(notebookFile).Result;
+            _notebook = await DeserializeNotebook(notebookFile);
         }
 
         public async Task InitializeLocalNotebookFolder()

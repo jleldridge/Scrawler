@@ -5,6 +5,7 @@ using Windows.Storage;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Media.Imaging;
 using StylusAppU.Data.Serialization;
+using System.Threading.Tasks;
 
 namespace StylusAppU.ViewModel
 {
@@ -43,7 +44,7 @@ namespace StylusAppU.ViewModel
             }
         }
 
-        public async void LoadStrokes()
+        public async Task LoadStrokes()
         {
             if (!string.IsNullOrWhiteSpace(_page.InkFileName))
             {

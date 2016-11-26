@@ -124,8 +124,12 @@ namespace StylusAppU.ViewModel
             await _notebookSerializer.SaveNotebook();
             for (int i = 0; i < Pages.Count; i++)
             {
-                var page = _notebook.Pages[i];
-                await _notebookSerializer.SavePage(page, Pages[i].StrokeContainer);
+                var strokeContainer = Pages[i].StrokeContainer;
+                if (strokeContainer.GetStrokes().Any())
+                {
+                    var page = _notebook.Pages[i];
+                    await _notebookSerializer.SavePage(page, strokeContainer);
+                }
             }
         }
     }
