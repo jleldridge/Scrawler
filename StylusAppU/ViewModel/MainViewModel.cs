@@ -4,6 +4,7 @@ using Windows.Storage;
 using StylusAppU.Data.Serialization;
 using Utils.Commands;
 using Utils.ViewModel;
+using System.Threading.Tasks;
 
 namespace StylusAppU.ViewModel
 {
@@ -23,7 +24,7 @@ namespace StylusAppU.ViewModel
             //}
             //else
             //{
-                CreateNewNotebook();
+                //CreateNewNotebook();
                 //ApplicationData.Current.LocalSettings.Values.Add(NotebookSerializer.CurrentNotebookKey, CurrentNotebook.NotebookGuid.ToString());
             //}
         }
@@ -38,7 +39,7 @@ namespace StylusAppU.ViewModel
             }
         }
 
-        public ICommand SaveCommand { get { return _saveCommand ?? (_saveCommand = new RelayCommand(SaveNotebook)); } }
+        public ICommand SaveCommand { get { return _saveCommand ?? (_saveCommand = new RelayCommand(_ => SaveNotebook())); } }
 
         public ICommand LoadCommand { get { return _loadCommand ?? (_loadCommand = new RelayCommand(LoadNotebook)); } }
 
@@ -58,13 +59,20 @@ namespace StylusAppU.ViewModel
             CurrentNotebook = new NotebookViewModel(notebook);
         }
 
-        private async void SaveNotebook(object commandArg)
+        private async void SaveNotebook()
         {
-            CurrentNotebook.SaveNotebook();
+            await CurrentNotebook.SaveNotebook();
         }
 
         public async void LoadNotebook(object commandParam)
         {
+            if (ApplicationData.Current.LocalSettings.Values.ContainsKey(NotebookSerializer.CurrentNotebookKey))
+            {
+                var notebookGuid = ApplicationData.Current.LocalSettings.Values[NotebookSerializer.CurrentNotebookKey] as string;
+                var notebookSerializer = new NotebookSerializer();
+                notebookSerializer.LoadLocalNotebookFolder(notebookGuid);
+                CurrentNotebook = new NotebookViewModel(notebookSerializer);
+            }
         }
     }
 }

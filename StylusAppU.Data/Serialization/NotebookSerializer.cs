@@ -43,7 +43,7 @@ namespace StylusAppU.Data.Serialization
 
         #region Public Methods
 
-        public async void LoadLocalNotebookFolder(string localNotebookFolderPath)
+        public async Task LoadLocalNotebookFolder(string localNotebookFolderPath)
         {
             var appFolder = ApplicationData.Current.LocalFolder;
             _notebookFolder = await appFolder.GetFolderAsync(localNotebookFolderPath);
@@ -53,7 +53,7 @@ namespace StylusAppU.Data.Serialization
             _notebook = DeserializeNotebook(notebookFile).Result;
         }
 
-        public async void InitializeLocalNotebookFolder()
+        public async Task InitializeLocalNotebookFolder()
         {
             var appFolder = ApplicationData.Current.LocalFolder;
             // create or get the local notebook folder for this notebook
@@ -63,10 +63,10 @@ namespace StylusAppU.Data.Serialization
             _backgroundMetadataFolder = await _notebookFolder.CreateFolderAsync(BackgroundMetadataSubfolderName, CreationCollisionOption.OpenIfExists);
         }
 
-        public async void SaveNotebook()
+        public async Task SaveNotebook()
         {
             var notebookFile = await _notebookFolder.CreateFileAsync(NotebookFileName, CreationCollisionOption.ReplaceExisting);
-            SerializeNotebook(_notebook, notebookFile);
+            await SerializeNotebook(_notebook, notebookFile);
         }
 
         public async Task SavePage(Page page, InkStrokeContainer strokeContainer)
@@ -89,7 +89,7 @@ namespace StylusAppU.Data.Serialization
 
         #region Private Methods
 
-        private async void SerializeNotebook(Notebook notebook, StorageFile file)
+        private async Task SerializeNotebook(Notebook notebook, StorageFile file)
         {
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Notebook));
 
@@ -122,12 +122,14 @@ namespace StylusAppU.Data.Serialization
             // finalized with call to CompleteUpdatesAsync.
             CachedFileManager.DeferUpdates(file);
             // Open a file stream for writing.
-            using (var outputStream = file.OpenAsync(FileAccessMode.ReadWrite).GetResults().GetOutputStreamAt(0))
+            var stream = await file.OpenAsync(FileAccessMode.ReadWrite);
+            using (var outputStream = stream.GetOutputStreamAt(0))
             {
                 // Write the ink strokes to the output stream.
                 await strokeContainer.SaveAsync(outputStream);
                 await outputStream.FlushAsync();
             }
+            stream.Dispose();
 
             // Finalize write so other apps can update file.
             Windows.Storage.Provider.FileUpdateStatus status =

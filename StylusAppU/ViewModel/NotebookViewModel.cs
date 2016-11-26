@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Utils.Commands;
 using Utils.ViewModel;
+using System.Threading.Tasks;
 
 namespace StylusAppU.ViewModel
 {
@@ -118,9 +119,9 @@ namespace StylusAppU.ViewModel
             CurrentPageNumber = _notebook.Pages.Count;
         }
 
-        public async void SaveNotebook()
+        public async Task SaveNotebook()
         {
-            _notebookSerializer.SaveNotebook();
+            await _notebookSerializer.SaveNotebook();
             for (int i = 0; i < Pages.Count; i++)
             {
                 var page = _notebook.Pages[i];
