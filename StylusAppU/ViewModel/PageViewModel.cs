@@ -43,7 +43,7 @@ namespace StylusAppU.ViewModel
             }
         }
 
-        public async Task LoadStrokes()
+        public async Task Initialize()
         {
             if (!string.IsNullOrWhiteSpace(_page.InkFileName))
             {

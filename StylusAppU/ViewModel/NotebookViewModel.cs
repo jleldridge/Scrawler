@@ -117,15 +117,16 @@ namespace StylusAppU.ViewModel
 
             foreach (var page in Pages)
             {
-                await page.LoadStrokes();
+                await page.Initialize();
             }
         }
 
-        public void CreateNewPage()
+        public async Task CreateNewPage()
         {
             _notebook.AddPage();
             Pages.Add(new PageViewModel(_notebook.Pages.Last(), _notebookSerializer));
             CurrentPageNumber = _notebook.Pages.Count;
+            await CurrentPage.Initialize();
         }
 
         public async Task SaveNotebook()
