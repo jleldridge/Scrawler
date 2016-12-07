@@ -52,11 +52,13 @@ namespace StylusAppU.ViewModel
             }
         }
 
-        private void CreateNewNotebook()
+        private async void CreateNewNotebook()
         {
             var notebook = new Notebook("NewNotebook");
             notebook.AddPage();
-            CurrentNotebook = new NotebookViewModel(notebook);
+            var notebookSerializer = new NotebookSerializer(notebook);
+            await notebookSerializer.InitializeLocalNotebookFolder();
+            CurrentNotebook = new NotebookViewModel(notebook, notebookSerializer);
         }
 
         private async Task SaveNotebook()

@@ -18,17 +18,16 @@ namespace StylusAppU.ViewModel
         private RelayCommand _prevPageCommand;
         private RelayCommand _nextPageCommand;
 
-        public NotebookViewModel(Notebook notebook)
+        public NotebookViewModel(Notebook notebook, NotebookSerializer notebookSerializer)
         {
             _notebook = notebook;
+            _notebookSerializer = notebookSerializer;
+
             Pages = new ObservableCollection<PageViewModel>();
             foreach (var page in _notebook.Pages)
             {
                 Pages.Add(new PageViewModel(page, _notebookSerializer));
             }
-
-            _notebookSerializer = new NotebookSerializer(notebook);
-            _notebookSerializer.InitializeLocalNotebookFolder();
         }
 
         public NotebookViewModel(NotebookSerializer notebookSerializer)
