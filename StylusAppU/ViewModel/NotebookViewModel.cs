@@ -117,7 +117,7 @@ namespace StylusAppU.ViewModel
             picker.SuggestedFileName = "Notebook";
             var file = await picker.PickSaveFileAsync();
 
-            await _notebookSerializer.InitializeNotebookArchive(file);
+            _notebookSerializer.InitializeNotebookArchive(file);
         }
 
         public async Task SaveNotebook()

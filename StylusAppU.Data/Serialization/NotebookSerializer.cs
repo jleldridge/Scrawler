@@ -57,7 +57,7 @@ namespace StylusAppU.Data.Serialization
             }
         }
 
-        public async Task InitializeNotebookArchive(StorageFile file)
+        public void InitializeNotebookArchive(StorageFile file)
         {
             NotebookArchiveFile = file;
         }
@@ -68,7 +68,7 @@ namespace StylusAppU.Data.Serialization
             {
                 using (var archive = new ZipArchive(stream, ZipArchiveMode.Update))
                 {
-                    var notebookFile = archive.CreateEntry(NotebookFileName);
+                    var notebookFile = CreateFreshArchiveEntry(archive, NotebookFileName);
                     await SerializeNotebook(_notebook, notebookFile);
                 }
             }
@@ -80,7 +80,7 @@ namespace StylusAppU.Data.Serialization
             {
                 using (var archive = new ZipArchive(stream, ZipArchiveMode.Update))
                 {
-                    var inkFile = archive.CreateEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
+                    var inkFile = CreateFreshArchiveEntry(archive, InkMetadataSubfolderName + "/" + page.InkFileName);
                     await SerializeInkCanvas(strokeContainer, inkFile);
                     //todo: serialize background file
                 }
@@ -89,6 +89,8 @@ namespace StylusAppU.Data.Serialization
 
         public async Task<InkStrokeContainer> LoadPage(Page page)
         {
+            if (NotebookArchiveFile == null) return null;
+
             using (var stream = await NotebookArchiveFile.OpenAsync(FileAccessMode.ReadWrite))
             {    
                 using (var archive = new ZipArchive(stream.AsStream(), ZipArchiveMode.Update))
@@ -154,6 +156,17 @@ namespace StylusAppU.Data.Serialization
                 await strokeContainer.LoadAsync(inputStream);
             }
             return strokeContainer;
+        }
+
+        private ZipArchiveEntry CreateFreshArchiveEntry(ZipArchive archive, string path)
+        {
+            var file = archive.GetEntry(path);
+            if (file != null)
+            {
+                file.Delete();
+            }
+            file = archive.CreateEntry(path);
+            return file;
         }
 
         #endregion

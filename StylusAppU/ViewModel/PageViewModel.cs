@@ -45,11 +45,8 @@ namespace StylusAppU.ViewModel
 
         public async Task Initialize()
         {
-            if (_notebookSerializer.NotebookArchiveFile != null)
-            {
-                StrokeContainer = await _notebookSerializer.LoadPage(_page);
-            }
-            else
+            StrokeContainer = await _notebookSerializer.LoadPage(_page);
+            if (StrokeContainer == null)
             {
                 StrokeContainer = new InkStrokeContainer();
             }
