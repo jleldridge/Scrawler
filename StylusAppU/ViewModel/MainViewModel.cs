@@ -58,7 +58,7 @@ namespace StylusAppU.ViewModel
             notebook.AddPage();
             var notebookSerializer = new NotebookSerializer(notebook);
             await notebookSerializer.InitializeLocalNotebookFolder();
-            CurrentNotebook = new NotebookViewModel(notebook, notebookSerializer);
+            CurrentNotebook = new NotebookViewModel(notebookSerializer);
         }
 
         private async Task SaveNotebook()
@@ -82,7 +82,6 @@ namespace StylusAppU.ViewModel
                 var notebookSerializer = new NotebookSerializer();
                 await notebookSerializer.LoadLocalNotebookFolder(notebookGuid);
                 CurrentNotebook = new NotebookViewModel(notebookSerializer);
-                await CurrentNotebook.LoadPages();
             }
         }
     }

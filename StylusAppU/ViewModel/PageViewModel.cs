@@ -58,9 +58,5 @@ namespace StylusAppU.ViewModel
                 }
             }
         }
-
-        public void LoadBackground()
-        {
-        }
     }
 }

@@ -18,23 +18,15 @@ namespace StylusAppU.ViewModel
         private RelayCommand _prevPageCommand;
         private RelayCommand _nextPageCommand;
 
-        public NotebookViewModel(Notebook notebook, NotebookSerializer notebookSerializer)
-        {
-            _notebook = notebook;
-            _notebookSerializer = notebookSerializer;
-
-            Pages = new ObservableCollection<PageViewModel>();
-            foreach (var page in _notebook.Pages)
-            {
-                Pages.Add(new PageViewModel(page, _notebookSerializer));
-            }
-        }
-
         public NotebookViewModel(NotebookSerializer notebookSerializer)
         {
             _notebookSerializer = notebookSerializer;
             _notebook = notebookSerializer.Notebook;
             Pages = new ObservableCollection<PageViewModel>();
+            foreach (var page in _notebook.Pages)
+            {
+                Pages.Add(new PageViewModel(page, _notebookSerializer));
+            }
         }
 
         public Guid NotebookGuid
@@ -107,25 +99,12 @@ namespace StylusAppU.ViewModel
             }
         }
 
-        public async Task LoadPages()
-        {
-            foreach (var page in _notebook.Pages)
-            {
-                Pages.Add(new PageViewModel(page, _notebookSerializer));
-            }
-
-            foreach (var page in Pages)
-            {
-                await page.Initialize();
-            }
-        }
-
-        public async Task CreateNewPage()
+        public void CreateNewPage()
         {
             _notebook.AddPage();
-            Pages.Add(new PageViewModel(_notebook.Pages.Last(), _notebookSerializer));
+            var page = new PageViewModel(_notebook.Pages.Last(), _notebookSerializer);
+            Pages.Add(page);
             CurrentPageNumber = _notebook.Pages.Count;
-            await CurrentPage.Initialize();
         }
 
         public async Task SaveNotebook()
