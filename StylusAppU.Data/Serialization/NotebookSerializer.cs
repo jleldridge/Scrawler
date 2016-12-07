@@ -89,7 +89,7 @@ namespace StylusAppU.Data.Serialization
 
         public async Task<InkStrokeContainer> LoadPage(Page page)
         {
-            using (var stream = await NotebookArchiveFile.OpenAsync(FileAccessMode.Read))
+            using (var stream = await NotebookArchiveFile.OpenAsync(FileAccessMode.ReadWrite))
             {    
                 using (var archive = new ZipArchive(stream.AsStream(), ZipArchiveMode.Update))
                 {
