@@ -19,8 +19,9 @@ namespace StylusAppU.Data.Serialization
         public static readonly string NotebookFileName = "Notebook.json";
         public static readonly string CurrentNotebookKey = "CurrentNotebook";
 
+        public ZipArchive NotebookArchive { get; set; }
+
         private Notebook _notebook;
-        private StorageFolder _notebookFolder, _inkMetadataFolder, _backgroundMetadataFolder;
 
         #region Constructor
 
@@ -43,35 +44,41 @@ namespace StylusAppU.Data.Serialization
 
         #region Public Methods
 
-        public async Task LoadLocalNotebookFolder(string localNotebookFolderPath)
+        public async Task LoadNotebookArchive(StorageFile file)
         {
-            var appFolder = ApplicationData.Current.LocalFolder;
-            _notebookFolder = await appFolder.GetFolderAsync(localNotebookFolderPath);
-            _inkMetadataFolder = await _notebookFolder.GetFolderAsync(InkMetadataSubfolderName);
-            _backgroundMetadataFolder = await _notebookFolder.GetFolderAsync(BackgroundMetadataSubfolderName);
-            var notebookFile = await _notebookFolder.GetFileAsync(NotebookFileName);
+            using (var stream = await file.OpenStreamForReadAsync())
+            {
+                NotebookArchive = new ZipArchive(stream, ZipArchiveMode.Read);
+            }
+            var notebookFile = NotebookArchive.GetEntry(NotebookFileName);
             _notebook = await DeserializeNotebook(notebookFile);
         }
 
-        public async Task InitializeLocalNotebookFolder()
+        public async Task InitializeNotebookArchive(StorageFile file)
         {
             var appFolder = ApplicationData.Current.LocalFolder;
             // create or get the local notebook folder for this notebook
-            _notebookFolder = await appFolder.CreateFolderAsync(_notebook.Guid.ToString(), CreationCollisionOption.OpenIfExists);
+            using (var stream = await file.OpenStreamForWriteAsync())
+            {
+                NotebookArchive = new ZipArchive(stream, ZipArchiveMode.Create, true);
+            }
+            //_notebookFolder = await appFolder.CreateFolderAsync(_notebook.Guid.ToString(), CreationCollisionOption.OpenIfExists);
             // create or open the metadata folders
-            _inkMetadataFolder = await _notebookFolder.CreateFolderAsync(InkMetadataSubfolderName, CreationCollisionOption.OpenIfExists);
-            _backgroundMetadataFolder = await _notebookFolder.CreateFolderAsync(BackgroundMetadataSubfolderName, CreationCollisionOption.OpenIfExists);
         }
 
         public async Task SaveNotebook()
         {
-            var notebookFile = await _notebookFolder.CreateFileAsync(NotebookFileName, CreationCollisionOption.ReplaceExisting);
+            ZipArchiveEntry notebookFile = null; // = NotebookArchive.GetEntry(NotebookFileName);
+            if (notebookFile == null)
+            {
+                notebookFile = NotebookArchive.CreateEntry(NotebookFileName);
+            }
             await SerializeNotebook(_notebook, notebookFile);
         }
 
         public async Task SavePage(Page page, InkStrokeContainer strokeContainer)
         {
-            var inkFile = await _inkMetadataFolder.CreateFileAsync(page.InkFileName, CreationCollisionOption.ReplaceExisting);
+            var inkFile = NotebookArchive.GetEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
             await SerializeInkCanvas(strokeContainer, inkFile);
             //todo
             //var backgroundFile = await _inkMetadataFolder.CreateFileAsync(page.BackgroundFileName, CreationCollisionOption.ReplaceExisting);
@@ -79,7 +86,7 @@ namespace StylusAppU.Data.Serialization
 
         public async Task<InkStrokeContainer> LoadPage(Page page)
         {
-            var inkFile = await _inkMetadataFolder.TryGetItemAsync(page.InkFileName) as StorageFile;
+            var inkFile = NotebookArchive.GetEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
             if (inkFile == null) return null;
 
             var strokeContainer = await DeserializeInkCanvas(inkFile);
@@ -91,68 +98,50 @@ namespace StylusAppU.Data.Serialization
 
         #region Private Methods
 
-        private async Task SerializeNotebook(Notebook notebook, StorageFile file)
+        private async Task SerializeNotebook(Notebook notebook, ZipArchiveEntry file)
         {
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Notebook));
 
-            var stream = await file.OpenStreamForWriteAsync();
+            var stream = file.Open();
             serializer.WriteObject(stream, notebook);
             await stream.FlushAsync();
             stream.Dispose();
         }
 
-        private async Task<Notebook> DeserializeNotebook(StorageFile file)
+        private async Task<Notebook> DeserializeNotebook(ZipArchiveEntry file)
         {
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Notebook));
             Notebook notebook = null;
-            using (var stream = await file.OpenStreamForWriteAsync())
+            using (var stream = file.Open())
             {
                 notebook = serializer.ReadObject(stream) as Notebook;
             }
 
             if (notebook == null)
             {
-                throw new FileLoadException("Could not load a notebook from file.", file.Path);
+                throw new FileLoadException("Could not load a notebook from file.", NotebookFileName);
             }
 
             return notebook;
         }
 
-        private static async Task<bool> SerializeInkCanvas(InkStrokeContainer strokeContainer, StorageFile file)
+        private static async Task SerializeInkCanvas(InkStrokeContainer strokeContainer, ZipArchiveEntry file)
         {
-            // Prevent updates to the file until updates are 
-            // finalized with call to CompleteUpdatesAsync.
-            CachedFileManager.DeferUpdates(file);
             // Open a file stream for writing.
-            var stream = await file.OpenAsync(FileAccessMode.ReadWrite);
-            using (var outputStream = stream.GetOutputStreamAt(0))
+            using (var outputStream = file.Open().AsOutputStream())
             {
                 // Write the ink strokes to the output stream.
                 await strokeContainer.SaveAsync(outputStream);
                 await outputStream.FlushAsync();
             }
-            stream.Dispose();
-
-            // Finalize write so other apps can update file.
-            Windows.Storage.Provider.FileUpdateStatus status =
-                await CachedFileManager.CompleteUpdatesAsync(file);
-
-            if (status == Windows.Storage.Provider.FileUpdateStatus.Complete)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
 
-        private static async Task<InkStrokeContainer> DeserializeInkCanvas(StorageFile file)
+        private static async Task<InkStrokeContainer> DeserializeInkCanvas(ZipArchiveEntry file)
         {
             var strokeContainer = new InkStrokeContainer();
             // Open a file stream for reading.
             // Read from file.
-            using (var inputStream = await file.OpenAsync(FileAccessMode.Read))
+            using (var inputStream = file.Open().AsRandomAccessStream())
             {
                 await strokeContainer.LoadAsync(inputStream);
             }

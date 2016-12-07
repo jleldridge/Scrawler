@@ -1,10 +1,12 @@
-﻿using StylusAppU.Data.Data;
+﻿using System;
+using StylusAppU.Data.Data;
 using System.Windows.Input;
 using Windows.Storage;
 using StylusAppU.Data.Serialization;
 using Utils.Commands;
 using Utils.ViewModel;
 using System.Threading.Tasks;
+using Windows.Storage.Pickers;
 
 namespace StylusAppU.ViewModel
 {
@@ -57,7 +59,7 @@ namespace StylusAppU.ViewModel
             var notebook = new Notebook("NewNotebook");
             notebook.AddPage();
             var notebookSerializer = new NotebookSerializer(notebook);
-            await notebookSerializer.InitializeLocalNotebookFolder();
+            //await notebookSerializer.InitializeLocalNotebookFolder();
             CurrentNotebook = new NotebookViewModel(notebookSerializer);
         }
 
@@ -78,9 +80,15 @@ namespace StylusAppU.ViewModel
         {
             if (ApplicationData.Current.LocalSettings.Values.ContainsKey(NotebookSerializer.CurrentNotebookKey))
             {
-                var notebookGuid = ApplicationData.Current.LocalSettings.Values[NotebookSerializer.CurrentNotebookKey] as string;
+                //var notebookGuid = ApplicationData.Current.LocalSettings.Values[NotebookSerializer.CurrentNotebookKey] as string;
                 var notebookSerializer = new NotebookSerializer();
-                await notebookSerializer.LoadLocalNotebookFolder(notebookGuid);
+
+                var picker = new FileOpenPicker();
+                picker.FileTypeFilter.Add(".note");
+
+                var file = await picker.PickSingleFileAsync();
+
+                await notebookSerializer.LoadNotebookArchive(file);
                 CurrentNotebook = new NotebookViewModel(notebookSerializer);
             }
         }

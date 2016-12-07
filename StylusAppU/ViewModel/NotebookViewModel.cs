@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using StylusAppU.Data.Data;
 using StylusAppU.Data.Serialization;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using Utils.Commands;
 using Utils.ViewModel;
@@ -107,8 +110,23 @@ namespace StylusAppU.ViewModel
             CurrentPageNumber = _notebook.Pages.Count;
         }
 
+        public async Task SaveNotebookAs()
+        {
+            var picker = new Windows.Storage.Pickers.FileSavePicker();
+            picker.FileTypeChoices.Add(new KeyValuePair<string, IList<string>>("Notebook file", new List<string>() {".note"}));
+            picker.SuggestedFileName = "Notebook";
+            var file = await picker.PickSaveFileAsync();
+
+            await _notebookSerializer.InitializeNotebookArchive(file);
+        }
+
         public async Task SaveNotebook()
         {
+            if (_notebookSerializer.NotebookArchive == null)
+            {
+                await SaveNotebookAs();
+            }
+
             await _notebookSerializer.SaveNotebook();
             for (int i = 0; i < Pages.Count; i++)
             {
