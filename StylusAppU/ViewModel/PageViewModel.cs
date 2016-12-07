@@ -47,12 +47,8 @@ namespace StylusAppU.ViewModel
         {
             if (!string.IsNullOrWhiteSpace(_page.InkFileName))
             {
-                var file = await ApplicationData.Current.LocalFolder.TryGetItemAsync(_page.InkFileName);
-                if (file != null)
-                {
-                    StrokeContainer = await _notebookSerializer.LoadPage(_page);
-                }
-                else
+                StrokeContainer = await _notebookSerializer.LoadPage(_page);
+                if (StrokeContainer == null)
                 {
                     StrokeContainer = new InkStrokeContainer();
                 }

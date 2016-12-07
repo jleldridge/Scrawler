@@ -79,7 +79,9 @@ namespace StylusAppU.Data.Serialization
 
         public async Task<InkStrokeContainer> LoadPage(Page page)
         {
-            var inkFile = await _inkMetadataFolder.GetFileAsync(page.InkFileName);
+            var inkFile = await _inkMetadataFolder.TryGetItemAsync(page.InkFileName) as StorageFile;
+            if (inkFile == null) return null;
+
             var strokeContainer = await DeserializeInkCanvas(inkFile);
 
             return strokeContainer;
