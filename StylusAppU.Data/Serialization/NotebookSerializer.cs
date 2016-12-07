@@ -19,7 +19,7 @@ namespace StylusAppU.Data.Serialization
         public static readonly string NotebookFileName = "Notebook.json";
         public static readonly string CurrentNotebookKey = "CurrentNotebook";
 
-        public ZipArchive NotebookArchive { get; set; }
+        public StorageFile NotebookArchiveFile { get; set; }
 
         private Notebook _notebook;
 
@@ -46,52 +46,60 @@ namespace StylusAppU.Data.Serialization
 
         public async Task LoadNotebookArchive(StorageFile file)
         {
-            using (var stream = await file.OpenStreamForReadAsync())
+            NotebookArchiveFile = file;
+            using (var stream = await NotebookArchiveFile.OpenStreamForReadAsync())
             {
-                NotebookArchive = new ZipArchive(stream, ZipArchiveMode.Read);
+                using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
+                {
+                    var notebookFile = archive.GetEntry(NotebookFileName);
+                    _notebook = await DeserializeNotebook(notebookFile);
+                }
             }
-            var notebookFile = NotebookArchive.GetEntry(NotebookFileName);
-            _notebook = await DeserializeNotebook(notebookFile);
         }
 
         public async Task InitializeNotebookArchive(StorageFile file)
         {
-            var appFolder = ApplicationData.Current.LocalFolder;
-            // create or get the local notebook folder for this notebook
-            using (var stream = await file.OpenStreamForWriteAsync())
-            {
-                NotebookArchive = new ZipArchive(stream, ZipArchiveMode.Create, true);
-            }
-            //_notebookFolder = await appFolder.CreateFolderAsync(_notebook.Guid.ToString(), CreationCollisionOption.OpenIfExists);
-            // create or open the metadata folders
+            NotebookArchiveFile = file;
         }
 
         public async Task SaveNotebook()
         {
-            ZipArchiveEntry notebookFile = null; // = NotebookArchive.GetEntry(NotebookFileName);
-            if (notebookFile == null)
+            using (var stream = await NotebookArchiveFile.OpenStreamForWriteAsync())
             {
-                notebookFile = NotebookArchive.CreateEntry(NotebookFileName);
+                using (var archive = new ZipArchive(stream, ZipArchiveMode.Update))
+                {
+                    var notebookFile = archive.CreateEntry(NotebookFileName);
+                    await SerializeNotebook(_notebook, notebookFile);
+                }
             }
-            await SerializeNotebook(_notebook, notebookFile);
         }
 
         public async Task SavePage(Page page, InkStrokeContainer strokeContainer)
         {
-            var inkFile = NotebookArchive.GetEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
-            await SerializeInkCanvas(strokeContainer, inkFile);
-            //todo
-            //var backgroundFile = await _inkMetadataFolder.CreateFileAsync(page.BackgroundFileName, CreationCollisionOption.ReplaceExisting);
+            using (var stream = await NotebookArchiveFile.OpenStreamForWriteAsync())
+            {
+                using (var archive = new ZipArchive(stream, ZipArchiveMode.Update))
+                {
+                    var inkFile = archive.CreateEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
+                    await SerializeInkCanvas(strokeContainer, inkFile);
+                    //todo: serialize background file
+                }
+            }
         }
 
         public async Task<InkStrokeContainer> LoadPage(Page page)
         {
-            var inkFile = NotebookArchive.GetEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
-            if (inkFile == null) return null;
+            using (var stream = await NotebookArchiveFile.OpenAsync(FileAccessMode.Read))
+            {    
+                using (var archive = new ZipArchive(stream.AsStream(), ZipArchiveMode.Update))
+                {
+                    var inkFile = archive.GetEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
+                    if (inkFile == null) return null;
 
-            var strokeContainer = await DeserializeInkCanvas(inkFile);
-
-            return strokeContainer;
+                    var strokeContainer = await DeserializeInkCanvas(inkFile);
+                    return strokeContainer;
+                }
+            }
         }
 
         #endregion

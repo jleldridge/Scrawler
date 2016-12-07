@@ -122,7 +122,7 @@ namespace StylusAppU.ViewModel
 
         public async Task SaveNotebook()
         {
-            if (_notebookSerializer.NotebookArchive == null)
+            if (_notebookSerializer.NotebookArchiveFile == null)
             {
                 await SaveNotebookAs();
             }

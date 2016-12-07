@@ -87,9 +87,11 @@ namespace StylusAppU.ViewModel
                 picker.FileTypeFilter.Add(".note");
 
                 var file = await picker.PickSingleFileAsync();
-
-                await notebookSerializer.LoadNotebookArchive(file);
-                CurrentNotebook = new NotebookViewModel(notebookSerializer);
+                if (file != null)
+                {
+                    await notebookSerializer.LoadNotebookArchive(file);
+                    CurrentNotebook = new NotebookViewModel(notebookSerializer);
+                }
             }
         }
     }
