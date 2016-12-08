@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:StylusAppU.ViewModel"
     xmlns:view="using:StylusAppU.View"
-    xmlns:converters="using:StylusAppU.Converters"
+    xmlns:converters="using:StylusAppU.Utils.Converters"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance vm:MainViewModel}"
     x:Name="MainPageControl">
