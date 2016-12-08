@@ -13,7 +13,6 @@ namespace StylusAppU.ViewModel
     {
         private Page _page;
         private BitmapImage _backgroundImage;
-        private InkStrokeContainer _strokeContainer;
         private NotebookSerializer _notebookSerializer;
 
         public PageViewModel(Page page, NotebookSerializer notebookSerializer)
@@ -55,10 +54,10 @@ namespace StylusAppU.ViewModel
 
         public InkStrokeContainer StrokeContainer
         {
-            get { return _strokeContainer; }
+            get { return _page.StrokeContainer; }
             set
             {
-                _strokeContainer = value;
+                _page.StrokeContainer = value;
                 OnPropertyChanged();
             }
         }
