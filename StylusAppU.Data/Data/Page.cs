@@ -11,7 +11,22 @@ namespace StylusAppU.Data.Data
             Guid = Guid.NewGuid();
             InkFileName = Guid.ToString();
             BackgroundFileName = Guid.ToString();
+            Width = 800;
+            Height = 600;
         }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            if (Width == 0) Width = 800;
+            if (Height == 0) Height = 600;
+        }
+
+        [DataMember]
+        public double Width { get; set; }
+
+        [DataMember]
+        public double Height { get; set; }
 
         [DataMember]
         public Guid Guid { get; set; }

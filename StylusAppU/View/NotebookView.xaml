@@ -34,10 +34,18 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
-        <local:PageView 
-            DataContext="{Binding CurrentPage}"/>
 
+        <ScrollViewer
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Auto">
+
+            <local:PageView 
+                DataContext="{Binding CurrentPage}"
+                Width="{Binding Width}"
+                Height="{Binding Height}"/>
+        
+        </ScrollViewer>
+        
         <StackPanel 
             Background="CadetBlue"
             HorizontalAlignment="Center"
@@ -49,12 +57,16 @@
                 Content="&lt;"
                 Command="{Binding PreviousPageCommand}"/>
 
-            <TextBlock
+            <TextBox
                 Width="50"
                 Height="30"
                 TextAlignment="Center"
                 FontWeight="Bold"
-                Text="{Binding CurrentPageNumber}"/>
+                BorderThickness="0"
+                Background="Transparent"
+                Text="{Binding CurrentPageNumber, 
+                    UpdateSourceTrigger=PropertyChanged, 
+                    Mode=TwoWay}"/>
 
             <TextBlock
                 Width="50"

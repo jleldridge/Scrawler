@@ -8,13 +8,14 @@
     xmlns:vm="using:StylusAppU.ViewModel"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance vm:PageViewModel}">
-    
-    <Grid>
-    
+
+    <Grid
+        Background="White">
+
         <InkCanvas 
             x:Name="Canvas"
             Grid.Row="1"/>
-    
+
     </Grid>
-    
+
 </UserControl>

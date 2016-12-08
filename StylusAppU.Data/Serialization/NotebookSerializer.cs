@@ -153,7 +153,13 @@ namespace StylusAppU.Data.Serialization
             // Read from file.
             using (var inputStream = file.Open().AsRandomAccessStream())
             {
-                await strokeContainer.LoadAsync(inputStream);
+                try
+                {
+                    await strokeContainer.LoadAsync(inputStream);
+                }
+                catch(Exception e)
+                {
+                }
             }
             return strokeContainer;
         }

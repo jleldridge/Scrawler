@@ -6,10 +6,20 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:StylusAppU.ViewModel"
     xmlns:view="using:StylusAppU.View"
+    xmlns:converters="using:StylusAppU.Converters"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance vm:MainViewModel}">
+    d:DataContext="{d:DesignInstance vm:MainViewModel}"
+    x:Name="MainPageControl">
 
-    <Grid Background="LightGray">
+    <Page.Resources>
+        <ResourceDictionary>
+
+            <converters:NullToVisibilityConverter x:Key="VisibleIfNotNull"/>
+
+        </ResourceDictionary>
+    </Page.Resources>
+    
+    <Grid Background="DarkGray">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -38,11 +48,35 @@
                 Command="{Binding CreateNotebookCommand}"
                 Content="Create Notebook" />
 
+            <TextBox
+                Width="50"
+                Height="30"
+                TextAlignment="Center"
+                FontWeight="Bold"
+                Text="{Binding CurrentNotebook.CurrentPage.Width, Mode=TwoWay}"
+                Visibility="{Binding CurrentNotebook, 
+                    Converter={StaticResource VisibleIfNotNull}}"/>
+
+            <TextBox
+                Width="50"
+                Height="30"
+                TextAlignment="Center"
+                FontWeight="Bold"
+                Text="{Binding CurrentNotebook.CurrentPage.Height, Mode=TwoWay}"
+                Visibility="{Binding CurrentNotebook,
+                    Converter={StaticResource VisibleIfNotNull}}"/>
+
         </StackPanel>
 
-        <view:NotebookView
-            DataContext="{Binding CurrentNotebook}"
-            Grid.Row="1"/>
+        <Border
+            Grid.Row="1"
+            Visibility="{Binding CurrentNotebook, 
+                Converter={StaticResource VisibleIfNotNull}}">
+            
+            <view:NotebookView
+                DataContext="{Binding CurrentNotebook}"/>
+            
+        </Border>
 
     </Grid>
 </Page>

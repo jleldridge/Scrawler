@@ -62,7 +62,18 @@ namespace StylusAppU.ViewModel
             get { return _currentPageNumber + 1; }
             set
             {
-                _currentPageNumber = value - 1;
+                if (value > Pages.Count)
+                {
+                    _currentPageNumber = Pages.Count - 1;
+                }
+                else if (value <= 0)
+                {
+                    _currentPageNumber = 0;
+                }
+                else
+                {
+                    _currentPageNumber = value - 1;
+                }
                 OnPropertyChanged();
                 OnPropertyChanged("CurrentPage");
             }

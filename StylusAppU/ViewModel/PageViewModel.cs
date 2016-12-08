@@ -23,6 +23,26 @@ namespace StylusAppU.ViewModel
             //LoadBackground();
         }
 
+        public double Width
+        {
+            get { return _page.Width; }
+            set
+            {
+                _page.Width = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double Height
+        {
+            get { return _page.Height; }
+            set
+            {
+                _page.Height = value;
+                OnPropertyChanged();
+            }
+        }
+
         public BitmapImage BackgroundImage
         {
             get { return _backgroundImage; }
