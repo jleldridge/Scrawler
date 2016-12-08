@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Windows.UI.Input.Inking;
 
 namespace StylusAppU.Data.Data
 {
@@ -36,6 +37,8 @@ namespace StylusAppU.Data.Data
 
         [DataMember]
         public string BackgroundFileName { get; set; }
+
+        public InkStrokeContainer StrokeContainer { get; set; }
 
         public bool Equals(Page other)
         {

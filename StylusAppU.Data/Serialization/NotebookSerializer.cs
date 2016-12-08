@@ -9,6 +9,7 @@ using Windows.Storage.Streams;
 using Windows.UI.Input.Inking;
 using System.IO.Compression;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace StylusAppU.Data.Serialization
 {
@@ -20,6 +21,7 @@ namespace StylusAppU.Data.Serialization
         public static readonly string CurrentNotebookKey = "CurrentNotebook";
 
         public StorageFile NotebookArchiveFile { get; set; }
+        public SemaphoreSlim NotebookFileSemaphore = new SemaphoreSlim(1,1);
 
         private Notebook _notebook;
 
@@ -44,63 +46,86 @@ namespace StylusAppU.Data.Serialization
 
         #region Public Methods
 
-        public async Task LoadNotebookArchive(StorageFile file)
-        {
-            NotebookArchiveFile = file;
-            using (var stream = await NotebookArchiveFile.OpenStreamForReadAsync())
-            {
-                using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
-                {
-                    var notebookFile = archive.GetEntry(NotebookFileName);
-                    _notebook = await DeserializeNotebook(notebookFile);
-                }
-            }
-        }
-
         public void InitializeNotebookArchive(StorageFile file)
         {
             NotebookArchiveFile = file;
         }
 
-        public async Task SaveNotebook()
+        public async Task LoadNotebookArchive(StorageFile file)
         {
-            using (var stream = await NotebookArchiveFile.OpenStreamForWriteAsync())
+            await NotebookFileSemaphore.WaitAsync();
+            try
             {
-                using (var archive = new ZipArchive(stream, ZipArchiveMode.Update))
+                NotebookArchiveFile = file;
+                using (var stream = await NotebookArchiveFile.OpenStreamForReadAsync())
                 {
-                    var notebookFile = CreateFreshArchiveEntry(archive, NotebookFileName);
-                    await SerializeNotebook(_notebook, notebookFile);
+                    using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
+                    {
+                        var notebookFile = archive.GetEntry(NotebookFileName);
+                        _notebook = DeserializeNotebook(notebookFile);
+                    }
                 }
+            }
+            finally
+            {
+                NotebookFileSemaphore.Release();
             }
         }
 
-        public async Task SavePage(Page page, InkStrokeContainer strokeContainer)
+        public async Task SaveNotebook()
         {
-            using (var stream = await NotebookArchiveFile.OpenStreamForWriteAsync())
-            {
-                using (var archive = new ZipArchive(stream, ZipArchiveMode.Update))
+            await NotebookFileSemaphore.WaitAsync();
+            try
+            {    
+                using (var stream = await NotebookArchiveFile.OpenStreamForWriteAsync())
                 {
-                    var inkFile = CreateFreshArchiveEntry(archive, InkMetadataSubfolderName + "/" + page.InkFileName);
-                    await SerializeInkCanvas(strokeContainer, inkFile);
-                    //todo: serialize background file
+                    using (var archive = new ZipArchive(stream, ZipArchiveMode.Create))
+                    {
+                        var notebookFile = archive.GetEntry(NotebookFileName);
+                        await SerializeNotebook(_notebook, notebookFile);
+
+                        foreach (var page in _notebook.Pages)
+                        {
+                            await SavePage(page, archive);
+                        }
+                    }
                 }
             }
+            finally
+            {
+                NotebookFileSemaphore.Release();
+            }
+        }
+
+        private async Task SavePage(Page page, ZipArchive archive)
+        {
+            var inkFile = archive.GetEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
+            await SerializeInkCanvas(page.StrokeContainer, inkFile);
+            //todo: serialize background file
         }
 
         public async Task<InkStrokeContainer> LoadPage(Page page)
         {
             if (NotebookArchiveFile == null) return null;
 
-            using (var stream = await NotebookArchiveFile.OpenAsync(FileAccessMode.ReadWrite))
+            await NotebookFileSemaphore.WaitAsync();
+            try
             {    
-                using (var archive = new ZipArchive(stream.AsStream(), ZipArchiveMode.Update))
-                {
-                    var inkFile = archive.GetEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
-                    if (inkFile == null) return null;
+                using (var stream = await NotebookArchiveFile.OpenAsync(FileAccessMode.ReadWrite))
+                {    
+                    using (var archive = new ZipArchive(stream.AsStream(), ZipArchiveMode.Update))
+                    {
+                        var inkFile = archive.GetEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
+                        if (inkFile == null) return null;
 
-                    var strokeContainer = await DeserializeInkCanvas(inkFile);
-                    return strokeContainer;
+                        var strokeContainer = await DeserializeInkCanvas(inkFile);
+                        return strokeContainer;
+                    }
                 }
+            }
+            finally
+            {
+                NotebookFileSemaphore.Release();
             }
         }
 
@@ -118,7 +143,7 @@ namespace StylusAppU.Data.Serialization
             stream.Dispose();
         }
 
-        private async Task<Notebook> DeserializeNotebook(ZipArchiveEntry file)
+        private Notebook DeserializeNotebook(ZipArchiveEntry file)
         {
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Notebook));
             Notebook notebook = null;
@@ -156,17 +181,6 @@ namespace StylusAppU.Data.Serialization
                 await strokeContainer.LoadAsync(inputStream);
             }
             return strokeContainer;
-        }
-
-        private ZipArchiveEntry CreateFreshArchiveEntry(ZipArchive archive, string path)
-        {
-            var file = archive.GetEntry(path);
-            if (file != null)
-            {
-                file.Delete();
-            }
-            file = archive.CreateEntry(path);
-            return file;
         }
 
         #endregion
