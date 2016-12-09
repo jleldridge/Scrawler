@@ -20,18 +20,6 @@ namespace StylusAppU.ViewModel
 
         public MainViewModel()
         {
-            //if (ApplicationData.Current.LocalSettings.Values.ContainsKey(NotebookSerializer.CurrentNotebookKey))
-            //{
-            //    var notebookGuid = ApplicationData.Current.LocalSettings.Values[NotebookSerializer.CurrentNotebookKey] as string;
-            //    var notebookSerializer = new NotebookSerializer();
-            //    notebookSerializer.LoadLocalNotebookFolder(notebookGuid);
-            //    CurrentNotebook = new NotebookViewModel(notebookSerializer);
-            //}
-            //else
-            //{
-                //CreateNewNotebook();
-                //ApplicationData.Current.LocalSettings.Values.Add(NotebookSerializer.CurrentNotebookKey, CurrentNotebook.NotebookGuid.ToString());
-            //}
         }
 
         public NotebookViewModel CurrentNotebook

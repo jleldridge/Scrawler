@@ -43,7 +43,7 @@
                 DataContext="{Binding CurrentPage}"
                 Width="{Binding Width}"
                 Height="{Binding Height}"/>
-        
+
         </ScrollViewer>
         
         <StackPanel 

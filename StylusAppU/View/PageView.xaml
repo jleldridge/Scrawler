@@ -10,6 +10,8 @@
     d:DataContext="{d:DesignInstance vm:PageViewModel}">
 
     <Grid
+        BorderThickness="1"
+        BorderBrush="Black"
         Background="White">
 
         <InkCanvas 
