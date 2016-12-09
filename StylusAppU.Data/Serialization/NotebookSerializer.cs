@@ -57,12 +57,17 @@ namespace StylusAppU.Data.Serialization
             try
             {
                 NotebookArchiveFile = file;
-                using (var stream = await NotebookArchiveFile.OpenStreamForReadAsync())
+                using (var stream = await NotebookArchiveFile.OpenAsync(FileAccessMode.ReadWrite))
                 {
-                    using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
+                    using (var archive = new ZipArchive(stream.AsStream(), ZipArchiveMode.Update))
                     {
                         var notebookFile = archive.GetEntry(NotebookFileName);
                         _notebook = DeserializeNotebook(notebookFile);
+
+                        foreach (var page in _notebook.Pages)
+                        {
+                            await LoadPage(page, archive);
+                        }
                     }
                 }
             }
@@ -77,11 +82,13 @@ namespace StylusAppU.Data.Serialization
             await NotebookFileSemaphore.WaitAsync();
             try
             {    
-                using (var stream = await NotebookArchiveFile.OpenStreamForWriteAsync())
+                using (var stream = await NotebookArchiveFile.OpenAsync(FileAccessMode.ReadWrite))
                 {
-                    using (var archive = new ZipArchive(stream, ZipArchiveMode.Create))
+                    using (var archive = new ZipArchive(stream.AsStream(), ZipArchiveMode.Update))
                     {
-                        var notebookFile = archive.GetEntry(NotebookFileName);
+                        ClearArchive(archive);
+
+                        var notebookFile = archive.CreateEntry(NotebookFileName);
                         await SerializeNotebook(_notebook, notebookFile);
 
                         foreach (var page in _notebook.Pages)
@@ -99,34 +106,17 @@ namespace StylusAppU.Data.Serialization
 
         private async Task SavePage(Page page, ZipArchive archive)
         {
-            var inkFile = archive.GetEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
+            var inkFile = archive.CreateEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
             await SerializeInkCanvas(page.StrokeContainer, inkFile);
             //todo: serialize background file
         }
 
-        public async Task<InkStrokeContainer> LoadPage(Page page)
+        private async Task LoadPage(Page page, ZipArchive archive)
         {
-            if (NotebookArchiveFile == null) return null;
+            var inkFile = archive.GetEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
+            if (inkFile == null) return;
 
-            await NotebookFileSemaphore.WaitAsync();
-            try
-            {    
-                using (var stream = await NotebookArchiveFile.OpenAsync(FileAccessMode.ReadWrite))
-                {    
-                    using (var archive = new ZipArchive(stream.AsStream(), ZipArchiveMode.Update))
-                    {
-                        var inkFile = archive.GetEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
-                        if (inkFile == null) return null;
-
-                        var strokeContainer = await DeserializeInkCanvas(inkFile);
-                        return strokeContainer;
-                    }
-                }
-            }
-            finally
-            {
-                NotebookFileSemaphore.Release();
-            }
+            await DeserializeInkCanvas(inkFile, page.StrokeContainer);
         }
 
         #endregion
@@ -171,16 +161,23 @@ namespace StylusAppU.Data.Serialization
             }
         }
 
-        private static async Task<InkStrokeContainer> DeserializeInkCanvas(ZipArchiveEntry file)
+        private static async Task DeserializeInkCanvas(ZipArchiveEntry file, InkStrokeContainer container)
         {
-            var strokeContainer = new InkStrokeContainer();
             // Open a file stream for reading.
             // Read from file.
             using (var inputStream = file.Open().AsRandomAccessStream())
             {
-                await strokeContainer.LoadAsync(inputStream);
+                await container.LoadAsync(inputStream);
             }
-            return strokeContainer;
+        }
+
+        private void ClearArchive(ZipArchive archive)
+        {
+            for (int i = archive.Entries.Count - 1; i >= 0; i--)
+            {
+                var entry = archive.Entries[i];
+                entry.Delete();
+            }
         }
 
         #endregion

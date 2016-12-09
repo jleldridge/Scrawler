@@ -14,6 +14,7 @@ namespace StylusAppU.Data.Data
             BackgroundFileName = Guid.ToString();
             Width = 800;
             Height = 600;
+            StrokeContainer = new InkStrokeContainer();
         }
 
         [OnDeserialized]
@@ -21,6 +22,7 @@ namespace StylusAppU.Data.Data
         {
             if (Width == 0) Width = 800;
             if (Height == 0) Height = 600;
+            StrokeContainer = new InkStrokeContainer();
         }
 
         [DataMember]

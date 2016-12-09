@@ -61,16 +61,5 @@ namespace StylusAppU.ViewModel
                 OnPropertyChanged();
             }
         }
-
-        public async Task Initialize()
-        {
-            if (StrokeContainer != null) return;
-
-            StrokeContainer = await _notebookSerializer.LoadPage(_page);
-            if (StrokeContainer == null)
-            {
-                StrokeContainer = new InkStrokeContainer();
-            }
-        }
     }
 }

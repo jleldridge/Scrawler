@@ -15,15 +15,11 @@ namespace StylusAppU.View
             DataContextChanged += PageView_DataContextChanged;
         }
 
-        private async void PageView_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs e)
+        private void PageView_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs e)
         {
             var pageViewModel = e.NewValue as PageViewModel;
             if (pageViewModel != null)
             {
-                if (pageViewModel.StrokeContainer == null)
-                {
-                    await pageViewModel.Initialize();
-                }
                 Canvas.InkPresenter.StrokeContainer = pageViewModel.StrokeContainer;
             }
         }
