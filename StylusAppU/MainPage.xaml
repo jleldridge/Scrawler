@@ -48,23 +48,11 @@
                 Command="{Binding CreateNotebookCommand}"
                 Content="Create Notebook" />
 
-            <TextBox
-                Width="50"
-                Height="30"
-                TextAlignment="Center"
-                FontWeight="Bold"
-                Text="{Binding CurrentNotebook.CurrentPage.Width, Mode=TwoWay}"
-                Visibility="{Binding CurrentNotebook, 
-                    Converter={StaticResource VisibleIfNotNull}}"/>
-
-            <TextBox
-                Width="50"
-                Height="30"
-                TextAlignment="Center"
-                FontWeight="Bold"
-                Text="{Binding CurrentNotebook.CurrentPage.Height, Mode=TwoWay}"
-                Visibility="{Binding CurrentNotebook,
-                    Converter={StaticResource VisibleIfNotNull}}"/>
+            <Button 
+                Margin="5"
+                Background="White"
+                Command="{Binding ShowPageOptionsCommand}"
+                Content="Page Options" />
 
         </StackPanel>
 

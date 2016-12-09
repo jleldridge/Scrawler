@@ -7,12 +7,15 @@ using Utils.Commands;
 using Utils.ViewModel;
 using System.Threading.Tasks;
 using Windows.Storage.Pickers;
+using StylusAppU.DialogViewModels;
+using StylusAppU.Dialogs;
+using Windows.UI.Xaml.Controls;
 
 namespace StylusAppU.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        private ICommand _saveCommand, _loadCommand, _createNotebookCommand;
+        private ICommand _saveCommand, _loadCommand, _createNotebookCommand, _showNotebookOptionsCommand;
         private NotebookViewModel _currentNotebook;
 
         public MainViewModel()
@@ -54,6 +57,11 @@ namespace StylusAppU.ViewModel
             }
         }
 
+        public ICommand ShowPageOptionsCommand
+        {
+            get { return _showNotebookOptionsCommand ?? (_showNotebookOptionsCommand = new RelayCommand(_ => ShowNotebookOptions())); }
+        }
+
         private async void CreateNewNotebook()
         {
             var notebook = new Notebook("NewNotebook");
@@ -92,6 +100,18 @@ namespace StylusAppU.ViewModel
                     await notebookSerializer.LoadNotebookArchive(file);
                     CurrentNotebook = new NotebookViewModel(notebookSerializer);
                 }
+            }
+        }
+
+        public async void ShowNotebookOptions()
+        {
+            PageOptionsViewModel options = new PageOptionsViewModel(CurrentNotebook.CurrentPage);
+            var dlg = new PageOptionsDialog(options);
+            var result = await dlg.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                CurrentNotebook.CurrentPage.Width = options.Width;
+                CurrentNotebook.CurrentPage.Height = options.Height;
             }
         }
     }
