@@ -37,20 +37,22 @@
         </Grid.RowDefinitions>
 
         <ScrollViewer
+            x:Name="PageScroller"
             HorizontalScrollBarVisibility="Auto"
-            VerticalScrollBarVisibility="Auto">
+            VerticalScrollBarVisibility="Auto"
+            ZoomMode="Enabled">
 
             <local:PageView 
                 DataContext="{Binding CurrentPage}"
                 Width="{Binding Width}"
                 Height="{Binding Height}">
-                <local:PageView.RenderTransform>
+                <!--<local:PageView.RenderTransform>
                     <ScaleTransform
                         CenterX="0.5"
                         CenterY="0.5"
                         ScaleX="{Binding DataContext.Zoom, ElementName=NotebookViewElement}"
                         ScaleY="{Binding DataContext.Zoom, ElementName=NotebookViewElement}" />
-                </local:PageView.RenderTransform>
+                </local:PageView.RenderTransform>-->
             </local:PageView>
 
         </ScrollViewer>
