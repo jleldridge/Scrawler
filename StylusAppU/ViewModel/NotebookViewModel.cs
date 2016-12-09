@@ -17,6 +17,7 @@ namespace StylusAppU.ViewModel
         private Notebook _notebook;
         private int _currentPageNumber;
         private NotebookSerializer _notebookSerializer;
+        private double _zoom = 1.0;
 
         private RelayCommand _prevPageCommand;
         private RelayCommand _nextPageCommand;
@@ -76,6 +77,16 @@ namespace StylusAppU.ViewModel
                 }
                 OnPropertyChanged();
                 OnPropertyChanged("CurrentPage");
+            }
+        }
+
+        public double Zoom
+        {
+            get { return _zoom; }
+            set
+            {
+                _zoom = value;
+                OnPropertyChanged();
             }
         }
 
