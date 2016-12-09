@@ -5,12 +5,32 @@
     xmlns:local="using:StylusAppU.Dialogs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dvm="using:StylusAppU.DialogViewModels"
     mc:Ignorable="d"
     Title="Page Options"
     PrimaryButtonText="Apply"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_OkButtonClick"
-    SecondaryButtonClick="ContentDialog_CancelButtonClick">
+    SecondaryButtonClick="ContentDialog_CancelButtonClick"
+    d:DataContext="{d:DesignInstance dvm:PageOptionsViewModel}">
+
+    <ContentDialog.Resources>
+        <ResourceDictionary>
+
+            <Style TargetType="TextBlock">
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Margin" Value="5,0,5,0"/>
+            </Style>
+
+            <Style TargetType="Slider" x:Key="ColorSliderStyle">
+                <Setter Property="Minimum" Value="0" />
+                <Setter Property="Maximum" Value="255" />
+                <Setter Property="Width" Value="100" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentDialog.Resources>
+    
     <Grid>
         
         <StackPanel Orientation="Vertical">
@@ -19,8 +39,6 @@
                 Orientation="Horizontal"
                 Margin="0,5,0,5">
                 <TextBlock 
-                    Margin="5,0,5,0"
-                    FontWeight="Bold"
                     Text="Width"
                     Width="50"/>
                 <TextBox
@@ -37,8 +55,6 @@
                 Orientation="Horizontal"
                 Margin="0,5,0,5">
                 <TextBlock 
-                    Margin="5,0,5,0"
-                    FontWeight="Bold"
                     Text="Height"
                     Width="50"/>
                 <TextBox
@@ -49,6 +65,33 @@
                     Text="{Binding Height, 
                         Mode=TwoWay, 
                         UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+
+            <TextBlock
+                Margin="5,15,5,0"
+                Text="Background Color" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock 
+                    Text="R"/>
+                <Slider
+                    Style="{StaticResource ColorSliderStyle}"
+                    Value="{Binding Red}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock 
+                    Text="G"/>
+                <Slider 
+                    Style="{StaticResource ColorSliderStyle}"
+                    Value="{Binding Green}" />
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    Text="B"/>
+                <Slider 
+                    Style="{StaticResource ColorSliderStyle}"
+                    Value="{Binding Blue}" />
             </StackPanel>
 
         </StackPanel>

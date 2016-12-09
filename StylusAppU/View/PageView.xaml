@@ -14,6 +14,9 @@
         BorderBrush="Black"
         Background="White">
 
+        <Canvas 
+            />
+
         <InkCanvas 
             x:Name="Canvas"
             Grid.Row="1"/>
