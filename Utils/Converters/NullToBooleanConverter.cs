@@ -1,23 +1,15 @@
 ﻿using System;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace Utils.Converters
 {
-    public class NullToVisibilityConverter : IValueConverter
+    public class NullToBooleanConverter : IValueConverter
     {
         public bool Invert { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value == null && !Invert)
-            {
-                return Visibility.Collapsed;
-            }
-            else
-            {
-                return Visibility.Visible;
-            }
+            return !Invert ? value != null : value == null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
