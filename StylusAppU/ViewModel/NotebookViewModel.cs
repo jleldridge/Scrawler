@@ -14,10 +14,13 @@ namespace StylusAppU.ViewModel
 {
     public class NotebookViewModel : ViewModelBase
     {
+        public static readonly float ZoomMax = 5.0f;
+        public static readonly float ZoomMin = 0.1f;
+
         private Notebook _notebook;
         private int _currentPageNumber;
         private NotebookSerializer _notebookSerializer;
-        private float _zoom = 1.0f;
+        private float _zoom = 100.0f;
 
         private RelayCommand _prevPageCommand;
         private RelayCommand _nextPageCommand;
@@ -80,12 +83,16 @@ namespace StylusAppU.ViewModel
             }
         }
 
+        // Zoom is a percentage, translated to float in actual zooming code.
         public float Zoom
         {
             get { return _zoom; }
             set
             {
-                _zoom = value;
+                if (value > ZoomMax * 100f) _zoom = ZoomMax * 100;
+                else if (value < ZoomMin * 100f) _zoom = ZoomMin * 100;
+                else _zoom = value;
+
                 OnPropertyChanged();
             }
         }

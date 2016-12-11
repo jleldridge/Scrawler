@@ -57,14 +57,16 @@
                 Command="{Binding ShowPageOptionsCommand}"
                 Content="Page Options"
                 IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>
-
-            <Slider 
-                Minimum="1.0"
-                Maximum="5.0"
-                TickFrequency="0.1"
-                Width="100"
-                Value="{Binding CurrentNotebook.Zoom, Mode=TwoWay}"
+            
+            <TextBox 
+                Width="30"
+                Height="25"
+                Text="{Binding CurrentNotebook.Zoom, Mode=TwoWay}"
                 IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>
+            <TextBlock
+                FontWeight="Bold"
+                Height="25"
+                Text="%" />
 
         </StackPanel>
 

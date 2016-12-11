@@ -41,6 +41,8 @@
             HorizontalScrollBarVisibility="Auto"
             VerticalScrollBarVisibility="Auto"
             ZoomMode="Enabled"
+            MinZoomFactor="0.1"
+            MaxZoomFactor="5"
             ViewChanged="PageScroller_ViewChanged"
             >
 
