@@ -42,8 +42,7 @@
                 Background="White"
                 Command="{Binding LoadCommand}"
                 CommandParameter="{Binding ElementName=Canvas}"
-                Content="Load" 
-                IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>
+                Content="Load" />
 
             <Button 
                 Margin="5"
