@@ -16,6 +16,7 @@
 
             <converters:NullToVisibilityConverter x:Key="VisibleIfNotNull"/>
             <converters:NullToBooleanConverter x:Key="NotNull" />
+            <converters:NumberToPercentageConverter x:Key="ToPercentage" />
 
         </ResourceDictionary>
     </Page.Resources>
@@ -56,16 +57,20 @@
                 Command="{Binding ShowPageOptionsCommand}"
                 Content="Page Options"
                 IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>
-            
-            <TextBox 
-                Width="30"
-                Height="25"
-                Text="{Binding CurrentNotebook.Zoom, Mode=TwoWay}"
-                IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>
+
+            <Button 
+                Content="-"
+                Command="{Binding ZoomOutCommand}"
+                Visibility="{Binding CurrentNotebook, Converter={StaticResource VisibleIfNotNull}}"/>
             <TextBlock
-                FontWeight="Bold"
                 Height="25"
-                Text="%" />
+                VerticalAlignment="Center"
+                Text="{Binding CurrentNotebook.Zoom, Converter={StaticResource ToPercentage}}"
+                Visibility="{Binding CurrentNotebook, Converter={StaticResource VisibleIfNotNull}}"/>
+            <Button 
+                Content="+"
+                Command="{Binding ZoomInCommand}"
+                Visibility="{Binding CurrentNotebook, Converter={StaticResource VisibleIfNotNull}}"/>
 
         </StackPanel>
 

@@ -35,9 +35,9 @@ namespace StylusAppU.View
             switch (e.PropertyName)
             {
                 case "Zoom":
-                    if (ViewModel != null && PageScroller.ZoomFactor != ViewModel.Zoom / 100f)
+                    if (ViewModel != null && PageScroller.ZoomFactor != ViewModel.Zoom)
                     {
-                        PageScroller.ChangeView(null, null, ViewModel.Zoom / 100f);
+                        PageScroller.ChangeView(null, null, ViewModel.Zoom);
                     }
                     break;
             }
@@ -47,7 +47,7 @@ namespace StylusAppU.View
         {
             if (ViewModel.Zoom != PageScroller.ZoomFactor)
             {
-                ViewModel.Zoom = PageScroller.ZoomFactor * 100;
+                ViewModel.Zoom = PageScroller.ZoomFactor;
             }
         }
     }
