@@ -14,8 +14,8 @@
         BorderBrush="Black"
         Background="White">
 
-        <Canvas 
-            />
+        <Canvas
+            Background="{Binding BackgroundBrush}"/>
 
         <InkCanvas 
             x:Name="Canvas"

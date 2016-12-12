@@ -75,7 +75,7 @@
                     Text="R"/>
                 <Slider
                     Style="{StaticResource ColorSliderStyle}"
-                    Value="{Binding Red}"/>
+                    Value="{Binding Red, Mode=TwoWay}"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
@@ -83,7 +83,7 @@
                     Text="G"/>
                 <Slider 
                     Style="{StaticResource ColorSliderStyle}"
-                    Value="{Binding Green}" />
+                    Value="{Binding Green, Mode=TwoWay}" />
             </StackPanel>
             
             <StackPanel Orientation="Horizontal">
@@ -91,7 +91,7 @@
                     Text="B"/>
                 <Slider 
                     Style="{StaticResource ColorSliderStyle}"
-                    Value="{Binding Blue}" />
+                    Value="{Binding Blue, Mode=TwoWay}" />
             </StackPanel>
 
         </StackPanel>

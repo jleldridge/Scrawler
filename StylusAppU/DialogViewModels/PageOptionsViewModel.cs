@@ -7,7 +7,7 @@ namespace StylusAppU.DialogViewModels
     public class PageOptionsViewModel : ViewModelBase
     {
         private double _height, _width;
-        private byte _red, _green, _blue;
+        private double _red, _green, _blue;
 
         public PageOptionsViewModel(PageViewModel page)
         {
@@ -35,7 +35,7 @@ namespace StylusAppU.DialogViewModels
             }
         }
 
-        public byte Red
+        public double Red
         {
             get { return _red; }
             set
@@ -45,7 +45,7 @@ namespace StylusAppU.DialogViewModels
             }
         }
 
-        public byte Green
+        public double Green
         {
             get { return _green; }
             set
@@ -55,7 +55,7 @@ namespace StylusAppU.DialogViewModels
             }
         }
 
-        public byte Blue
+        public double Blue
         {
             get { return _blue; }
             set

@@ -6,13 +6,14 @@ using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Media.Imaging;
 using StylusAppU.Data.Serialization;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media;
 
 namespace StylusAppU.ViewModel
 {
     public class PageViewModel : ViewModelBase
     {
         private Page _page;
-        private BitmapImage _backgroundImage;
+        private Brush _backgroundBrush;
         private NotebookSerializer _notebookSerializer;
 
         public PageViewModel(Page page, NotebookSerializer notebookSerializer)
@@ -42,12 +43,12 @@ namespace StylusAppU.ViewModel
             }
         }
 
-        public BitmapImage BackgroundImage
+        public Brush BackgroundBrush
         {
-            get { return _backgroundImage; }
+            get { return _backgroundBrush; }
             set
             {
-                _backgroundImage = value;
+                _backgroundBrush = value;
                 OnPropertyChanged();
             }
         }

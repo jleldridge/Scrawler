@@ -7,9 +7,11 @@ using Utils.Commands;
 using Utils.ViewModel;
 using System.Threading.Tasks;
 using Windows.Storage.Pickers;
+using Windows.UI;
 using StylusAppU.DialogViewModels;
 using StylusAppU.Dialogs;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace StylusAppU.ViewModel
 {
@@ -115,6 +117,13 @@ namespace StylusAppU.ViewModel
             {
                 CurrentNotebook.CurrentPage.Width = options.Width;
                 CurrentNotebook.CurrentPage.Height = options.Height;
+                CurrentNotebook.CurrentPage.BackgroundBrush = new SolidColorBrush(new Color()
+                {
+                    A = 255,
+                    R = (byte)options.Red,
+                    G = (byte)options.Green,
+                    B = (byte)options.Blue
+                });
             }
         }
 
