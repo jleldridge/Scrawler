@@ -43,8 +43,8 @@
             ZoomMode="Enabled"
             MinZoomFactor="0.1"
             MaxZoomFactor="5"
-            ViewChanged="PageScroller_ViewChanged"
-            >
+            ZoomSnapPointsType="Mandatory"
+            ViewChanged="PageScroller_ViewChanged">
 
             <local:PageView 
                 DataContext="{Binding CurrentPage}"

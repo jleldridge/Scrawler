@@ -3,6 +3,7 @@ using System.ComponentModel;
 using StylusAppU.ViewModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using System.Diagnostics;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -14,6 +15,10 @@ namespace StylusAppU.View
         {
             this.InitializeComponent();
             DataContextChanged += NotebookView_DataContextChanged;
+            for (int i = 1; i < 500; i++)
+            {
+                PageScroller.ZoomSnapPoints.Add(i * 0.1f);
+            }
         }
 
         public NotebookViewModel ViewModel

@@ -122,7 +122,7 @@ namespace StylusAppU.ViewModel
         {
             if (CurrentNotebook != null)
             {
-                CurrentNotebook.Zoom -= 0.25f;
+                CurrentNotebook.Zoom -= 0.1f;
             }
         }
 
@@ -130,7 +130,7 @@ namespace StylusAppU.ViewModel
         {
             if (CurrentNotebook != null)
             {
-                CurrentNotebook.Zoom += 0.25f;
+                CurrentNotebook.Zoom += 0.1f;
             }
         }
     }
