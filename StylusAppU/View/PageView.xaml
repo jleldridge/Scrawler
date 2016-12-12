@@ -19,7 +19,8 @@
 
         <InkCanvas 
             x:Name="Canvas"
-            Grid.Row="1"/>
+            Grid.Row="1">
+        </InkCanvas>
 
     </Grid>
 

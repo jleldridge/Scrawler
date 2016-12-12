@@ -15,7 +15,12 @@ namespace StylusAppU.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        private ICommand _saveCommand, _loadCommand, _createNotebookCommand, _showNotebookOptionsCommand;
+        private ICommand _saveCommand, 
+            _loadCommand, 
+            _createNotebookCommand, 
+            _showNotebookOptionsCommand,
+            _zoomOutCommand,
+            _zoomInCommand;
         private NotebookViewModel _currentNotebook;
 
         public MainViewModel()
@@ -48,6 +53,16 @@ namespace StylusAppU.ViewModel
         public ICommand ShowPageOptionsCommand
         {
             get { return _showNotebookOptionsCommand ?? (_showNotebookOptionsCommand = new RelayCommand(_ => ShowNotebookOptions())); }
+        }
+
+        public ICommand ZoomOutCommand
+        {
+            get { return _zoomOutCommand ?? (_zoomOutCommand = new RelayCommand(_ => ZoomOut())); }
+        }
+
+        public ICommand ZoomInCommand
+        {
+            get { return _zoomInCommand ?? (_zoomInCommand = new RelayCommand(_ => ZoomIn())); }
         }
 
         private async void CreateNewNotebook()
@@ -100,6 +115,22 @@ namespace StylusAppU.ViewModel
             {
                 CurrentNotebook.CurrentPage.Width = options.Width;
                 CurrentNotebook.CurrentPage.Height = options.Height;
+            }
+        }
+
+        public void ZoomOut()
+        {
+            if (CurrentNotebook != null)
+            {
+                CurrentNotebook.Zoom -= 0.1f;
+            }
+        }
+
+        public void ZoomIn()
+        {
+            if (CurrentNotebook != null)
+            {
+                CurrentNotebook.Zoom += 0.1f;
             }
         }
     }

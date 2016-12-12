@@ -14,9 +14,13 @@ namespace StylusAppU.ViewModel
 {
     public class NotebookViewModel : ViewModelBase
     {
+        public static readonly float ZoomMax = 5.0f;
+        public static readonly float ZoomMin = 0.1f;
+
         private Notebook _notebook;
         private int _currentPageNumber;
         private NotebookSerializer _notebookSerializer;
+        private float _zoom = 1f;
 
         private RelayCommand _prevPageCommand;
         private RelayCommand _nextPageCommand;
@@ -76,6 +80,19 @@ namespace StylusAppU.ViewModel
                 }
                 OnPropertyChanged();
                 OnPropertyChanged("CurrentPage");
+            }
+        }
+
+        public float Zoom
+        {
+            get { return _zoom; }
+            set
+            {
+                if (value > ZoomMax) _zoom = ZoomMax;
+                else if (value < ZoomMin) _zoom = ZoomMin;
+                else _zoom = value;
+
+                OnPropertyChanged();
             }
         }
 
