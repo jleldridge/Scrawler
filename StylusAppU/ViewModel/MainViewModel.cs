@@ -79,32 +79,21 @@ namespace StylusAppU.ViewModel
         private async Task SaveNotebook()
         {
             await CurrentNotebook.SaveNotebook();
-            if (ApplicationData.Current.LocalSettings.Values.ContainsKey(NotebookSerializer.CurrentNotebookKey))
-            {
-                ApplicationData.Current.LocalSettings.Values[NotebookSerializer.CurrentNotebookKey] = CurrentNotebook.NotebookGuid.ToString();
-            }
-            else
-            {
-                ApplicationData.Current.LocalSettings.Values.Add(NotebookSerializer.CurrentNotebookKey, CurrentNotebook.NotebookGuid.ToString());
-            }
         }
 
         public async Task LoadNotebook()
         {
-            if (ApplicationData.Current.LocalSettings.Values.ContainsKey(NotebookSerializer.CurrentNotebookKey))
+            //var notebookGuid = ApplicationData.Current.LocalSettings.Values[NotebookSerializer.CurrentNotebookKey] as string;
+            var notebookSerializer = new NotebookSerializer();
+
+            var picker = new FileOpenPicker();
+            picker.FileTypeFilter.Add(".note");
+
+            var file = await picker.PickSingleFileAsync();
+            if (file != null)
             {
-                //var notebookGuid = ApplicationData.Current.LocalSettings.Values[NotebookSerializer.CurrentNotebookKey] as string;
-                var notebookSerializer = new NotebookSerializer();
-
-                var picker = new FileOpenPicker();
-                picker.FileTypeFilter.Add(".note");
-
-                var file = await picker.PickSingleFileAsync();
-                if (file != null)
-                {
-                    await notebookSerializer.LoadNotebookArchive(file);
-                    CurrentNotebook = new NotebookViewModel(notebookSerializer);
-                }
+                await notebookSerializer.LoadNotebookArchive(file);
+                CurrentNotebook = new NotebookViewModel(notebookSerializer);
             }
         }
 
