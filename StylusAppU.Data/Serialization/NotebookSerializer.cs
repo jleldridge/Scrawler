@@ -9,6 +9,7 @@ using Windows.Storage.Streams;
 using Windows.UI.Input.Inking;
 using System.IO.Compression;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace StylusAppU.Data.Serialization
@@ -152,12 +153,15 @@ namespace StylusAppU.Data.Serialization
 
         private static async Task SerializeInkCanvas(InkStrokeContainer strokeContainer, ZipArchiveEntry file)
         {
-            // Open a file stream for writing.
-            using (var outputStream = file.Open().AsOutputStream())
-            {
-                // Write the ink strokes to the output stream.
-                await strokeContainer.SaveAsync(outputStream);
-                await outputStream.FlushAsync();
+            if (strokeContainer.GetStrokes().Any())
+            {    
+                // Open a file stream for writing.
+                using (var outputStream = file.Open().AsOutputStream())
+                {
+                    // Write the ink strokes to the output stream.
+                    await strokeContainer.SaveAsync(outputStream);
+                    await outputStream.FlushAsync();
+                }
             }
         }
 
@@ -167,7 +171,10 @@ namespace StylusAppU.Data.Serialization
             // Read from file.
             using (var inputStream = file.Open().AsRandomAccessStream())
             {
-                await container.LoadAsync(inputStream);
+                if (inputStream.Size > 0)
+                {
+                    await container.LoadAsync(inputStream);
+                }
             }
         }
 

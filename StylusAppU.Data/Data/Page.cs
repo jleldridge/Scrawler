@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Windows.UI;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -16,7 +17,7 @@ namespace StylusAppU.Data.Data
             Width = 800;
             Height = 600;
             StrokeContainer = new InkStrokeContainer();
-            BackgroundImage = new BitmapImage();
+            BackgroundColor = new Color() {A = 255, R = 255, G = 255, B = 255};
         }
 
         [OnDeserialized]
@@ -24,8 +25,8 @@ namespace StylusAppU.Data.Data
         {
             if (Width == 0) Width = 800;
             if (Height == 0) Height = 600;
+            if (BackgroundColor.A == 0) BackgroundColor = new Color() { A = 255, R = 255, G = 255, B = 255 };
             StrokeContainer = new InkStrokeContainer();
-            BackgroundImage = new BitmapImage();
         }
 
         [DataMember]
@@ -43,7 +44,8 @@ namespace StylusAppU.Data.Data
         [DataMember]
         public string BackgroundFileName { get; set; }
 
-        public BitmapImage BackgroundImage { get; set; }
+        [DataMember]
+        public Color BackgroundColor { get; set; }
 
         public InkStrokeContainer StrokeContainer { get; set; }
 

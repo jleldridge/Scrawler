@@ -70,29 +70,61 @@
             <TextBlock
                 Margin="5,15,5,0"
                 Text="Background Color" />
-            <StackPanel Orientation="Horizontal">
-                <TextBlock 
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
                     Text="R"/>
                 <Slider
+                    Grid.Row="0"
+                    Grid.Column="1"
                     Style="{StaticResource ColorSliderStyle}"
                     Value="{Binding Red, Mode=TwoWay}"/>
-            </StackPanel>
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock 
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
                     Text="G"/>
-                <Slider 
+                <Slider
+                    Grid.Row="1"
+                    Grid.Column="1"
                     Style="{StaticResource ColorSliderStyle}"
                     Value="{Binding Green, Mode=TwoWay}" />
-            </StackPanel>
-            
-            <StackPanel Orientation="Horizontal">
+
                 <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
                     Text="B"/>
-                <Slider 
+                <Slider
+                    Grid.Row="2"
+                    Grid.Column="1"
                     Style="{StaticResource ColorSliderStyle}"
                     Value="{Binding Blue, Mode=TwoWay}" />
-            </StackPanel>
+                
+                <Border 
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Grid.RowSpan="3"
+                    Width="50"
+                    Height="50"
+                    VerticalAlignment="Center"
+                    BorderThickness="1"
+                    BorderBrush="Black"
+                    Background="{Binding BackgroundColorSample}" />
+
+            </Grid>
 
         </StackPanel>
         

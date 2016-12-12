@@ -6,6 +6,7 @@ using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Media.Imaging;
 using StylusAppU.Data.Serialization;
 using System.Threading.Tasks;
+using Windows.UI;
 using Windows.UI.Xaml.Media;
 
 namespace StylusAppU.ViewModel
@@ -13,7 +14,6 @@ namespace StylusAppU.ViewModel
     public class PageViewModel : ViewModelBase
     {
         private Page _page;
-        private Brush _backgroundBrush;
         private NotebookSerializer _notebookSerializer;
 
         public PageViewModel(Page page, NotebookSerializer notebookSerializer)
@@ -43,12 +43,12 @@ namespace StylusAppU.ViewModel
             }
         }
 
-        public Brush BackgroundBrush
+        public Color BackgroundColor
         {
-            get { return _backgroundBrush; }
+            get { return _page.BackgroundColor; }
             set
             {
-                _backgroundBrush = value;
+                _page.BackgroundColor = value;
                 OnPropertyChanged();
             }
         }

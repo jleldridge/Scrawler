@@ -6,21 +6,28 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:StylusAppU.ViewModel"
+    xmlns:converters="using:Utils.Converters"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance vm:PageViewModel}">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
 
+            <converters:ColorToSolidColorBrushConverter x:Key="ColorToBrush"/>
+            
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
     <Grid
         BorderThickness="1"
         BorderBrush="Black"
         Background="White">
 
         <Canvas
-            Background="{Binding BackgroundBrush}"/>
+            Background="{Binding BackgroundColor, Converter={StaticResource ColorToBrush}}"/>
 
         <InkCanvas 
-            x:Name="Canvas"
-            Grid.Row="1">
-        </InkCanvas>
+            x:Name="Canvas" />
 
     </Grid>
 

@@ -1,6 +1,7 @@
 ﻿using StylusAppU.ViewModel;
 using Utils.ViewModel;
 using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace StylusAppU.DialogViewModels
 {
@@ -13,6 +14,9 @@ namespace StylusAppU.DialogViewModels
         {
             Width = page.Width;
             Height = page.Height;
+            Red = page.BackgroundColor.R;
+            Green = page.BackgroundColor.G;
+            Blue = page.BackgroundColor.B;
         }
 
         public double Height
@@ -42,6 +46,7 @@ namespace StylusAppU.DialogViewModels
             {
                 _red = value;
                 OnPropertyChanged();
+                OnPropertyChanged("BackgroundColorSample");
             }
         }
 
@@ -52,6 +57,7 @@ namespace StylusAppU.DialogViewModels
             {
                 _green = value;
                 OnPropertyChanged();
+                OnPropertyChanged("BackgroundColorSample");
             }
         }
 
@@ -62,7 +68,13 @@ namespace StylusAppU.DialogViewModels
             {
                 _blue = value;
                 OnPropertyChanged();
+                OnPropertyChanged("BackgroundColorSample");
             }
+        }
+
+        public SolidColorBrush BackgroundColorSample
+        {
+            get { return new SolidColorBrush(new Color() { A = 255, R = (byte)Red, G = (byte)Green, B = (byte)Blue }); }
         }
     }
 }
