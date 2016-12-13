@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Windows.UI;
 
 namespace StylusAppU.Data.Data
 {
@@ -13,6 +14,13 @@ namespace StylusAppU.Data.Data
 
             Pages = new List<Page>();
             Guid = Guid.NewGuid();
+            SavedColors = new List<Color>();
+        }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            if (SavedColors == null) SavedColors = new List<Color>();
         }
 
         [DataMember]
@@ -23,6 +31,9 @@ namespace StylusAppU.Data.Data
 
         [DataMember]
         public List<Page> Pages { get; set; }
+
+        [DataMember]
+        public List<Color> SavedColors { get; set; }
 
         public Page AddPage()
         {

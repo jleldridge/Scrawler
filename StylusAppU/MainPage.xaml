@@ -72,6 +72,21 @@
                 Command="{Binding ZoomInCommand}"
                 Visibility="{Binding CurrentNotebook, Converter={StaticResource VisibleIfNotNull}}"/>
 
+            <Button
+                x:Name="PenSettingsButton"
+                Content="Pen Settings"
+                IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}">
+                <Button.Flyout>
+                    
+                    <Flyout
+                        Placement="Bottom">
+                        <view:PenOptionsView 
+                            DataContext="{Binding CurrentNotebook.PenOptionsViewModel}"/>
+                    </Flyout>
+                    
+                </Button.Flyout>
+            </Button>
+
         </StackPanel>
 
         <Border

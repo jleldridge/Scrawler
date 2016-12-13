@@ -106,11 +106,15 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\NotebookViewModel.cs" />
     <Compile Include="ViewModel\PageViewModel.cs" />
+    <Compile Include="ViewModel\PenOptionsViewModel.cs" />
     <Compile Include="View\NotebookView.xaml.cs">
       <DependentUpon>NotebookView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\PageView.xaml.cs">
       <DependentUpon>PageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PenOptionsView.xaml.cs">
+      <DependentUpon>PenOptionsView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +150,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\PageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PenOptionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

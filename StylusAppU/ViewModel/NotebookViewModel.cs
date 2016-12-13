@@ -9,6 +9,7 @@ using System.Linq;
 using Utils.Commands;
 using Utils.ViewModel;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace StylusAppU.ViewModel
 {
@@ -21,6 +22,7 @@ namespace StylusAppU.ViewModel
         private int _currentPageNumber;
         private NotebookSerializer _notebookSerializer;
         private float _zoom = 1f;
+        private PenOptionsViewModel _penOptionsViewModel;
 
         private RelayCommand _prevPageCommand;
         private RelayCommand _nextPageCommand;
@@ -34,6 +36,8 @@ namespace StylusAppU.ViewModel
             {
                 Pages.Add(new PageViewModel(page, _notebookSerializer));
             }
+
+            PenOptionsViewModel = new PenOptionsViewModel(this);
         }
 
         public Guid NotebookGuid
@@ -92,6 +96,26 @@ namespace StylusAppU.ViewModel
                 else if (value < ZoomMin) _zoom = ZoomMin;
                 else _zoom = value;
 
+                OnPropertyChanged();
+            }
+        }
+
+        public List<Color> SavedColors
+        {
+            get { return _notebook.SavedColors; }
+            set
+            {
+                _notebook.SavedColors = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public PenOptionsViewModel PenOptionsViewModel
+        {
+            get { return _penOptionsViewModel; }
+            set
+            {
+                _penOptionsViewModel = value;
                 OnPropertyChanged();
             }
         }

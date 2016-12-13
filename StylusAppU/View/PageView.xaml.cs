@@ -3,6 +3,8 @@ using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using StylusAppU.ViewModel;
+using Windows.UI;
+using Windows.UI.Input.Inking;
 
 namespace StylusAppU.View
 {
@@ -11,7 +13,7 @@ namespace StylusAppU.View
         public PageView()
         {
             this.InitializeComponent();
-            Canvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Pen;
+            InkCanvasElement.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Pen;
             DataContextChanged += PageView_DataContextChanged;
         }
 
@@ -20,8 +22,15 @@ namespace StylusAppU.View
             var pageViewModel = e.NewValue as PageViewModel;
             if (pageViewModel != null)
             {
-                Canvas.InkPresenter.StrokeContainer = pageViewModel.StrokeContainer;
+                InkCanvasElement.InkPresenter.StrokeContainer = pageViewModel.StrokeContainer;
             }
+        }
+
+        public void SetPenColor(Color color)
+        {
+            var drawingAttributes = new InkDrawingAttributes();
+            drawingAttributes.Color = color;
+            InkCanvasElement.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
         }
     }
 }

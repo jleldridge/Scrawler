@@ -47,9 +47,10 @@
             ViewChanged="PageScroller_ViewChanged">
 
             <local:PageView 
+                x:Name="PageViewElement"
                 DataContext="{Binding CurrentPage}"
                 Width="{Binding Width}"
-                Height="{Binding Height}" />
+                Height="{Binding Height}"/>
 
 
         </ScrollViewer>

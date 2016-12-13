@@ -4,6 +4,7 @@ using StylusAppU.ViewModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using System.Diagnostics;
+using Windows.UI;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -32,6 +33,7 @@ namespace StylusAppU.View
             if (vm != null)
             {
                 vm.PropertyChanged += ViewModel_PropertyChanged;
+                vm.PenOptionsViewModel.PropertyChanged += PenOptions_PropertyChanged;
             }
         }
 
@@ -45,6 +47,28 @@ namespace StylusAppU.View
                         PageScroller.ChangeView(null, null, ViewModel.Zoom);
                     }
                     break;
+            }
+        }
+
+        private void PenOptions_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var vm = sender as PenOptionsViewModel;
+            if (vm != null)
+            {
+                switch (e.PropertyName)
+                {
+                    case "Red":
+                    case "Green":
+                    case "Blue":
+                        PageViewElement.SetPenColor(new Color()
+                        {
+                            A = 255,
+                            R = (byte)vm.Red,
+                            G = (byte)vm.Green,
+                            B = (byte)vm.Blue
+                        });
+                        break;
+                }
             }
         }
 

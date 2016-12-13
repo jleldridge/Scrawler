@@ -27,7 +27,7 @@
             Background="{Binding BackgroundColor, Converter={StaticResource ColorToBrush}}"/>
 
         <InkCanvas 
-            x:Name="Canvas" />
+            x:Name="InkCanvasElement" />
 
     </Grid>
 
