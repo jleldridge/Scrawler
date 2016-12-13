@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using StylusAppU.Data.Data;
 using StylusAppU.Data.Serialization;
 using Windows.Storage;
+using System.Threading.Tasks;
 
 namespace StylusAppU.Tests
 {
@@ -10,7 +11,7 @@ namespace StylusAppU.Tests
     public class NotebookSerializerTests
     {
         [TestMethod]
-        public async void SaveNotebookTest()
+        public async Task SaveNotebookTest()
         {
             var notebook = new Notebook("TestNotebook");
             notebook.AddPage();
@@ -25,7 +26,7 @@ namespace StylusAppU.Tests
         }
 
         [TestMethod]
-        public async void LoadNotebookTest()
+        public async Task LoadNotebookTest()
         {
             var notebook = new Notebook("TestNotebook");
             notebook.AddPage();
