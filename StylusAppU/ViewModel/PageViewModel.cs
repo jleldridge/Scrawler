@@ -45,10 +45,10 @@ namespace StylusAppU.ViewModel
 
         public Color BackgroundColor
         {
-            get { return _page.BackgroundColor; }
+            get { return _page.Background.BackgroundColor; }
             set
             {
-                _page.BackgroundColor = value;
+                _page.Background.BackgroundColor = value;
                 OnPropertyChanged();
             }
         }

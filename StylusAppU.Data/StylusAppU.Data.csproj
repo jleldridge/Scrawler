@@ -107,6 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Background.cs" />
     <Compile Include="Data\Notebook.cs" />
     <Compile Include="Data\Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
