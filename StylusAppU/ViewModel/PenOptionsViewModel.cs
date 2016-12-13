@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Input;
 using Utils.Commands;
 using Utils.ViewModel;
+using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
 
@@ -10,12 +13,21 @@ namespace StylusAppU.ViewModel
     public class PenOptionsViewModel : ViewModelBase
     {
         private double _red, _green, _blue;
+        private int _penSize;
         private NotebookViewModel _notebookViewModel;
-        private ICommand _saveColorCommand, _setColorCommand;
+        private ICommand _saveColorCommand, 
+            _setColorCommand;
 
         public PenOptionsViewModel(NotebookViewModel notebook)
         {
             _notebookViewModel = notebook;
+            notebook.PropertyChanged += Notebook_PropertyChanged;
+            PenSize = 2;
+        }
+
+        public NotebookViewModel Notebook
+        {
+            get { return _notebookViewModel; }
         }
 
         public double Red
@@ -49,6 +61,23 @@ namespace StylusAppU.ViewModel
                 OnPropertyChanged();
                 OnPropertyChanged("ColorSample");
             }
+        }
+
+        public int PenSize
+        {
+            get { return _penSize; }
+            set
+            {
+                _penSize = value;
+                OnPropertyChanged();
+                OnPropertyChanged("PenSampleSize");
+            }
+        }
+
+        // takes zoom into account to show how large the stroke will be at the current zoom level
+        public double PenSampleSize
+        {
+            get { return PenSize * Notebook.Zoom; }
         }
 
         public SolidColorBrush ColorSample
@@ -97,6 +126,16 @@ namespace StylusAppU.ViewModel
                 B = (byte)Blue
             });
             SavedColors = new List<Color>(SavedColors);
+        }
+
+        private void Notebook_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "Zoom":
+                    OnPropertyChanged("PenSampleSize");
+                    break;
+            }
         }
     }
 }

@@ -60,13 +60,8 @@ namespace StylusAppU.View
                     case "Red":
                     case "Green":
                     case "Blue":
-                        PageViewElement.SetPenColor(new Color()
-                        {
-                            A = 255,
-                            R = (byte)vm.Red,
-                            G = (byte)vm.Green,
-                            B = (byte)vm.Blue
-                        });
+                    case "PenSize":
+                        PageViewElement.ApplyPenOptions(vm);
                         break;
                 }
             }

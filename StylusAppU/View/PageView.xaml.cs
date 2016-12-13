@@ -5,6 +5,7 @@ using Windows.UI.Xaml;
 using StylusAppU.ViewModel;
 using Windows.UI;
 using Windows.UI.Input.Inking;
+using Windows.Foundation;
 
 namespace StylusAppU.View
 {
@@ -26,10 +27,18 @@ namespace StylusAppU.View
             }
         }
 
-        public void SetPenColor(Color color)
+        public void ApplyPenOptions(PenOptionsViewModel options)
         {
             var drawingAttributes = new InkDrawingAttributes();
-            drawingAttributes.Color = color;
+            drawingAttributes.Color = new Color()
+            {
+                A = 255,
+                R = (byte)options.Red,
+                G = (byte)options.Green,
+                B = (byte)options.Blue
+            };
+            drawingAttributes.Size = new Size(options.PenSize, options.PenSize);
+
             InkCanvasElement.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
         }
     }
