@@ -43,39 +43,37 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <Border
+            <ItemsControl
                 Grid.Row="0"
                 Grid.ColumnSpan="3"
-                BorderBrush="Black"
-                BorderThickness="1">
+                ItemsSource="{Binding SavedColors}">
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VariableSizedWrapGrid 
+                            Orientation="Horizontal"
+                            MaximumRowsOrColumns="10"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+
+                        <Button
+                            Width="25"
+                            Height="25"
+                            Background="{Binding Converter={StaticResource ColorToBrush}}"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            Margin="1"
+                            Command="{Binding DataContext.SetColorCommand, ElementName=PenOptionsViewElement}"
+                            CommandParameter="{Binding}"/>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+            </ItemsControl>
                 
-                <ItemsControl
-                    ItemsSource="{Binding SavedColors}">
-
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VariableSizedWrapGrid 
-                                Orientation="Horizontal"
-                                MaximumRowsOrColumns="10"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-
-                            <Button
-                                Width="25"
-                                Height="25"
-                                Background="{Binding Converter={StaticResource ColorToBrush}}" 
-                                Command="{Binding DataContext.SetColorCommand, ElementName=PenOptionsViewElement}"
-                                CommandParameter="{Binding}"/>
-
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-
-                </ItemsControl>
-                
-            </Border>
 
             <TextBlock
                     Grid.Row="1"

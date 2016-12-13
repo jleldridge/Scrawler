@@ -18,6 +18,11 @@
             <converters:NullToBooleanConverter x:Key="NotNull" />
             <converters:NumberToPercentageConverter x:Key="ToPercentage" />
 
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="White" />
+                <Setter Property="Margin" Value="5" />
+            </Style>
+
         </ResourceDictionary>
     </Page.Resources>
     
@@ -31,29 +36,21 @@
             Orientation="Horizontal">
 
             <Button 
-                Margin="5"
-                Background="White"
                 Command="{Binding SaveCommand}"
                 CommandParameter="{Binding ElementName=Canvas}"
                 Content="Save" 
                 IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>
 
             <Button 
-                Margin="5"
-                Background="White"
                 Command="{Binding LoadCommand}"
                 CommandParameter="{Binding ElementName=Canvas}"
                 Content="Load" />
 
             <Button 
-                Margin="5"
-                Background="White"
                 Command="{Binding CreateNotebookCommand}"
                 Content="Create Notebook" />
 
             <Button 
-                Margin="5"
-                Background="White"
                 Command="{Binding ShowPageOptionsCommand}"
                 Content="Page Options"
                 IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>

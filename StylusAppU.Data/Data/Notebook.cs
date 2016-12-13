@@ -14,13 +14,16 @@ namespace StylusAppU.Data.Data
 
             Pages = new List<Page>();
             Guid = Guid.NewGuid();
-            SavedColors = new List<Color>();
+            SavedColors = new List<Color>() { new Color() { A = 255 } };
         }
 
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            if (SavedColors == null) SavedColors = new List<Color>();
+            if (SavedColors == null)
+            {
+                SavedColors = new List<Color>() { new Color() { A = 255 } };
+            }
         }
 
         [DataMember]
