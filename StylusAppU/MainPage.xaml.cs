@@ -1,5 +1,8 @@
-﻿using StylusAppU.ViewModel;
+﻿using System;
+using System.ComponentModel;
+using StylusAppU.ViewModel;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -13,12 +16,12 @@ namespace StylusAppU
         public MainPage()
         {
             DataContext = new MainViewModel();
-
             this.InitializeComponent();
+        }
 
-            //InkDrawingAttributes attr = new InkDrawingAttributes();
-            //attr.Color = Colors.White;
-            //Canvas.InkPresenter.UpdateDefaultDrawingAttributes(attr);
+        public MainViewModel ViewModel
+        {
+            get { return DataContext as MainViewModel; }
         }
     }
 }

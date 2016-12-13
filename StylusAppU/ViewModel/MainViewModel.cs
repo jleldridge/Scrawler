@@ -24,6 +24,7 @@ namespace StylusAppU.ViewModel
             _zoomOutCommand,
             _zoomInCommand;
         private NotebookViewModel _currentNotebook;
+        private bool _isSaving;
 
         public MainViewModel()
         {
@@ -35,6 +36,16 @@ namespace StylusAppU.ViewModel
             set
             {
                 _currentNotebook = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsSaving
+        {
+            get { return _isSaving; }
+            set
+            {
+                _isSaving = value;
                 OnPropertyChanged();
             }
         }
@@ -72,13 +83,14 @@ namespace StylusAppU.ViewModel
             var notebook = new Notebook("NewNotebook");
             notebook.AddPage();
             var notebookSerializer = new NotebookSerializer(notebook);
-            //await notebookSerializer.InitializeLocalNotebookFolder();
             CurrentNotebook = new NotebookViewModel(notebookSerializer);
         }
 
         private async Task SaveNotebook()
         {
+            IsSaving = true;
             await CurrentNotebook.SaveNotebook();
+            IsSaving = false;
         }
 
         public async Task LoadNotebook()
