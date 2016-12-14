@@ -8,6 +8,16 @@ namespace StylusAppU.BackgroundControls
 {
     public class GridLineBackgroundControl : Canvas
     {
+        public GridLineBackgroundControl()
+        {
+            SizeChanged += GridLineBackgroundControl_SizeChanged;
+        }
+
+        private void GridLineBackgroundControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            RedrawChildren();
+        }
+
         public static readonly DependencyProperty HorizontalLineThicknessProperty = DependencyProperty.Register(
             "HorizontalLineThickness", typeof (double), typeof (GridLineBackgroundControl), new PropertyMetadata(default(double), RedrawChildren));
 
@@ -56,51 +66,59 @@ namespace StylusAppU.BackgroundControls
         private static void RedrawChildren(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (GridLineBackgroundControl)d;
+            control.RedrawChildren();
+        }
 
-            control.Children.Clear();
+        private void RedrawChildren()
+        {
+            Children.Clear();
 
-            control.AddHorizontalLines();
-            control.AddVerticalLines();
-            control.InvalidateArrange();
+            AddHorizontalLines();
+            AddVerticalLines();
+            InvalidateArrange();
         }
 
         private void AddHorizontalLines()
         {
-            int numberOfHorizontalLines = (int)(Height / (HorizontalLineThickness + HorizontalLineSpacing));
             var lineColor = new SolidColorBrush(LineColor);
-            for (int i = 0; i < numberOfHorizontalLines; i++)
+
+            double y = HorizontalLineSpacing;
+            while (y < Height - 1)
             {
-                double y = i * (HorizontalLineThickness + HorizontalLineThickness);
                 var line = new Line
                 {
                     Stroke = lineColor,
                     StrokeThickness = HorizontalLineThickness,
                     X1 = 0,
                     X2 = Width,
-                    Y1 = y,
-                    Y2 = y
+                    Y1 = y - HorizontalLineThickness / 2,
+                    Y2 = y - HorizontalLineThickness / 2
                 };
                 Children.Add(line);
+
+                y += HorizontalLineSpacing;
             }
         }
 
         private void AddVerticalLines()
         {
-            int numberOfVerticalLines = (int)(Width / (VerticalLineThickness + VerticalLineSpacing));
             var lineColor = new SolidColorBrush(LineColor);
-            for (int i = 0; i < numberOfVerticalLines; i++)
+
+            double x = VerticalLineSpacing;
+            while (x < Width)
             {
-                double x = i * (VerticalLineThickness + VerticalLineSpacing);
                 var line = new Line
                 {
                     Stroke = lineColor,
                     StrokeThickness = VerticalLineThickness,
-                    X1 = x,
-                    X2 = x,
+                    X1 = x - VerticalLineThickness / 2,
+                    X2 = x - VerticalLineThickness / 2,
                     Y1 = 0,
                     Y2 = Height
                 };
                 Children.Add(line);
+
+                x += VerticalLineSpacing;
             }
         }
     }

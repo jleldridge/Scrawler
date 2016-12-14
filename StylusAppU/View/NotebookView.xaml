@@ -49,9 +49,9 @@
             <local:PageView 
                 x:Name="PageViewElement"
                 Margin="10"
-                DataContext="{Binding CurrentPage}"
-                Width="{Binding Width}"
-                Height="{Binding Height}"/>
+                Width="802"
+                Height="602"
+                DataContext="{Binding CurrentPage}"/>
 
 
         </ScrollViewer>
