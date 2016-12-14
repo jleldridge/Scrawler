@@ -90,11 +90,32 @@
             Grid.Row="1"
             Visibility="{Binding CurrentNotebook, 
                 Converter={StaticResource VisibleIfNotNull}}">
-            
+
             <view:NotebookView
-                DataContext="{Binding CurrentNotebook}"/>
-            
+                x:Name="NotebookViewElement"
+                DataContext="{Binding CurrentNotebook}" />
+
+
         </Border>
+
+        <Popup
+            Width="100"
+            Height="50"
+            Grid.RowSpan="2"
+            IsOpen="{Binding IsSaving}">
+            <Border
+                BorderBrush="Black"
+                BorderThickness="1"
+                Background="White">
+                <TextBlock 
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    FontSize="25"
+                    Text="Saving..." />
+            </Border>
+        </Popup>
 
     </Grid>
 </Page>
