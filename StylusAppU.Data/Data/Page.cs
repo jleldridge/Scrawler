@@ -17,7 +17,7 @@ namespace StylusAppU.Data.Data
             Width = 800;
             Height = 600;
             StrokeContainer = new InkStrokeContainer();
-            Background = new Background();
+            Background = new SolidBackground();
         }
 
         [OnDeserialized]
@@ -25,7 +25,7 @@ namespace StylusAppU.Data.Data
         {
             if (Width == 0) Width = 800;
             if (Height == 0) Height = 600;
-            if (Background == null) Background = new Background();
+            if (Background == null) Background = new SolidBackground();
             StrokeContainer = new InkStrokeContainer();
         }
 
@@ -45,7 +45,7 @@ namespace StylusAppU.Data.Data
         public string BackgroundFileName { get; set; }
 
         [DataMember]
-        public Background Background { get; set; }
+        public BackgroundBase Background { get; set; }
 
         public InkStrokeContainer StrokeContainer { get; set; }
 

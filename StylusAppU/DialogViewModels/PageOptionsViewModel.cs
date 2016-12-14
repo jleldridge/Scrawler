@@ -1,6 +1,4 @@
-﻿using StylusAppU.Data.Data;
-using StylusAppU.ViewModel;
-using System.Collections.Generic;
+﻿using StylusAppU.ViewModel;
 using Utils.ViewModel;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
@@ -11,7 +9,6 @@ namespace StylusAppU.DialogViewModels
     {
         private double _height, _width;
         private double _red, _green, _blue;
-        private BackgroundType _backgroundType;
 
         public PageOptionsViewModel(PageViewModel page)
         {
@@ -38,31 +35,6 @@ namespace StylusAppU.DialogViewModels
             set
             {
                 _width = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public List<BackgroundType> BackgroundTypes
-        {
-            get
-            {
-                return new List<BackgroundType>()
-                {
-                    BackgroundType.Solid,
-                    BackgroundType.HorizontalLines,
-                    BackgroundType.VerticalLines,
-                    BackgroundType.Grid,
-                    BackgroundType.Image
-                };
-            }
-        }
-
-        public BackgroundType BackgroundType
-        {
-            get { return _backgroundType; }
-            set
-            {
-                _backgroundType = value;
                 OnPropertyChanged();
             }
         }

@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:StylusAppU.ViewModel"
     xmlns:converters="using:Utils.Converters"
+    xmlns:backgroundControls="using:StylusAppU.BackgroundControls"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance vm:PageViewModel}">
     
@@ -23,8 +24,16 @@
         BorderBrush="Black"
         Background="White">
 
-        <Canvas
-            Background="{Binding BackgroundColor, Converter={StaticResource ColorToBrush}}"/>
+        <!--<Canvas
+            Background="{Binding BackgroundColor, Converter={StaticResource ColorToBrush}}"/>-->
+        <backgroundControls:GridLineBackgroundControl 
+            Width="{Binding Width}"
+            Height="{Binding Height}"
+            HorizontalLineSpacing="10"
+            VerticalLineSpacing="10"
+            HorizontalLineThickness="3"
+            VerticalLineThickness="3"
+            LineColor="Green"/>
 
         <InkCanvas 
             x:Name="InkCanvasElement" />
