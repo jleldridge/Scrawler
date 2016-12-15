@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using StylusAppU.Data.Data;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
+using StylusAppU.DialogViewModels;
 
 namespace StylusAppU.Controls
 {
@@ -20,31 +22,38 @@ namespace StylusAppU.Controls
             RedrawChildren();
         }
 
-        public BackgroundBase BackgroundData
+        public static readonly DependencyProperty BackgroundViewModelProperty = DependencyProperty.Register(
+            "BackgroundViewModel", 
+            typeof (BackgroundViewModelBase), 
+            typeof (BackgroundControl), 
+            new PropertyMetadata(default(BackgroundViewModelBase), BackgroundViewModelChanged));
+
+        public BackgroundViewModelBase BackgroundViewModel
         {
-            get { return (BackgroundBase)GetValue(BackgroundDataProperty); }
-            set { SetValue(BackgroundDataProperty, value); }
+            get { return (BackgroundViewModelBase) GetValue(BackgroundViewModelProperty); }
+            set { SetValue(BackgroundViewModelProperty, value); }
         }
 
-        public static readonly DependencyProperty BackgroundDataProperty =
-            DependencyProperty.Register("BackgroundData", 
-                typeof(BackgroundBase), 
-                typeof(BackgroundControl), 
-                new PropertyMetadata(default(BackgroundBase), RedrawChildren));
-
-        private static void RedrawChildren(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void BackgroundViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((BackgroundControl)d).RedrawChildren();
+            var control = ((BackgroundControl)d);
+            control.BackgroundViewModel.PropertyChanged += control.BackgroundViewModelOnPropertyChanged;
+            control.RedrawChildren();
+        }
+
+        private void BackgroundViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RedrawChildren();
         }
 
         private void RedrawChildren()
         {
             Children.Clear();
-            Background = new SolidColorBrush(BackgroundData.BackgroundColor);
+            Background = new SolidColorBrush(BackgroundViewModel.BackgroundData.BackgroundColor);
             
-            if (BackgroundData is GridLineBackground)
+            if (BackgroundViewModel.BackgroundData is GridLineBackground)
             {
-                var background = BackgroundData as GridLineBackground;
+                var background = BackgroundViewModel.BackgroundData as GridLineBackground;
                 DrawGridLineBackground(background);
             }
             InvalidateArrange();

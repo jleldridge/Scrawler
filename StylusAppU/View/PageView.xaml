@@ -29,7 +29,7 @@
         <controls:BackgroundControl 
             Width="{Binding Width}"
             Height="{Binding Height}"
-            BackgroundData="{Binding BackgroundData}"/>
+            BackgroundViewModel="{Binding BackgroundViewModel}"/>
 
         <InkCanvas
             Width="{Binding Width}"

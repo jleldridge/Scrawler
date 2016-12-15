@@ -18,7 +18,7 @@ namespace StylusAppU.DialogViewModels
         {
             Width = page.Width;
             Height = page.Height;
-            var backgroundData = DataContractHelper.Clone(page.BackgroundData);
+            var backgroundData = DataContractHelper.Clone(page.BackgroundViewModel.BackgroundData);
             
             if (backgroundData is SolidBackground)
             {

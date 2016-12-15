@@ -8,6 +8,7 @@ using StylusAppU.Data.Serialization;
 using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
+using StylusAppU.DialogViewModels;
 
 namespace StylusAppU.ViewModel
 {
@@ -15,11 +16,24 @@ namespace StylusAppU.ViewModel
     {
         private Page _page;
         private NotebookSerializer _notebookSerializer;
+        private BackgroundViewModelBase _backgroundViewModel;
 
         public PageViewModel(Page page, NotebookSerializer notebookSerializer)
         {
             _page = page;
             _notebookSerializer = notebookSerializer;
+            if (_page.Background is SolidBackground)
+            {
+                _backgroundViewModel = new SolidBackgroundViewModel((SolidBackground)_page.Background);
+            }
+            else if (_page.Background is GridLineBackground)
+            {
+                _backgroundViewModel = new GridLineBackgroundViewModel((GridLineBackground)_page.Background);
+            }
+            else if (_page.Background is ImageBackground)
+            {
+                _backgroundViewModel = new ImageBackgroundViewModel((ImageBackground)_page.Background);
+            }
             //LoadBackground();
         }
 
@@ -43,12 +57,13 @@ namespace StylusAppU.ViewModel
             }
         }
 
-        public BackgroundBase BackgroundData
+        public BackgroundViewModelBase BackgroundViewModel
         {
-            get { return _page.Background; }
+            get { return _backgroundViewModel; }
             set
             {
-                _page.Background = value;
+                _backgroundViewModel = value;
+                _page.Background = _backgroundViewModel.BackgroundData;
                 OnPropertyChanged();
             }
         }

@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:dvm="using:StylusAppU.DialogViewModels"
+    xmlns:controls="using:StylusAppU.Controls"
     mc:Ignorable="d"
     Title="Page Options"
     PrimaryButtonText="Apply"
@@ -169,16 +170,14 @@
                     Style="{StaticResource ColorSliderStyle}"
                     Value="{Binding BackgroundDataViewModel.Blue, Mode=TwoWay}" />
                 
-                <Border 
+                <controls:BackgroundControl 
                     Grid.Row="0"
                     Grid.Column="2"
                     Grid.RowSpan="4"
                     Width="125"
                     Height="125"
                     VerticalAlignment="Center"
-                    BorderThickness="1"
-                    BorderBrush="Black"
-                    Background="{Binding BackgroundDataViewModel.BackgroundColorSample}" />
+                    BackgroundViewModel="{Binding BackgroundDataViewModel}" />
 
             </Grid>
 
