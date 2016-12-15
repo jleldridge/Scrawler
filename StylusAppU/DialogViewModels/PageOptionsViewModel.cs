@@ -1,4 +1,6 @@
-﻿using StylusAppU.ViewModel;
+﻿using StylusAppU.Data.Data;
+using StylusAppU.ViewModel;
+using Utils.Serialization;
 using Utils.ViewModel;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
@@ -8,16 +10,19 @@ namespace StylusAppU.DialogViewModels
     public class PageOptionsViewModel : ViewModelBase
     {
         private double _height, _width;
-        private double _red, _green, _blue;
+        //private double _red, _green, _blue;
 
         public PageOptionsViewModel(PageViewModel page)
         {
             Width = page.Width;
             Height = page.Height;
-            Red = page.BackgroundColor.R;
-            Green = page.BackgroundColor.G;
-            Blue = page.BackgroundColor.B;
+            BackgroundData = DataContractHelper.Clone(page.BackgroundData);
+            //Red = page.BackgroundData.BackgroundColor.R;
+            //Green = page.BackgroundData.BackgroundColor.G;
+            //Blue = page.BackgroundData.BackgroundColor.B;
         }
+
+        public BackgroundBase BackgroundData { get; private set; }
 
         public double Height
         {
@@ -41,10 +46,16 @@ namespace StylusAppU.DialogViewModels
 
         public double Red
         {
-            get { return _red; }
+            get { return BackgroundData.BackgroundColor.R; }
             set
             {
-                _red = value;
+                BackgroundData.BackgroundColor = new Color()
+                {
+                    A = BackgroundData.BackgroundColor.A,
+                    R = (byte)value,
+                    G = BackgroundData.BackgroundColor.G,
+                    B = BackgroundData.BackgroundColor.B
+                };
                 OnPropertyChanged();
                 OnPropertyChanged("BackgroundColorSample");
             }
@@ -52,10 +63,16 @@ namespace StylusAppU.DialogViewModels
 
         public double Green
         {
-            get { return _green; }
+            get { return BackgroundData.BackgroundColor.G; }
             set
             {
-                _green = value;
+                BackgroundData.BackgroundColor = new Color()
+                {
+                    A = BackgroundData.BackgroundColor.A,
+                    R = BackgroundData.BackgroundColor.R,
+                    G = (byte)value,
+                    B = BackgroundData.BackgroundColor.B
+                };
                 OnPropertyChanged();
                 OnPropertyChanged("BackgroundColorSample");
             }
@@ -63,10 +80,16 @@ namespace StylusAppU.DialogViewModels
 
         public double Blue
         {
-            get { return _blue; }
+            get { return BackgroundData.BackgroundColor.B; }
             set
             {
-                _blue = value;
+                BackgroundData.BackgroundColor = new Color()
+                {
+                    A = BackgroundData.BackgroundColor.A,
+                    R = BackgroundData.BackgroundColor.R,
+                    G = BackgroundData.BackgroundColor.G,
+                    B = (byte)value
+                };
                 OnPropertyChanged();
                 OnPropertyChanged("BackgroundColorSample");
             }

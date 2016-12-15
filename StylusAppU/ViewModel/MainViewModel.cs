@@ -118,13 +118,7 @@ namespace StylusAppU.ViewModel
             {
                 CurrentNotebook.CurrentPage.Width = options.Width;
                 CurrentNotebook.CurrentPage.Height = options.Height;
-                CurrentNotebook.CurrentPage.BackgroundColor = new Color()
-                {
-                    A = 255,
-                    R = (byte)options.Red,
-                    G = (byte)options.Green,
-                    B = (byte)options.Blue
-                };
+                CurrentNotebook.CurrentPage.BackgroundData = options.BackgroundData;
             }
         }
 
