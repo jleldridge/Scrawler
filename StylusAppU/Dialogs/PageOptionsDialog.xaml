@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:dvm="using:StylusAppU.DialogViewModels"
     xmlns:controls="using:StylusAppU.Controls"
+    xmlns:viewModel="using:StylusAppU.ViewModel"
     mc:Ignorable="d"
     Title="Page Options"
     PrimaryButtonText="Apply"
@@ -29,7 +30,7 @@
                 <Setter Property="Width" Value="100" />
             </Style>
 
-            <DataTemplate x:DataType="dvm:GridLineBackgroundViewModel" x:Key="GridLineBackgroundTemplate">
+            <DataTemplate x:DataType="viewModel:GridLineBackgroundViewModel" x:Key="GridLineBackgroundTemplate">
                 <StackPanel Orientation="Vertical">
 
                     <StackPanel Orientation="Horizontal">
@@ -55,15 +56,15 @@
                 </StackPanel>
             </DataTemplate>
 
-            <DataTemplate x:DataType="dvm:SolidBackgroundViewModel" x:Key="SolidBackgroundTemplate">
+            <DataTemplate x:DataType="viewModel:SolidBackgroundViewModel" x:Key="SolidBackgroundTemplate">
                 <Grid />
             </DataTemplate>
 
-            <DataTemplate x:DataType="dvm:ImageBackgroundViewModel" x:Key="ImageBackgroundTemplate">
+            <DataTemplate x:DataType="viewModel:ImageBackgroundViewModel" x:Key="ImageBackgroundTemplate">
                 <Grid />
             </DataTemplate>
 
-            <dvm:BackgroundViewModelTemplateSelector 
+            <viewModel:BackgroundViewModelTemplateSelector 
                 x:Key="BackgroundTemplateSelector"
                 SolidBackgroundTemplate="{StaticResource SolidBackgroundTemplate}"
                 GridLineBackgroundTemplate="{StaticResource GridLineBackgroundTemplate}"

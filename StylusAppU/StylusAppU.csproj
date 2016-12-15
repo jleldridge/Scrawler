@@ -99,7 +99,7 @@
     <Compile Include="Dialogs\PageOptionsDialog.xaml.cs">
       <DependentUpon>PageOptionsDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DialogViewModels\BackgroundViewModel.cs" />
+    <Compile Include="ViewModel\BackgroundViewModel.cs" />
     <Compile Include="DialogViewModels\PageOptionsViewModel.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

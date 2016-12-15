@@ -5,7 +5,7 @@ using Windows.UI.Xaml.Media;
 using StylusAppU.Data.Data;
 using Utils.ViewModel;
 
-namespace StylusAppU.DialogViewModels
+namespace StylusAppU.ViewModel
 {
     public abstract class BackgroundViewModelBase : ViewModelBase
     {
