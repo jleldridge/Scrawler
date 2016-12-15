@@ -1,6 +1,6 @@
 ﻿using StylusAppU.Data.Data;
+using StylusAppU.Data.Serialization;
 using StylusAppU.ViewModel;
-using Utils.Serialization;
 using Utils.ViewModel;
 using Windows.UI;
 using Windows.UI.Xaml.Media;

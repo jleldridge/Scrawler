@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 
-namespace Utils.Serialization
+namespace StylusAppU.Data.Serialization
 {
     public static class DataContractHelper
     {

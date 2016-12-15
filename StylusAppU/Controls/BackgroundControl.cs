@@ -1,4 +1,5 @@
-﻿using StylusAppU.Data.Data;
+﻿using System;
+using StylusAppU.Data.Data;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -29,11 +30,17 @@ namespace StylusAppU.Controls
             DependencyProperty.Register("BackgroundData", 
                 typeof(BackgroundBase), 
                 typeof(BackgroundControl), 
-                new PropertyMetadata(0));
+                new PropertyMetadata(default(BackgroundBase), RedrawChildren));
+
+        private static void RedrawChildren(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((BackgroundControl)d).RedrawChildren();
+        }
 
         private void RedrawChildren()
         {
             Children.Clear();
+            Background = new SolidColorBrush(BackgroundData.BackgroundColor);
             
             if (BackgroundData is GridLineBackground)
             {

@@ -9,6 +9,13 @@ namespace StylusAppU.Data.Data
         {
         }
 
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            OnDeserializedBase(context);
+        }
+
+
         [DataMember]
         public string ImageFilePath { get; set; }
     }

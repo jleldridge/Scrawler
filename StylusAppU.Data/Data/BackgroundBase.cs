@@ -4,6 +4,9 @@ using Windows.UI;
 namespace StylusAppU.Data.Data
 {
     [DataContract]
+    [KnownType(typeof(SolidBackground))]
+    [KnownType(typeof(ImageBackground))]
+    [KnownType(typeof(GridLineBackground))]
     public abstract class BackgroundBase
     {
         public BackgroundBase()
@@ -11,8 +14,7 @@ namespace StylusAppU.Data.Data
             BackgroundColor = new Color() { A = 255, R = 255, G = 255, B = 255 };
         }
 
-        [OnDeserialized]
-        protected virtual void OnDeserialized(StreamingContext context)
+        protected void OnDeserializedBase(StreamingContext context)
         {
             if (BackgroundColor.A == 0)
             {

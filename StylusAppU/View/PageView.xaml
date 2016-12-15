@@ -28,7 +28,8 @@
                 Background="{Binding BackgroundColor, Converter={StaticResource ColorToBrush}}"/>-->
         <controls:BackgroundControl 
             Width="{Binding Width}"
-            Height="{Binding Height}"/>
+            Height="{Binding Height}"
+            BackgroundData="{Binding BackgroundData}"/>
 
         <InkCanvas
             Width="{Binding Width}"

@@ -12,9 +12,9 @@ namespace StylusAppU.Data.Data
         }
 
         [OnDeserialized]
-        protected override void OnDeserialized(StreamingContext context)
+        private void OnDeserialized(StreamingContext context)
         {
-            base.OnDeserialized(context);
+            OnDeserializedBase(context);
 
             if (LineColor.A == 0)
             {

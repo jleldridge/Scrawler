@@ -114,6 +114,7 @@
     <Compile Include="Data\Page.cs" />
     <Compile Include="Data\SolidBackground.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\DataContractHelper.cs" />
     <Compile Include="Serialization\NotebookSerializer.cs" />
     <EmbeddedResource Include="Properties\StylusAppU.Data.rd.xml" />
   </ItemGroup>
