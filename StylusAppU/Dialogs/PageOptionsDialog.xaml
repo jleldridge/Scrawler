@@ -28,6 +28,46 @@
                 <Setter Property="Width" Value="100" />
             </Style>
 
+            <DataTemplate x:DataType="dvm:GridLineBackgroundViewModel" x:Key="GridLineBackgroundTemplate">
+                <StackPanel Orientation="Vertical">
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Horizontal Line Spacing"/>
+                        <TextBox Text="{Binding HorizontalLineSpacing, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Vertical Line Spacing"/>
+                        <TextBox Text="{Binding VerticalLineSpacing, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Horizontal Line Thickness"/>
+                        <TextBox Text="{Binding HorizontalLineThickness, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Vertical Line Thickness"/>
+                        <TextBox Text="{Binding VerticalLineThickness, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:DataType="dvm:SolidBackgroundViewModel" x:Key="SolidBackgroundTemplate">
+                <Grid />
+            </DataTemplate>
+
+            <DataTemplate x:DataType="dvm:ImageBackgroundViewModel" x:Key="ImageBackgroundTemplate">
+                <Grid />
+            </DataTemplate>
+
+            <dvm:BackgroundViewModelTemplateSelector 
+                x:Key="BackgroundTemplateSelector"
+                SolidBackgroundTemplate="{StaticResource SolidBackgroundTemplate}"
+                GridLineBackgroundTemplate="{StaticResource GridLineBackgroundTemplate}"
+                ImageBackgroundTemplate="{StaticResource ImageBackgroundTemplate}"/>
+
         </ResourceDictionary>
     </ContentDialog.Resources>
     
@@ -107,7 +147,7 @@
                     Grid.Row="1"
                     Grid.Column="1"
                     Style="{StaticResource ColorSliderStyle}"
-                    Value="{Binding Red, Mode=TwoWay}"/>
+                    Value="{Binding BackgroundDataViewModel.Red, Mode=TwoWay}"/>
 
                 <TextBlock
                     Grid.Row="2"
@@ -117,7 +157,7 @@
                     Grid.Row="2"
                     Grid.Column="1"
                     Style="{StaticResource ColorSliderStyle}"
-                    Value="{Binding Green, Mode=TwoWay}" />
+                    Value="{Binding BackgroundDataViewModel.Green, Mode=TwoWay}" />
 
                 <TextBlock
                     Grid.Row="3"
@@ -127,7 +167,7 @@
                     Grid.Row="3"
                     Grid.Column="1"
                     Style="{StaticResource ColorSliderStyle}"
-                    Value="{Binding Blue, Mode=TwoWay}" />
+                    Value="{Binding BackgroundDataViewModel.Blue, Mode=TwoWay}" />
                 
                 <Border 
                     Grid.Row="0"
@@ -138,9 +178,13 @@
                     VerticalAlignment="Center"
                     BorderThickness="1"
                     BorderBrush="Black"
-                    Background="{Binding BackgroundColorSample}" />
+                    Background="{Binding BackgroundDataViewModel.BackgroundColorSample}" />
 
             </Grid>
+
+            <ContentControl
+                Content="{Binding BackgroundDataViewModel, Mode=OneWay}"
+                ContentTemplateSelector="{StaticResource BackgroundTemplateSelector}" />
 
         </StackPanel>
         

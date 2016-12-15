@@ -12,23 +12,27 @@ namespace StylusAppU.DialogViewModels
     {
         private double _height, _width;
         private BackgroundType _selectedType;
+        private BackgroundViewModelBase _backgroundDataViewModel;
 
         public PageOptionsViewModel(PageViewModel page)
         {
             Width = page.Width;
             Height = page.Height;
-            BackgroundData = DataContractHelper.Clone(page.BackgroundData);
+            var backgroundData = DataContractHelper.Clone(page.BackgroundData);
             
-            if (BackgroundData is SolidBackground)
+            if (backgroundData is SolidBackground)
             {
+                _backgroundDataViewModel = new SolidBackgroundViewModel(backgroundData as SolidBackground);
                 _selectedType = BackgroundType.Solid;
             }
-            else if (BackgroundData is GridLineBackground)
+            else if (backgroundData is GridLineBackground)
             {
+                _backgroundDataViewModel = new GridLineBackgroundViewModel(backgroundData as GridLineBackground);
                 _selectedType = BackgroundType.Grid;
             }
-            else if (BackgroundData is ImageBackground)
+            else if (backgroundData is ImageBackground)
             {
+                _backgroundDataViewModel = new ImageBackgroundViewModel(backgroundData as ImageBackground);
                 _selectedType = BackgroundType.Image;
             }
         }
@@ -51,29 +55,36 @@ namespace StylusAppU.DialogViewModels
             get { return _selectedType; }
             set
             {
-                _selectedType = value;
-                OnPropertyChanged();
+                if (value != _selectedType)
+                {    
+                    _selectedType = value;
+                    OnPropertyChanged();
 
-                switch (_selectedType)
-                {
-                    case BackgroundType.Solid:
-                        BackgroundData = new SolidBackground();
-                        break;
-                    case BackgroundType.Grid:
-                        BackgroundData = new GridLineBackground();
-                        break;
-                    case BackgroundType.Image:
-                        BackgroundData = new ImageBackground();
-                        break;
+                    switch (_selectedType)
+                    {
+                        case BackgroundType.Solid:
+                            BackgroundDataViewModel = new SolidBackgroundViewModel(new SolidBackground());
+                            break;
+                        case BackgroundType.Grid:
+                            BackgroundDataViewModel = new GridLineBackgroundViewModel(new GridLineBackground());
+                            break;
+                        case BackgroundType.Image:
+                            BackgroundDataViewModel = new ImageBackgroundViewModel(new ImageBackground());
+                            break;
+                    }
                 }
-                OnPropertyChanged("Red");
-                OnPropertyChanged("Green");
-                OnPropertyChanged("Blue");
-                OnPropertyChanged("BackgroundColorSample");
             }
         }
 
-        public BackgroundBase BackgroundData { get; private set; }
+        public BackgroundViewModelBase BackgroundDataViewModel
+        {
+            get { return _backgroundDataViewModel; }
+            set
+            {
+                _backgroundDataViewModel = value;
+                OnPropertyChanged();
+            }
+        }
 
         public double Height
         {
@@ -93,62 +104,6 @@ namespace StylusAppU.DialogViewModels
                 _width = value;
                 OnPropertyChanged();
             }
-        }
-
-        public double Red
-        {
-            get { return BackgroundData.BackgroundColor.R; }
-            set
-            {
-                BackgroundData.BackgroundColor = new Color()
-                {
-                    A = BackgroundData.BackgroundColor.A,
-                    R = (byte)value,
-                    G = BackgroundData.BackgroundColor.G,
-                    B = BackgroundData.BackgroundColor.B
-                };
-                OnPropertyChanged();
-                OnPropertyChanged("BackgroundColorSample");
-            }
-        }
-
-        public double Green
-        {
-            get { return BackgroundData.BackgroundColor.G; }
-            set
-            {
-                BackgroundData.BackgroundColor = new Color()
-                {
-                    A = BackgroundData.BackgroundColor.A,
-                    R = BackgroundData.BackgroundColor.R,
-                    G = (byte)value,
-                    B = BackgroundData.BackgroundColor.B
-                };
-                OnPropertyChanged();
-                OnPropertyChanged("BackgroundColorSample");
-            }
-        }
-
-        public double Blue
-        {
-            get { return BackgroundData.BackgroundColor.B; }
-            set
-            {
-                BackgroundData.BackgroundColor = new Color()
-                {
-                    A = BackgroundData.BackgroundColor.A,
-                    R = BackgroundData.BackgroundColor.R,
-                    G = BackgroundData.BackgroundColor.G,
-                    B = (byte)value
-                };
-                OnPropertyChanged();
-                OnPropertyChanged("BackgroundColorSample");
-            }
-        }
-
-        public SolidColorBrush BackgroundColorSample
-        {
-            get { return new SolidColorBrush(new Color() { A = 255, R = (byte)Red, G = (byte)Green, B = (byte)Blue }); }
         }
     }
 
