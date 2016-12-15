@@ -95,7 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BackgroundControls\GridLineBackgroundControl.cs" />
+    <Compile Include="Controls\BackgroundControl.cs" />
     <Compile Include="Dialogs\PageOptionsDialog.xaml.cs">
       <DependentUpon>PageOptionsDialog.xaml</DependentUpon>
     </Compile>

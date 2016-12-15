@@ -7,33 +7,28 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:StylusAppU.ViewModel"
     xmlns:converters="using:Utils.Converters"
-    xmlns:backgroundControls="using:StylusAppU.BackgroundControls"
+    xmlns:controls="using:StylusAppU.Controls"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance vm:PageViewModel}">
-    
+
     <UserControl.Resources>
         <ResourceDictionary>
 
             <converters:ColorToSolidColorBrushConverter x:Key="ColorToBrush"/>
-            
+
         </ResourceDictionary>
     </UserControl.Resources>
-    
+
     <Grid
-        BorderThickness="1"
-        BorderBrush="Black"
+        Width="{Binding Width}"
+        Height="{Binding Height}"
         Background="White">
 
         <!--<Canvas
-            Background="{Binding BackgroundColor, Converter={StaticResource ColorToBrush}}"/>-->
-        <backgroundControls:GridLineBackgroundControl 
+                Background="{Binding BackgroundColor, Converter={StaticResource ColorToBrush}}"/>-->
+        <controls:BackgroundControl 
             Width="{Binding Width}"
-            Height="{Binding Height}"
-            HorizontalLineSpacing="10"
-            VerticalLineSpacing="10"
-            HorizontalLineThickness="1"
-            VerticalLineThickness="1"
-            LineColor="Green"/>
+            Height="{Binding Height}"/>
 
         <InkCanvas
             Width="{Binding Width}"
