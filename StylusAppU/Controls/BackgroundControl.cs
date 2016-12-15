@@ -54,38 +54,44 @@ namespace StylusAppU.Controls
         {
             var lineColor = new SolidColorBrush(background.LineColor);
 
-            double y = background.HorizontalLineSpacing;
-            while (y < Height - 1)
+            if (background.HorizontalLineSpacing > 0)
             {
-                var line = new Line
+                double y = background.HorizontalLineSpacing;
+                while (y < Height - 1)
                 {
-                    Stroke = lineColor,
-                    StrokeThickness = background.HorizontalLineThickness,
-                    X1 = 0,
-                    X2 = Width,
-                    Y1 = y - background.HorizontalLineThickness / 2,
-                    Y2 = y - background.HorizontalLineThickness / 2
-                };
-                Children.Add(line);
+                    var line = new Line
+                    {
+                        Stroke = lineColor,
+                        StrokeThickness = background.HorizontalLineThickness,
+                        X1 = 0,
+                        X2 = Width,
+                        Y1 = y - background.HorizontalLineThickness / 2,
+                        Y2 = y - background.HorizontalLineThickness / 2
+                    };
+                    Children.Add(line);
 
-                y += background.HorizontalLineSpacing;
+                    y += background.HorizontalLineSpacing;
+                }
             }
 
-            double x = background.VerticalLineSpacing;
-            while (x < Width)
+            if (background.VerticalLineSpacing > 0)
             {
-                var line = new Line
+                double x = background.VerticalLineSpacing;
+                while (x < Width)
                 {
-                    Stroke = lineColor,
-                    StrokeThickness = background.VerticalLineThickness,
-                    X1 = x - background.VerticalLineThickness / 2,
-                    X2 = x - background.VerticalLineThickness / 2,
-                    Y1 = 0,
-                    Y2 = Height
-                };
-                Children.Add(line);
+                    var line = new Line
+                    {
+                        Stroke = lineColor,
+                        StrokeThickness = background.VerticalLineThickness,
+                        X1 = x - background.VerticalLineThickness / 2,
+                        X2 = x - background.VerticalLineThickness / 2,
+                        Y1 = 0,
+                        Y2 = Height
+                    };
+                    Children.Add(line);
 
-                x += background.VerticalLineSpacing;
+                    x += background.VerticalLineSpacing;
+                }
             }
         }
     }

@@ -79,7 +79,7 @@
                 <ComboBox
                     Width="120"
                     ItemsSource="{Binding BackgroundTypes}"
-                    SelectedItem="{Binding BackgroundType}"/>
+                    SelectedItem="{Binding SelectedType, Mode=TwoWay}"/>
             </StackPanel>
 
             <TextBlock

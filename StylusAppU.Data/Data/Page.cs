@@ -13,7 +13,6 @@ namespace StylusAppU.Data.Data
         {
             Guid = Guid.NewGuid();
             InkFileName = Guid.ToString();
-            BackgroundFileName = Guid.ToString();
             Width = 800;
             Height = 600;
             StrokeContainer = new InkStrokeContainer();
@@ -42,9 +41,6 @@ namespace StylusAppU.Data.Data
         public string InkFileName { get; set; }
 
         [DataMember]
-        public string BackgroundFileName { get; set; }
-
-        [DataMember]
         public BackgroundBase Background { get; set; }
 
         public InkStrokeContainer StrokeContainer { get; set; }
@@ -52,8 +48,7 @@ namespace StylusAppU.Data.Data
         public bool Equals(Page other)
         {
             return other.Guid.Equals(Guid) 
-                && other.InkFileName.Equals(InkFileName) 
-                && other.BackgroundFileName.Equals(BackgroundFileName);
+                && other.InkFileName.Equals(InkFileName);
         }
     }
 }
