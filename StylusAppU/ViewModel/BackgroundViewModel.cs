@@ -1,7 +1,6 @@
 ﻿using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using StylusAppU.Data.Data;
 using Utils.ViewModel;
 
@@ -29,7 +28,6 @@ namespace StylusAppU.ViewModel
                     B = BackgroundData.BackgroundColor.B
                 };
                 OnPropertyChanged();
-                OnPropertyChanged("BackgroundColorSample");
             }
         }
 
@@ -46,7 +44,6 @@ namespace StylusAppU.ViewModel
                     B = BackgroundData.BackgroundColor.B
                 };
                 OnPropertyChanged();
-                OnPropertyChanged("BackgroundColorSample");
             }
         }
 
@@ -63,13 +60,7 @@ namespace StylusAppU.ViewModel
                     B = (byte)value
                 };
                 OnPropertyChanged();
-                OnPropertyChanged("BackgroundColorSample");
             }
-        }
-
-        public SolidColorBrush BackgroundColorSample
-        {
-            get { return new SolidColorBrush(new Color() { A = 255, R = (byte)Red, G = (byte)Green, B = (byte)Blue }); }
         }
     }
 
@@ -114,6 +105,54 @@ namespace StylusAppU.ViewModel
         public GridLineBackground GridLineBackground
         {
             get { return BackgroundData as GridLineBackground; }
+        }
+
+        public double LineRed
+        {
+            get { return GridLineBackground.LineColor.R; }
+            set
+            {
+                GridLineBackground.LineColor = new Color()
+                {
+                    A = GridLineBackground.LineColor.A,
+                    R = (byte)value,
+                    G = GridLineBackground.LineColor.G,
+                    B = GridLineBackground.LineColor.B
+                };
+                OnPropertyChanged();
+            }
+        }
+
+        public double LineGreen
+        {
+            get { return GridLineBackground.LineColor.G; }
+            set
+            {
+                GridLineBackground.LineColor = new Color()
+                {
+                    A = GridLineBackground.LineColor.A,
+                    R = GridLineBackground.LineColor.R,
+                    G = (byte)value,
+                    B = GridLineBackground.LineColor.B
+                };
+                OnPropertyChanged();
+            }
+        }
+
+        public double LineBlue
+        {
+            get { return GridLineBackground.LineColor.B; }
+            set
+            {
+                GridLineBackground.LineColor = new Color()
+                {
+                    A = GridLineBackground.LineColor.A,
+                    R = GridLineBackground.LineColor.R,
+                    G = GridLineBackground.LineColor.G,
+                    B = (byte)value
+                };
+                OnPropertyChanged();
+            }
         }
 
         public double HorizontalLineSpacing

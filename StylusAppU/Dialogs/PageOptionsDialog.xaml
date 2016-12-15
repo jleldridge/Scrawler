@@ -39,62 +39,111 @@
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
+                    
+                    <TextBlock 
+                        Margin="5"
+                        FontWeight="Bold"
+                        Grid.Row="0"
+                        Grid.ColumnSpan="2"
+                        Text="Grid Lines" />
 
                     <TextBlock
                         Margin="5"
                         FontWeight="Bold"
-                        Grid.Row="0"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Text="R"/>
+                    <Slider
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Style="{StaticResource ColorSliderStyle}"
+                        Value="{Binding LineRed, Mode=TwoWay}"/>
+
+                    <TextBlock
+                        Margin="5"
+                        FontWeight="Bold"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Text="G"/>
+                    <Slider
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Style="{StaticResource ColorSliderStyle}"
+                        Value="{Binding LineGreen, Mode=TwoWay}" />
+
+                    <TextBlock
+                        Margin="5"
+                        FontWeight="Bold"
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Text="B"/>
+                    <Slider
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Style="{StaticResource ColorSliderStyle}"
+                        Value="{Binding LineBlue, Mode=TwoWay}" />
+
+                    <TextBlock
+                        Margin="5"
+                        FontWeight="Bold"
+                        Grid.Row="4"
                         Grid.Column="0"
                         Text="Horizontal Line Spacing"/>
                     <TextBox 
                         Margin="5"
                         FontWeight="Bold"
-                        Grid.Row="0"
+                        Grid.Row="4"
                         Grid.Column="1"
                         Text="{Binding HorizontalLineSpacing, Mode=TwoWay}"/>
 
                     <TextBlock 
                         Margin="5"
                         FontWeight="Bold"
-                        Grid.Row="1"
-                        Grid.Column="0"
+                        Grid.Row="4"
+                        Grid.Column="2"
                         Text="Vertical Line Spacing"/>
                     <TextBox 
                         Margin="5"
                         FontWeight="Bold"
-                        Grid.Row="1"
-                        Grid.Column="1"
+                        Grid.Row="4"
+                        Grid.Column="3"
                         Text="{Binding VerticalLineSpacing, Mode=TwoWay}"/>
 
                     <TextBlock 
                         Margin="5"
                         FontWeight="Bold"
-                        Grid.Row="2"
+                        Grid.Row="5"
                         Grid.Column="0"
                         Text="Horizontal Line Thickness"/>
                     <TextBox 
                         Margin="5"
                         FontWeight="Bold"
-                        Grid.Row="2"
+                        Grid.Row="5"
                         Grid.Column="1"
                         Text="{Binding HorizontalLineThickness, Mode=TwoWay}"/>
 
                     <TextBlock 
                         Margin="5"
                         FontWeight="Bold"
-                        Grid.Row="3"
-                        Grid.Column="0"
+                        Grid.Row="5"
+                        Grid.Column="2"
                         Text="Vertical Line Thickness"/>
                     <TextBox 
                         Margin="5"
                         FontWeight="Bold"
-                        Grid.Row="3"
-                        Grid.Column="1"
+                        Grid.Row="5"
+                        Grid.Column="3"
                         Text="{Binding VerticalLineThickness, Mode=TwoWay}"/>
 
                 </Grid>
