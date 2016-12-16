@@ -14,6 +14,7 @@
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_OkButtonClick"
     SecondaryButtonClick="ContentDialog_CancelButtonClick"
+    MaxWidth="600"
     d:DataContext="{d:DesignInstance dvm:PageOptionsViewModel}">
 
     <ContentDialog.Resources>
@@ -32,6 +33,12 @@
                 <Setter Property="TickFrequency" Value="1" />
             </Style>
 
+            <Style TargetType="TextBox" x:Key="NumericTextBoxStyle">
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="Width" Value="50" />
+                <Setter Property="Margin" Value="5" />
+            </Style>
+
             <DataTemplate x:DataType="viewModel:GridLineBackgroundViewModel" x:Key="GridLineBackgroundTemplate">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -39,6 +46,198 @@
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Stretch"
+                        Margin="5"
+                        Content="Background Color">
+                        <Button.Flyout>
+                            <Flyout>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock
+                                        Margin="5"
+                                        FontWeight="Bold"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Text="R"/>
+                                    <Slider
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ColorSliderStyle}"
+                                        Value="{Binding Red, Mode=TwoWay}"/>
+
+                                    <TextBlock
+                                        Margin="5"
+                                        FontWeight="Bold"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Text="G"/>
+                                    <Slider
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ColorSliderStyle}"
+                                        Value="{Binding Green, Mode=TwoWay}" />
+
+                                    <TextBlock
+                                        Margin="5"
+                                        FontWeight="Bold"
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        Text="B"/>
+                                    <Slider
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ColorSliderStyle}"
+                                        Value="{Binding Blue, Mode=TwoWay}" />
+
+                                </Grid>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+
+                    <Button
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Stretch"
+                        Margin="5"
+                        Content="Line Color">
+                        <Button.Flyout>
+                            <Flyout>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock
+                                        Margin="5"
+                                        FontWeight="Bold"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Text="R"/>
+                                    <Slider
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ColorSliderStyle}"
+                                        Value="{Binding LineRed, Mode=TwoWay}"/>
+
+                                    <TextBlock
+                                        Margin="5"
+                                        FontWeight="Bold"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Text="G"/>
+                                    <Slider
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ColorSliderStyle}"
+                                        Value="{Binding LineGreen, Mode=TwoWay}" />
+
+                                    <TextBlock
+                                        Margin="5"
+                                        FontWeight="Bold"
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        Text="B"/>
+                                    <Slider
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ColorSliderStyle}"
+                                        Value="{Binding LineBlue, Mode=TwoWay}" />
+
+                                </Grid>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+
+                    <TextBlock 
+                        Margin="5"
+                        FontWeight="Bold"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Text="Grid Lines" />
+
+                    <TextBlock
+                        Margin="5"
+                        FontWeight="Bold"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Text="Horizontal Line Spacing"/>
+                    <TextBox 
+                        Style="{StaticResource NumericTextBoxStyle}"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Text="{Binding HorizontalLineSpacing, Mode=TwoWay}"/>
+
+                    <TextBlock 
+                        Margin="5"
+                        FontWeight="Bold"
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Text="Vertical Line Spacing"/>
+                    <TextBox 
+                        Style="{StaticResource NumericTextBoxStyle}"
+                        Grid.Row="2"
+                        Grid.Column="3"
+                        Text="{Binding VerticalLineSpacing, Mode=TwoWay}"/>
+
+                    <TextBlock 
+                        Margin="5"
+                        FontWeight="Bold"
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Text="Horizontal Line Thickness"/>
+                    <TextBox 
+                        Style="{StaticResource NumericTextBoxStyle}"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Text="{Binding HorizontalLineThickness, Mode=TwoWay}"/>
+
+                    <TextBlock 
+                        Margin="5"
+                        FontWeight="Bold"
+                        Grid.Row="3"
+                        Grid.Column="2"
+                        Text="Vertical Line Thickness"/>
+                    <TextBox 
+                        Style="{StaticResource NumericTextBoxStyle}"
+                        Grid.Row="3"
+                        Grid.Column="3"
+                        Text="{Binding VerticalLineThickness, Mode=TwoWay}"/>
+
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:DataType="viewModel:SolidBackgroundViewModel" x:Key="SolidBackgroundTemplate">
+                <Grid>
+                    
+                    <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
@@ -47,16 +246,11 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    
-                    <TextBlock 
-                        Margin="5"
-                        FontWeight="Bold"
-                        Grid.Row="0"
-                        Grid.ColumnSpan="2"
-                        Text="Grid Lines" />
+
+                    <TextBlock
+                        Margin="5,15,5,0"
+                        Text="Background Color" />
 
                     <TextBlock
                         Margin="5"
@@ -68,7 +262,7 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Style="{StaticResource ColorSliderStyle}"
-                        Value="{Binding LineRed, Mode=TwoWay}"/>
+                        Value="{Binding Red, Mode=TwoWay}"/>
 
                     <TextBlock
                         Margin="5"
@@ -80,7 +274,7 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         Style="{StaticResource ColorSliderStyle}"
-                        Value="{Binding LineGreen, Mode=TwoWay}" />
+                        Value="{Binding Green, Mode=TwoWay}" />
 
                     <TextBlock
                         Margin="5"
@@ -92,69 +286,71 @@
                         Grid.Row="3"
                         Grid.Column="1"
                         Style="{StaticResource ColorSliderStyle}"
-                        Value="{Binding LineBlue, Mode=TwoWay}" />
-
-                    <TextBlock
-                        Margin="5"
-                        FontWeight="Bold"
-                        Grid.Row="4"
-                        Grid.Column="0"
-                        Text="Horizontal Line Spacing"/>
-                    <TextBox 
-                        Margin="5"
-                        FontWeight="Bold"
-                        Grid.Row="4"
-                        Grid.Column="1"
-                        Text="{Binding HorizontalLineSpacing, Mode=TwoWay}"/>
-
-                    <TextBlock 
-                        Margin="5"
-                        FontWeight="Bold"
-                        Grid.Row="4"
-                        Grid.Column="2"
-                        Text="Vertical Line Spacing"/>
-                    <TextBox 
-                        Margin="5"
-                        FontWeight="Bold"
-                        Grid.Row="4"
-                        Grid.Column="3"
-                        Text="{Binding VerticalLineSpacing, Mode=TwoWay}"/>
-
-                    <TextBlock 
-                        Margin="5"
-                        FontWeight="Bold"
-                        Grid.Row="5"
-                        Grid.Column="0"
-                        Text="Horizontal Line Thickness"/>
-                    <TextBox 
-                        Margin="5"
-                        FontWeight="Bold"
-                        Grid.Row="5"
-                        Grid.Column="1"
-                        Text="{Binding HorizontalLineThickness, Mode=TwoWay}"/>
-
-                    <TextBlock 
-                        Margin="5"
-                        FontWeight="Bold"
-                        Grid.Row="5"
-                        Grid.Column="2"
-                        Text="Vertical Line Thickness"/>
-                    <TextBox 
-                        Margin="5"
-                        FontWeight="Bold"
-                        Grid.Row="5"
-                        Grid.Column="3"
-                        Text="{Binding VerticalLineThickness, Mode=TwoWay}"/>
+                        Value="{Binding Blue, Mode=TwoWay}" />
 
                 </Grid>
             </DataTemplate>
 
-            <DataTemplate x:DataType="viewModel:SolidBackgroundViewModel" x:Key="SolidBackgroundTemplate">
-                <Grid />
-            </DataTemplate>
-
             <DataTemplate x:DataType="viewModel:ImageBackgroundViewModel" x:Key="ImageBackgroundTemplate">
-                <Grid />
+                <Grid>
+
+                    <Button
+                        Content="Background Color">
+                        <Button.Flyout>
+                            <Flyout>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock
+                                        Margin="5"
+                                        FontWeight="Bold"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Text="R"/>
+                                    <Slider
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ColorSliderStyle}"
+                                        Value="{Binding Red, Mode=TwoWay}"/>
+
+                                    <TextBlock
+                                        Margin="5"
+                                        FontWeight="Bold"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Text="G"/>
+                                    <Slider
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ColorSliderStyle}"
+                                        Value="{Binding Green, Mode=TwoWay}" />
+
+                                    <TextBlock
+                                        Margin="5"
+                                        FontWeight="Bold"
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        Text="B"/>
+                                    <Slider
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ColorSliderStyle}"
+                                        Value="{Binding Blue, Mode=TwoWay}" />
+
+                                </Grid>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+
+                </Grid>
             </DataTemplate>
 
             <viewModel:BackgroundViewModelTemplateSelector 
@@ -215,65 +411,29 @@
                     SelectedItem="{Binding SelectedType, Mode=TwoWay}"/>
             </StackPanel>
 
-            <TextBlock
-                Margin="5,15,5,0"
-                Text="Background Color" />
-
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
 
-                <TextBlock
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Text="R"/>
-                <Slider
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Style="{StaticResource ColorSliderStyle}"
-                    Value="{Binding BackgroundDataViewModel.Red, Mode=TwoWay}"/>
-
-                <TextBlock
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Text="G"/>
-                <Slider
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    Style="{StaticResource ColorSliderStyle}"
-                    Value="{Binding BackgroundDataViewModel.Green, Mode=TwoWay}" />
-
-                <TextBlock
-                    Grid.Row="3"
-                    Grid.Column="0"
-                    Text="B"/>
-                <Slider
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    Style="{StaticResource ColorSliderStyle}"
-                    Value="{Binding BackgroundDataViewModel.Blue, Mode=TwoWay}" />
-                
-                <controls:BackgroundControl 
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    Grid.RowSpan="4"
-                    Width="125"
-                    Height="125"
-                    VerticalAlignment="Center"
-                    BackgroundViewModel="{Binding BackgroundDataViewModel}" />
+                <Border
+                    Width="127"
+                    Height="127"
+                    BorderBrush="Black"
+                    BorderThickness="1">
+                    <controls:BackgroundControl 
+                        Width="125"
+                        Height="125"
+                        VerticalAlignment="Center"
+                        BackgroundViewModel="{Binding BackgroundDataViewModel}" />
+                </Border>
 
             </Grid>
 
             <ContentControl
+                Margin="5"
+                HorizontalAlignment="Center"
                 Content="{Binding BackgroundDataViewModel, Mode=OneWay}"
                 ContentTemplateSelector="{StaticResource BackgroundTemplateSelector}" />
 
