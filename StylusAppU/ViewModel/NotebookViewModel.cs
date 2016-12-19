@@ -55,6 +55,16 @@ namespace StylusAppU.ViewModel
             }
         }
 
+        public Defaults Defaults
+        {
+            get { return _notebook.Defaults; }
+            set
+            {
+                _notebook.Defaults = value;
+                OnPropertyChanged();
+            }
+        }
+
         public PageViewModel CurrentPage
         {
             // be sure to use field for indexing, since it is 0 based

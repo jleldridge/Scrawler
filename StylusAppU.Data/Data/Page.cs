@@ -3,20 +3,21 @@ using System.Runtime.Serialization;
 using Windows.UI;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Media.Imaging;
+using StylusAppU.Data.Serialization;
 
 namespace StylusAppU.Data.Data
 {
     [DataContract]
     public class Page : IEquatable<Page>
     {
-        internal Page()
+        internal Page(Defaults defaults)
         {
             Guid = Guid.NewGuid();
             InkFileName = Guid.ToString();
-            Width = 800;
-            Height = 600;
+            Width = defaults.PageWidth;
+            Height = defaults.PageHeight;
+            Background = DataContractHelper.Clone(defaults.Background);
             StrokeContainer = new InkStrokeContainer();
-            Background = new SolidBackground();
         }
 
         [OnDeserialized]

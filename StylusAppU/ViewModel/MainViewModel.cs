@@ -119,6 +119,13 @@ namespace StylusAppU.ViewModel
                 CurrentNotebook.CurrentPage.Width = options.Width;
                 CurrentNotebook.CurrentPage.Height = options.Height;
                 CurrentNotebook.CurrentPage.BackgroundViewModel = options.BackgroundDataViewModel;
+
+                CurrentNotebook.Defaults = new Defaults()
+                {
+                    Background = options.BackgroundDataViewModel.BackgroundData,
+                    PageWidth = options.Width,
+                    PageHeight = options.Height
+                };
             }
         }
 

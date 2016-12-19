@@ -15,6 +15,7 @@ namespace StylusAppU.Data.Data
             Pages = new List<Page>();
             Guid = Guid.NewGuid();
             SavedColors = new List<Color>() { new Color() { A = 255 } };
+            Defaults = new Defaults();
         }
 
         [OnDeserialized]
@@ -23,6 +24,10 @@ namespace StylusAppU.Data.Data
             if (SavedColors == null)
             {
                 SavedColors = new List<Color>() { new Color() { A = 255 } };
+            }
+            if (Defaults == null)
+            {
+                Defaults = new Defaults();
             }
         }
 
@@ -38,9 +43,12 @@ namespace StylusAppU.Data.Data
         [DataMember]
         public List<Color> SavedColors { get; set; }
 
+        [DataMember]
+        public Defaults Defaults { get; set; }
+
         public Page AddPage()
         {
-            var page = new Page();
+            var page = new Page(Defaults);
             Pages.Add(page);
             return page;
         }

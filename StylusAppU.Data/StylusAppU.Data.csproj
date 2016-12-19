@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\BackgroundBase.cs" />
+    <Compile Include="Data\Defaults.cs" />
     <Compile Include="Data\GridLineBackground.cs" />
     <Compile Include="Data\ImageBackground.cs" />
     <Compile Include="Data\Notebook.cs" />
