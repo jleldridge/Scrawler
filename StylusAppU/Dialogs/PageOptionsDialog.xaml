@@ -129,6 +129,7 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                         <RowDefinition />
+                                        <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -140,9 +141,21 @@
                                         FontWeight="Bold"
                                         Grid.Row="0"
                                         Grid.Column="0"
-                                        Text="R"/>
+                                        Text="A"/>
                                     <Slider
                                         Grid.Row="0"
+                                        Grid.Column="1"
+                                        Style="{StaticResource ColorSliderStyle}"
+                                        Value="{Binding LineAlpha, Mode=TwoWay}"/>
+
+                                    <TextBlock
+                                        Margin="5"
+                                        FontWeight="Bold"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Text="R"/>
+                                    <Slider
+                                        Grid.Row="1"
                                         Grid.Column="1"
                                         Style="{StaticResource ColorSliderStyle}"
                                         Value="{Binding LineRed, Mode=TwoWay}"/>
@@ -150,11 +163,11 @@
                                     <TextBlock
                                         Margin="5"
                                         FontWeight="Bold"
-                                        Grid.Row="1"
+                                        Grid.Row="2"
                                         Grid.Column="0"
                                         Text="G"/>
                                     <Slider
-                                        Grid.Row="1"
+                                        Grid.Row="2"
                                         Grid.Column="1"
                                         Style="{StaticResource ColorSliderStyle}"
                                         Value="{Binding LineGreen, Mode=TwoWay}" />
@@ -162,11 +175,11 @@
                                     <TextBlock
                                         Margin="5"
                                         FontWeight="Bold"
-                                        Grid.Row="2"
+                                        Grid.Row="3"
                                         Grid.Column="0"
                                         Text="B"/>
                                     <Slider
-                                        Grid.Row="2"
+                                        Grid.Row="3"
                                         Grid.Column="1"
                                         Style="{StaticResource ColorSliderStyle}"
                                         Value="{Binding LineBlue, Mode=TwoWay}" />

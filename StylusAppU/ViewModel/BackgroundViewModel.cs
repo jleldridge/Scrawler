@@ -107,6 +107,22 @@ namespace StylusAppU.ViewModel
             get { return BackgroundData as GridLineBackground; }
         }
 
+        public double LineAlpha
+        {
+            get { return GridLineBackground.LineColor.A; }
+            set
+            {
+                GridLineBackground.LineColor = new Color()
+                {
+                    A = (byte)value,
+                    R = GridLineBackground.LineColor.R,
+                    G = GridLineBackground.LineColor.G,
+                    B = GridLineBackground.LineColor.B
+                };
+                OnPropertyChanged();
+            }
+        }
+
         public double LineRed
         {
             get { return GridLineBackground.LineColor.R; }
