@@ -17,6 +17,7 @@
             <converters:NullToVisibilityConverter x:Key="VisibleIfNotNull"/>
             <converters:NullToBooleanConverter x:Key="NotNull" />
             <converters:NumberToPercentageConverter x:Key="ToPercentage" />
+            <converters:BoolToVisibilityConverter x:Key="VisibleIfTrue" />
 
             <Style TargetType="Button">
                 <Setter Property="Background" Value="White" />
@@ -26,96 +27,132 @@
         </ResourceDictionary>
     </Page.Resources>
     
-    <Grid Background="DarkGray">
-        <Grid.RowDefinitions>
+    <SplitView 
+        Background="DarkGray"
+        IsPaneOpen="{Binding IsChecked, ElementName=PaneDisplayButton, Mode=TwoWay}"
+        DisplayMode="CompactInline">
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        </Grid.RowDefinitions>-->
+        <SplitView.Pane>
+            <StackPanel 
+                Orientation="Vertical">
 
-        <StackPanel 
-            Orientation="Horizontal">
+                <ToggleButton
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Content="+" 
+                    x:Name="PaneDisplayButton"/>
 
-            <Button 
-                Command="{Binding SaveCommand}"
-                CommandParameter="{Binding ElementName=Canvas}"
-                Content="Save" 
-                IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>
-
-            <Button 
-                Command="{Binding LoadCommand}"
-                CommandParameter="{Binding ElementName=Canvas}"
-                Content="Load" />
-
-            <Button 
-                Command="{Binding CreateNotebookCommand}"
-                Content="Create Notebook" />
-
-            <Button 
-                Command="{Binding ShowPageOptionsCommand}"
-                Content="Page Options"
-                IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>
-
-            <Button 
-                Content="-"
-                Command="{Binding ZoomOutCommand}"
-                Visibility="{Binding CurrentNotebook, Converter={StaticResource VisibleIfNotNull}}"/>
-            <TextBlock
-                Height="25"
-                VerticalAlignment="Center"
-                Text="{Binding CurrentNotebook.Zoom, Converter={StaticResource ToPercentage}}"
-                Visibility="{Binding CurrentNotebook, Converter={StaticResource VisibleIfNotNull}}"/>
-            <Button 
-                Content="+"
-                Command="{Binding ZoomInCommand}"
-                Visibility="{Binding CurrentNotebook, Converter={StaticResource VisibleIfNotNull}}"/>
-
-            <Button
-                x:Name="PenSettingsButton"
-                Content="Pen Settings"
-                IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}">
-                <Button.Flyout>
+                <StackPanel
+                    Orientation="Vertical"
+                    Visibility="{Binding IsChecked, ElementName=PaneDisplayButton, Converter={StaticResource VisibleIfTrue}}">
                     
-                    <Flyout
-                        Placement="Bottom">
-                        <view:PenOptionsView 
-                            DataContext="{Binding CurrentNotebook.PenOptionsViewModel}"/>
-                    </Flyout>
-                    
-                </Button.Flyout>
-            </Button>
+                    <Button
+                        Background="Transparent"
+                        BorderThickness="0"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding ElementName=Canvas}"
+                        Content="Save" 
+                        IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>
 
-        </StackPanel>
+                    <Button 
+                        Background="Transparent"
+                        BorderThickness="0"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding LoadCommand}"
+                        CommandParameter="{Binding ElementName=Canvas}"
+                        Content="Load" />
 
-        <Border
-            Grid.Row="1"
-            Visibility="{Binding CurrentNotebook, 
-                Converter={StaticResource VisibleIfNotNull}}">
+                    <Button 
+                        Background="Transparent"
+                        BorderThickness="0"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding CreateNotebookCommand}"
+                        Content="Create Notebook" />
 
-            <view:NotebookView
-                x:Name="NotebookViewElement"
-                DataContext="{Binding CurrentNotebook}" />
+                    <Button 
+                        Background="Transparent"
+                        BorderThickness="0"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding ShowPageOptionsCommand}"
+                        Content="Page Options"
+                        IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>
 
+                </StackPanel>
+            </StackPanel>
+        </SplitView.Pane>
 
-        </Border>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <Popup
-            Width="100"
-            Height="50"
-            Grid.RowSpan="2"
-            IsOpen="{Binding IsSaving}">
-            <Border
-                BorderBrush="Black"
-                BorderThickness="1"
-                Background="White">
-                <TextBlock 
-                    Margin="20"
-                    HorizontalAlignment="Center"
+            <StackPanel Orientation="Horizontal">
+                
+                <Button 
+                    Content="-"
+                    Command="{Binding ZoomOutCommand}"
+                    Visibility="{Binding CurrentNotebook, Converter={StaticResource VisibleIfNotNull}}"/>
+                <TextBlock
+                    Height="25"
                     VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    FontSize="25"
-                    Text="Saving..." />
-            </Border>
-        </Popup>
+                    Text="{Binding CurrentNotebook.Zoom, Converter={StaticResource ToPercentage}}"
+                    Visibility="{Binding CurrentNotebook, Converter={StaticResource VisibleIfNotNull}}"/>
+                <Button 
+                    Content="+"
+                    Command="{Binding ZoomInCommand}"
+                    Visibility="{Binding CurrentNotebook, Converter={StaticResource VisibleIfNotNull}}"/>
 
-    </Grid>
+                <Button
+                    x:Name="PenSettingsButton"
+                    Content="Pen Settings"
+                    IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}">
+                    <Button.Flyout>
+
+                        <Flyout
+                            Placement="Bottom">
+                            <view:PenOptionsView 
+                                DataContext="{Binding CurrentNotebook.PenOptionsViewModel}"/>
+                        </Flyout>
+
+                    </Button.Flyout>
+                </Button>
+                
+            </StackPanel>
+
+            <Border
+                Grid.Row="1"
+                Visibility="{Binding CurrentNotebook, 
+                    Converter={StaticResource VisibleIfNotNull}}">
+                <view:NotebookView
+                    x:Name="NotebookViewElement"
+                    DataContext="{Binding CurrentNotebook}" />
+            </Border>
+
+            <Popup
+                Width="100"
+                Height="50"
+                Grid.RowSpan="2"
+                IsOpen="{Binding IsSaving}">
+                <Border
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    Background="White">
+                    <TextBlock 
+                        Margin="20"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        FontSize="25"
+                        Text="Saving..." />
+                </Border>
+            </Popup>
+            
+        </Grid>
+
+    </SplitView>
 </Page>
