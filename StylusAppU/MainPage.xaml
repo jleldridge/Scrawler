@@ -48,6 +48,21 @@
                 <StackPanel
                     Orientation="Vertical"
                     Visibility="{Binding IsChecked, ElementName=PaneDisplayButton, Converter={StaticResource VisibleIfTrue}}">
+
+                    <Button 
+                        Background="Transparent"
+                        BorderThickness="0"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding CreateNotebookCommand}"
+                        Content="New Notebook" />
+                    
+                    <Button 
+                        Background="Transparent"
+                        BorderThickness="0"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding LoadCommand}"
+                        CommandParameter="{Binding ElementName=Canvas}"
+                        Content="Open Notebook..." />
                     
                     <Button
                         Background="Transparent"
@@ -57,21 +72,6 @@
                         CommandParameter="{Binding ElementName=Canvas}"
                         Content="Save" 
                         IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>
-
-                    <Button 
-                        Background="Transparent"
-                        BorderThickness="0"
-                        HorizontalAlignment="Stretch"
-                        Command="{Binding LoadCommand}"
-                        CommandParameter="{Binding ElementName=Canvas}"
-                        Content="Load" />
-
-                    <Button 
-                        Background="Transparent"
-                        BorderThickness="0"
-                        HorizontalAlignment="Stretch"
-                        Command="{Binding CreateNotebookCommand}"
-                        Content="Create Notebook" />
 
                     <Button 
                         Background="Transparent"
