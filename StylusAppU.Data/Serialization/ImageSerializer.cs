@@ -14,7 +14,7 @@ namespace StylusAppU.Data.Serialization
                 using (var session = target.CreateDrawingSession())
                 {
                     session.Units = CanvasUnits.Pixels;
-
+                    session.DrawInk(page.StrokeContainer.GetStrokes());
                 }
             }
         }
