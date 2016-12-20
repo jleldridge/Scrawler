@@ -77,5 +77,10 @@ namespace StylusAppU.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        internal async Task CreatePageImage(StorageFile file)
+        {
+            await ImageSerializer.CreateImage(_page, file);
+        }
     }
 }

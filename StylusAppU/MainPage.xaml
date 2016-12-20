@@ -81,6 +81,14 @@
                         Content="Page Options"
                         IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>
 
+                    <Button 
+                        Background="Transparent"
+                        BorderThickness="0"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding CreatePageImageCommand}"
+                        Content="Create Page Image..."
+                        IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}"/>
+
                 </StackPanel>
             </StackPanel>
         </SplitView.Pane>

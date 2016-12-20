@@ -12,6 +12,7 @@ using StylusAppU.DialogViewModels;
 using StylusAppU.Dialogs;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using System.Collections.Generic;
 
 namespace StylusAppU.ViewModel
 {
@@ -22,7 +23,8 @@ namespace StylusAppU.ViewModel
             _createNotebookCommand, 
             _showNotebookOptionsCommand,
             _zoomOutCommand,
-            _zoomInCommand;
+            _zoomInCommand,
+            _createPageImageCommand;
         private NotebookViewModel _currentNotebook;
         private bool _isSaving;
 
@@ -78,7 +80,22 @@ namespace StylusAppU.ViewModel
             get { return _zoomInCommand ?? (_zoomInCommand = new RelayCommand(_ => ZoomIn())); }
         }
 
-        private async void CreateNewNotebook()
+        public ICommand CreatePageImageCommand
+        {
+            get { return _createPageImageCommand ?? (_createPageImageCommand = new RelayCommand(_ => CreatePageImage())); }
+        }
+
+        private async Task CreatePageImage()
+        {
+            var picker = new FileSavePicker();
+            picker.FileTypeChoices.Add(new KeyValuePair<string, IList<string>>("Bitmap file", new List<string>() { ".bmp" }));
+            picker.SuggestedFileName = "TestPage";
+            var file = await picker.PickSaveFileAsync();
+
+            await CurrentNotebook.CurrentPage.CreatePageImage(file);
+        }
+
+        private void CreateNewNotebook()
         {
             var notebook = new Notebook("NewNotebook");
             notebook.AddPage();
@@ -109,7 +126,7 @@ namespace StylusAppU.ViewModel
             }
         }
 
-        public async void ShowNotebookOptions()
+        public async Task ShowNotebookOptions()
         {
             PageOptionsViewModel options = new PageOptionsViewModel(CurrentNotebook.CurrentPage);
             var dlg = new PageOptionsDialog(options);
