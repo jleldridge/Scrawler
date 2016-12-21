@@ -26,7 +26,6 @@
 
             <Style TargetType="Button" x:Key="MenuButtonWithIcon">
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Margin" Value="5" />
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -43,52 +42,55 @@
         CompactPaneLength="60"
         OpenPaneLength="200">
         <SplitView.Pane>
-            <StackPanel 
-                Orientation="Vertical">
+            <ToggleButton
+                x:Name="PaneDisplayButton"
+                Background="Transparent"
+                HorizontalAlignment="Left"
+                IsChecked="{Binding MenuExpanded, Mode=TwoWay}"
+                Margin="0"
+                Padding="0"
+                VerticalAlignment="Stretch"
+                VerticalContentAlignment="Top">
+                <StackPanel 
+                    Orientation="Vertical">
 
-                <ToggleButton
-                    Background="Transparent"
-                    HorizontalAlignment="Left"
-                    IsChecked="{Binding MenuExpanded, Mode=TwoWay}"
-                    Margin="5"
-                    Padding="0"
-                    VerticalAlignment="Top" 
-                    x:Name="PaneDisplayButton">
-                    <Image 
+                    <Image
+                        Margin="5"
                         Width="48"
                         Height="48"
                         Stretch="Uniform"
                         Source="Assets/hamburger.bmp"/>
-                </ToggleButton>
 
-                <ItemsControl
-                    ItemsSource="{Binding MenuCommands}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate x:DataType="vm:SplitMenuCommandViewModel">
+                    <ItemsControl
+                        ItemsSource="{Binding MenuCommands}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:SplitMenuCommandViewModel">
 
-                            <Button 
-                                Style="{StaticResource MenuButtonWithIcon}"
-                                x:Name="ButtonElement"
-                                Command="{Binding RelayCommand}">
-                                <StackPanel Orientation="Horizontal">
-                                    <Image 
-                                        Stretch="Uniform"
-                                        Width="48"
-                                        Height="48"
-                                        Source="{Binding IconPath}"/>
-                                    <TextBlock
-                                        Width="150"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding Label}"
-                                        Visibility="{Binding IsExpanded, Converter={StaticResource VisibleIfTrue}}"/>
-                                </StackPanel>
-                            </Button>
+                                <Button 
+                                    Style="{StaticResource MenuButtonWithIcon}"
+                                    x:Name="ButtonElement"
+                                    Command="{Binding RelayCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image 
+                                            Stretch="Uniform"
+                                            Margin="5"
+                                            Width="48"
+                                            Height="48"
+                                            Source="{Binding IconPath}"/>
+                                        <TextBlock
+                                            Width="150"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Label}"
+                                            Visibility="{Binding IsExpanded, Converter={StaticResource VisibleIfTrue}}"/>
+                                    </StackPanel>
+                                </Button>
 
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-            </StackPanel>
+                </StackPanel>
+            </ToggleButton>
         </SplitView.Pane>
 
         <Grid>
