@@ -29,23 +29,19 @@
                 <Setter Property="Margin" Value="5" />
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="HorizontalContentAlignment" Value="Left" />
             </Style>
 
         </ResourceDictionary>
     </Page.Resources>
-    
+
     <SplitView 
         Background="DarkGray"
         IsPaneOpen="{Binding IsChecked, ElementName=PaneDisplayButton, Mode=TwoWay}"
         DisplayMode="CompactInline"
         CompactPaneLength="60"
         OpenPaneLength="200">
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>-->
         <SplitView.Pane>
             <StackPanel 
                 Orientation="Vertical">
@@ -53,6 +49,7 @@
                 <ToggleButton
                     Background="Transparent"
                     HorizontalAlignment="Left"
+                    IsChecked="{Binding MenuExpanded, Mode=TwoWay}"
                     Margin="5"
                     Padding="0"
                     VerticalAlignment="Top" 
@@ -64,91 +61,33 @@
                         Source="Assets/hamburger.bmp"/>
                 </ToggleButton>
 
-                <Button 
-                    Style="{StaticResource MenuButtonWithIcon}"
-                    Command="{Binding CreateNotebookCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image 
-                            Stretch="Uniform"
-                            Width="48"
-                            Height="48"
-                            Source="Assets/new_notebook.bmp"/>
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Text="New Notebook"
-                            Visibility="{Binding IsChecked, ElementName=PaneDisplayButton, Converter={StaticResource VisibleIfTrue}}"/>
-                    </StackPanel>
-                </Button>
+                <ItemsControl
+                    ItemsSource="{Binding MenuCommands}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:SplitMenuCommandViewModel">
 
-                <Button 
-                    Style="{StaticResource MenuButtonWithIcon}"
-                    Command="{Binding LoadCommand}"
-                    CommandParameter="{Binding ElementName=Canvas}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image 
-                            Stretch="Uniform"
-                            Width="48"
-                            Height="48"
-                            Source="Assets/open_notebook.bmp"/>
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Text="Open Notebook..."
-                            Visibility="{Binding IsChecked, ElementName=PaneDisplayButton, Converter={StaticResource VisibleIfTrue}}"/>
-                    </StackPanel>
-                </Button>
+                            <Button 
+                                Style="{StaticResource MenuButtonWithIcon}"
+                                x:Name="ButtonElement"
+                                Command="{Binding RelayCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image 
+                                        Stretch="Uniform"
+                                        Width="48"
+                                        Height="48"
+                                        Source="{Binding IconPath}"/>
+                                    <TextBlock
+                                        Width="150"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Label}"
+                                        Visibility="{Binding IsExpanded, Converter={StaticResource VisibleIfTrue}}"/>
+                                </StackPanel>
+                            </Button>
 
-                <Button
-                    Style="{StaticResource MenuButtonWithIcon}"
-                    Command="{Binding SaveCommand}"
-                    CommandParameter="{Binding ElementName=Canvas}"
-                    IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image 
-                            Stretch="Uniform"
-                            Width="48"
-                            Height="48"
-                            Source="Assets/save_notebook.bmp"/>
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Text="Save"
-                            Visibility="{Binding IsChecked, ElementName=PaneDisplayButton, Converter={StaticResource VisibleIfTrue}}"/>
-                    </StackPanel>
-                </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-                <Button 
-                    Style="{StaticResource MenuButtonWithIcon}"
-                    Command="{Binding ShowPageOptionsCommand}"
-                    IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image 
-                            Stretch="Uniform"
-                            Width="48"
-                            Height="48"
-                            Source="Assets/page_options.bmp"/>
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Text="Page Options"
-                            Visibility="{Binding IsChecked, ElementName=PaneDisplayButton, Converter={StaticResource VisibleIfTrue}}"/>
-                    </StackPanel>
-                </Button>
-
-                <Button 
-                    Style="{StaticResource MenuButtonWithIcon}"
-                    Command="{Binding CreatePageImageCommand}"
-                    IsEnabled="{Binding CurrentNotebook, Converter={StaticResource NotNull}}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image 
-                            Stretch="Uniform"
-                            Width="48"
-                            Height="48"
-                            Source="Assets/create_page_image.bmp"/>
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Text="Create Page Image..."
-                            Visibility="{Binding IsChecked, ElementName=PaneDisplayButton, Converter={StaticResource VisibleIfTrue}}"/>
-                    </StackPanel>
-                </Button>
-                
             </StackPanel>
         </SplitView.Pane>
 

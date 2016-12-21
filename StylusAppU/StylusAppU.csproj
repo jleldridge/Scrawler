@@ -106,10 +106,12 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\CommandViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\NotebookViewModel.cs" />
     <Compile Include="ViewModel\PageViewModel.cs" />
     <Compile Include="ViewModel\PenOptionsViewModel.cs" />
+    <Compile Include="ViewModel\SplitMenuCommandViewModel.cs" />
     <Compile Include="View\NotebookView.xaml.cs">
       <DependentUpon>NotebookView.xaml</DependentUpon>
     </Compile>

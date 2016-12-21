@@ -18,18 +18,20 @@ namespace StylusAppU.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        private ICommand _saveCommand, 
-            _loadCommand, 
-            _createNotebookCommand, 
-            _showNotebookOptionsCommand,
-            _zoomOutCommand,
-            _zoomInCommand,
-            _createPageImageCommand;
+        private List<SplitMenuCommandViewModel> _menuCommands;
         private NotebookViewModel _currentNotebook;
-        private bool _isSaving;
+        private bool _isSaving, _menuExpanded;
 
         public MainViewModel()
         {
+            _menuCommands = new List<SplitMenuCommandViewModel>()
+            {
+                new SplitMenuCommandViewModel("New Notebook", "ms-appx:///Assets/new_notebook.bmp", _ => CreateNewNotebook()),
+                new SplitMenuCommandViewModel("Open Notebook", "ms-appx:///Assets/open_notebook.bmp", _ => LoadNotebook()),
+                new SplitMenuCommandViewModel("Save Notebook", "ms-appx:///Assets/save_notebook.bmp", _ => SaveNotebook()),
+                new SplitMenuCommandViewModel("Page Options", "ms-appx:///Assets/page_options.bmp", _ => ShowNotebookOptions()),
+                new SplitMenuCommandViewModel("Create Page Image", "ms-appx:///Assets/create_page_image.bmp", _ => CreatePageImage()),
+            };
         }
 
         public NotebookViewModel CurrentNotebook
@@ -52,37 +54,23 @@ namespace StylusAppU.ViewModel
             }
         }
 
-        public ICommand SaveCommand { get { return _saveCommand ?? (_saveCommand = new RelayCommand(_ => SaveNotebook())); } }
-
-        public ICommand LoadCommand { get { return _loadCommand ?? (_loadCommand = new RelayCommand(_ => LoadNotebook())); } }
-
-        public ICommand CreateNotebookCommand
+        public bool MenuExpanded
         {
-            get
+            get { return _menuExpanded; }
+            set
             {
-                return _createNotebookCommand 
-                    ?? (_createNotebookCommand = new RelayCommand(_ => CreateNewNotebook()));
+                _menuExpanded = value;
+                foreach (var item in MenuCommands)
+                {
+                    item.IsExpanded = value;
+                }
+                OnPropertyChanged();
             }
         }
 
-        public ICommand ShowPageOptionsCommand
+        public List<SplitMenuCommandViewModel> MenuCommands
         {
-            get { return _showNotebookOptionsCommand ?? (_showNotebookOptionsCommand = new RelayCommand(_ => ShowNotebookOptions())); }
-        }
-
-        public ICommand ZoomOutCommand
-        {
-            get { return _zoomOutCommand ?? (_zoomOutCommand = new RelayCommand(_ => ZoomOut())); }
-        }
-
-        public ICommand ZoomInCommand
-        {
-            get { return _zoomInCommand ?? (_zoomInCommand = new RelayCommand(_ => ZoomIn())); }
-        }
-
-        public ICommand CreatePageImageCommand
-        {
-            get { return _createPageImageCommand ?? (_createPageImageCommand = new RelayCommand(_ => CreatePageImage())); }
+            get { return _menuCommands; }
         }
 
         private async Task CreatePageImage()
