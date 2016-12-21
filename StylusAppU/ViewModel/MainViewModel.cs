@@ -89,7 +89,7 @@ namespace StylusAppU.ViewModel
         {
             var picker = new FileSavePicker();
             picker.FileTypeChoices.Add(new KeyValuePair<string, IList<string>>("Bitmap file", new List<string>() { ".bmp" }));
-            picker.SuggestedFileName = "TestPage";
+            picker.SuggestedFileName = "PageImage";
             var file = await picker.PickSaveFileAsync();
 
             await CurrentNotebook.CurrentPage.CreatePageImage(file);

@@ -99,6 +99,7 @@
     <Compile Include="Dialogs\PageOptionsDialog.xaml.cs">
       <DependentUpon>PageOptionsDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Renderers\InkRenderer.cs" />
     <Compile Include="ViewModel\BackgroundViewModel.cs" />
     <Compile Include="DialogViewModels\PageOptionsViewModel.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -118,6 +119,7 @@
     <Compile Include="View\PenOptionsView.xaml.cs">
       <DependentUpon>PenOptionsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Renderers\BackgroundRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

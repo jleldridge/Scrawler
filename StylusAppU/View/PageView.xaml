@@ -24,17 +24,15 @@
         Height="{Binding Height}"
         Background="White">
 
-        <!--<Canvas
-                Background="{Binding BackgroundColor, Converter={StaticResource ColorToBrush}}"/>-->
         <controls:BackgroundControl 
             Width="{Binding Width}"
             Height="{Binding Height}"
             BackgroundViewModel="{Binding BackgroundViewModel}"/>
 
         <InkCanvas
+            x:Name="InkCanvasElement" 
             Width="{Binding Width}"
-            Height="{Binding Height}"
-            x:Name="InkCanvasElement" />
+            Height="{Binding Height}"/>
 
     </Grid>
 

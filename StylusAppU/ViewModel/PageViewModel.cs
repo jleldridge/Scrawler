@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
 using StylusAppU.DialogViewModels;
+using StylusAppU.Renderers;
 
 namespace StylusAppU.ViewModel
 {
@@ -80,7 +81,10 @@ namespace StylusAppU.ViewModel
 
         internal async Task CreatePageImage(StorageFile file)
         {
-            await ImageSerializer.CreateImage(_page, file);
+            var backgroundBitmap = BackgroundRenderer.RenderBackground(BackgroundViewModel.BackgroundData, Width, Height);
+            var inkBitmap = InkRenderer.RenderInk(StrokeContainer.GetStrokes(), Width, Height);
+
+            await ImageSerializer.SaveImage(backgroundBitmap, inkBitmap, file);
         }
     }
 }

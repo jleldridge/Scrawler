@@ -6,6 +6,7 @@ using StylusAppU.ViewModel;
 using Windows.UI;
 using Windows.UI.Input.Inking;
 using Windows.Foundation;
+using System.ComponentModel;
 
 namespace StylusAppU.View
 {

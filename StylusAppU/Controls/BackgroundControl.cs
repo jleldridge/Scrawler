@@ -7,13 +7,22 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 using StylusAppU.ViewModel;
+using StylusAppU.Renderers;
+using Windows.UI.Xaml.Media.Imaging;
+using System.Threading.Tasks;
+using Windows.Graphics.Imaging;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace StylusAppU.Controls
 {
     public class BackgroundControl : Canvas
     {
+        private Image _backgroundImage;
+
         public BackgroundControl()
         {
+            _backgroundImage = new Image();
+            Children.Add(_backgroundImage);
             SizeChanged += GridLineBackgroundControl_SizeChanged;
         }
 
@@ -34,74 +43,32 @@ namespace StylusAppU.Controls
             set { SetValue(BackgroundViewModelProperty, value); }
         }
 
-        private static void BackgroundViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static async void BackgroundViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = ((BackgroundControl)d);
             control.BackgroundViewModel.PropertyChanged += control.BackgroundViewModelOnPropertyChanged;
-            control.RedrawChildren();
+            await control.RedrawChildren();
         }
 
-        private void BackgroundViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async void BackgroundViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            RedrawChildren();
+            await RedrawChildren();
         }
 
-        private void RedrawChildren()
+        private async Task RedrawChildren()
         {
-            Children.Clear();
-            Background = new SolidColorBrush(BackgroundViewModel.BackgroundData.BackgroundColor);
-            
-            if (BackgroundViewModel.BackgroundData is GridLineBackground)
-            {
-                var background = BackgroundViewModel.BackgroundData as GridLineBackground;
-                DrawGridLineBackground(background);
-            }
-            InvalidateArrange();
-        }
+            var backgroundImage = BackgroundRenderer.RenderBackground(BackgroundViewModel.BackgroundData, Width, Height);
 
-        private void DrawGridLineBackground(GridLineBackground background)
-        {
-            var lineColor = new SolidColorBrush(background.LineColor);
+            var outputBitmap = new SoftwareBitmap(
+                BitmapPixelFormat.Bgra8,
+                (int)backgroundImage.SizeInPixels.Width,
+                (int)backgroundImage.SizeInPixels.Height,
+                BitmapAlphaMode.Premultiplied);
+            outputBitmap.CopyFromBuffer(backgroundImage.GetPixelBytes().AsBuffer());
 
-            if (background.HorizontalLineSpacing > 0)
-            {
-                double y = background.HorizontalLineSpacing;
-                while (y < Height - 1)
-                {
-                    var line = new Line
-                    {
-                        Stroke = lineColor,
-                        StrokeThickness = background.HorizontalLineThickness,
-                        X1 = 0,
-                        X2 = Width,
-                        Y1 = y - background.HorizontalLineThickness / 2,
-                        Y2 = y - background.HorizontalLineThickness / 2
-                    };
-                    Children.Add(line);
-
-                    y += background.HorizontalLineSpacing;
-                }
-            }
-
-            if (background.VerticalLineSpacing > 0)
-            {
-                double x = background.VerticalLineSpacing;
-                while (x < Width)
-                {
-                    var line = new Line
-                    {
-                        Stroke = lineColor,
-                        StrokeThickness = background.VerticalLineThickness,
-                        X1 = x - background.VerticalLineThickness / 2,
-                        X2 = x - background.VerticalLineThickness / 2,
-                        Y1 = 0,
-                        Y2 = Height
-                    };
-                    Children.Add(line);
-
-                    x += background.VerticalLineSpacing;
-                }
-            }
+            var source = new SoftwareBitmapSource();
+            await source.SetBitmapAsync(outputBitmap);
+            _backgroundImage.Source = source;
         }
     }
 }
