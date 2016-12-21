@@ -15,6 +15,22 @@ namespace StylusAppU.ViewModel
 
         public BackgroundBase BackgroundData { get; private set; }
 
+        public double Alpha
+        {
+            get { return BackgroundData.BackgroundColor.A; }
+            set
+            {
+                BackgroundData.BackgroundColor = new Color()
+                {
+                    A = (byte)value,
+                    R = BackgroundData.BackgroundColor.R,
+                    G = BackgroundData.BackgroundColor.G,
+                    B = BackgroundData.BackgroundColor.B
+                };
+                OnPropertyChanged();
+            }
+        }
+
         public double Red
         {
             get { return BackgroundData.BackgroundColor.R; }

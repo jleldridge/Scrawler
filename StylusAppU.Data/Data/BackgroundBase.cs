@@ -16,10 +16,6 @@ namespace StylusAppU.Data.Data
 
         protected void OnDeserializedBase(StreamingContext context)
         {
-            if (BackgroundColor.A == 0)
-            {
-                BackgroundColor = new Color() { A = 255, R = 255, G = 255, B = 255 };
-            }
         }
 
         [DataMember]
