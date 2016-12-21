@@ -127,6 +127,12 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\create_page_image.bmp" />
+    <Content Include="Assets\hamburger.bmp" />
+    <Content Include="Assets\new_notebook.bmp" />
+    <Content Include="Assets\open_notebook.bmp" />
+    <Content Include="Assets\page_options.bmp" />
+    <Content Include="Assets\save_notebook.bmp" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
