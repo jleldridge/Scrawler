@@ -1,9 +1,7 @@
 ﻿using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Brushes;
 using Scrawler.Data.Data;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
-using Windows.Graphics.Imaging;
 
 namespace Scrawler.Renderers
 {
@@ -26,14 +24,6 @@ namespace Scrawler.Renderers
             }
 
             return bitmap;
-            //var outputBitmap = new SoftwareBitmap(
-            //    BitmapPixelFormat.Bgra8, 
-            //    (int)bitmap.SizeInPixels.Width, 
-            //    (int)bitmap.SizeInPixels.Height, 
-            //    BitmapAlphaMode.Premultiplied);
-
-            //outputBitmap.CopyFromBuffer(bitmap.GetPixelBytes().AsBuffer());
-            //return outputBitmap;
         }
 
         private static void DrawGridLineBackground(GridLineBackground background, CanvasBitmap bitmap, CanvasDrawingSession session)

@@ -1,7 +1,5 @@
 ﻿using Microsoft.Graphics.Canvas;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Graphics.Imaging;
 using Windows.UI.Input.Inking;
 
 namespace Scrawler.Renderers
@@ -19,14 +17,6 @@ namespace Scrawler.Renderers
             }
 
             return bitmap;
-            //var outputBitmap = new SoftwareBitmap(
-            //    BitmapPixelFormat.Bgra8,
-            //    (int)bitmap.SizeInPixels.Width,
-            //    (int)bitmap.SizeInPixels.Height,
-            //    BitmapAlphaMode.Premultiplied);
-
-            //outputBitmap.CopyFromBuffer(bitmap.GetPixelBytes().AsBuffer());
-            //return outputBitmap;
         }
     }
 }

@@ -8,6 +8,7 @@
     xmlns:vm="using:Scrawler.ViewModel"
     xmlns:converters="using:Utils.Converters"
     xmlns:controls="using:Scrawler.Controls"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance vm:PageViewModel}">
 
@@ -28,6 +29,10 @@
             Width="{Binding Width}"
             Height="{Binding Height}"
             BackgroundViewModel="{Binding BackgroundViewModel}"/>
+
+        <canvas:CanvasControl
+            x:Name="DrawingCanvasElement"
+            ClearColor="Transparent"/>
 
         <InkCanvas
             x:Name="InkCanvasElement" 
