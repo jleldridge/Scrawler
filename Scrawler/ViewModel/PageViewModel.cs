@@ -10,6 +10,7 @@ using Windows.UI;
 using Windows.UI.Xaml.Media;
 using Scrawler.DialogViewModels;
 using Scrawler.Renderers;
+using Windows.Graphics.Imaging;
 
 namespace Scrawler.ViewModel
 {
