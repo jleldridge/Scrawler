@@ -23,4 +23,36 @@ namespace Scrawler.ViewModel
             }
         }
     }
+
+    public class PageGridPageViewModel : ViewModelBase
+    {
+        private double _scaledWidth, _scaledHeight;
+
+        public PageGridPageViewModel(PageViewModel pageVm)
+        {
+            PageViewModel = pageVm;
+        }
+
+        public PageViewModel PageViewModel { get; private set; }
+
+        public double ScaledWidth
+        {
+            get { return _scaledWidth; }
+            set
+            {
+                _scaledWidth = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double ScaledHeight
+        {
+            get { return _scaledHeight; }
+            set
+            {
+                _scaledHeight = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 }
