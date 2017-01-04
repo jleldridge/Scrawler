@@ -96,6 +96,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\BackgroundControl.cs" />
+    <Compile Include="Controls\PagePreviewControl.cs" />
     <Compile Include="Dialogs\PageOptionsDialog.xaml.cs">
       <DependentUpon>PageOptionsDialog.xaml</DependentUpon>
     </Compile>
