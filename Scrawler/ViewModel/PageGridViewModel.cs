@@ -6,14 +6,18 @@ namespace Scrawler.ViewModel
 {
     public class PageGridViewModel : ViewModelBase
     {
-        private ObservableCollection<PageViewModel> _pages;
+        private ObservableCollection<PageGridPageViewModel> _pages;
 
         public PageGridViewModel(IEnumerable<PageViewModel> pages)
         {
-            _pages = new ObservableCollection<PageViewModel>(pages);
+            _pages = new ObservableCollection<PageGridPageViewModel>();
+            foreach (var page in pages)
+            {
+                _pages.Add(new PageGridPageViewModel(page));
+            }
         }
 
-        public ObservableCollection<PageViewModel> Pages
+        public ObservableCollection<PageGridPageViewModel> Pages
         {
             get { return _pages; }
             set
@@ -26,7 +30,7 @@ namespace Scrawler.ViewModel
 
     public class PageGridPageViewModel : ViewModelBase
     {
-        private double _scaledWidth, _scaledHeight;
+        private double _width, _height;
 
         public PageGridPageViewModel(PageViewModel pageVm)
         {
@@ -35,22 +39,22 @@ namespace Scrawler.ViewModel
 
         public PageViewModel PageViewModel { get; private set; }
 
-        public double ScaledWidth
+        public double Width
         {
-            get { return _scaledWidth; }
+            get { return _width; }
             set
             {
-                _scaledWidth = value;
+                _width = value;
                 OnPropertyChanged();
             }
         }
 
-        public double ScaledHeight
+        public double Height
         {
-            get { return _scaledHeight; }
+            get { return _height; }
             set
             {
-                _scaledHeight = value;
+                _height = value;
                 OnPropertyChanged();
             }
         }

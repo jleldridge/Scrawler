@@ -4,8 +4,10 @@ using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace Scrawler.Controls
@@ -17,6 +19,7 @@ namespace Scrawler.Controls
 
         public PagePreviewControl()
         {
+            Background = new SolidColorBrush(Colors.White);
             _background = new BackgroundControl();
             _ink = new Image();
 
@@ -50,6 +53,7 @@ namespace Scrawler.Controls
 
             var source = new SoftwareBitmapSource();
             await source.SetBitmapAsync(outputBitmap);
+            _ink.Source = source;
         }
     }
 }

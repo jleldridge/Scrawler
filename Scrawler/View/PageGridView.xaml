@@ -24,12 +24,18 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-
-                    <controls:PagePreviewControl 
-                        Margin="10"
+                    
+                    <Viewbox
                         Width="{Binding Width}"
-                        Height="{Binding Height}"/>
-
+                        Height="{Binding Height}"
+                        Stretch="Uniform">
+                        <controls:PagePreviewControl 
+                            Margin="10"
+                            DataContext="{Binding PageViewModel}"
+                            Width="{Binding Width}"
+                            Height="{Binding Height}"/>
+                    </Viewbox>
+                    
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

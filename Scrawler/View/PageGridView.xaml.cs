@@ -33,7 +33,13 @@ namespace Scrawler.View
 
         private void SetPageSizes(PageGridViewModel vm)
         {
-
+            double itemWidth = ActualWidth / 5;
+            double itemHeight = itemWidth;
+            foreach (var page in vm.Pages)
+            {
+                page.Width = itemWidth;
+                page.Height = itemHeight;
+            }
         }
     }
 }
