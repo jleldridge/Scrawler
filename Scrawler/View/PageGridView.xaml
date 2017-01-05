@@ -11,34 +11,40 @@
     d:DataContext="{d:DesignInstance vm:PageGridViewModel}">
 
     <Grid Background="Transparent">
-        <ItemsControl
-            x:Name="PageGridItemsControl"
-            ItemsSource="{Binding Pages}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <ItemsWrapGrid 
-                        MaximumRowsOrColumns="5"
-                        Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+        <ScrollViewer
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto">
+            
+            <ItemsControl
+                x:Name="PageGridItemsControl"
+                ItemsSource="{Binding Pages}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid 
+                            MaximumRowsOrColumns="5"
+                            Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
                     
-                    <Viewbox
-                        Width="{Binding Width}"
-                        Height="{Binding Height}"
-                        Stretch="Uniform">
-                        <controls:PagePreviewControl 
-                            Margin="10"
-                            DataContext="{Binding PageViewModel}"
+                        <Viewbox
                             Width="{Binding Width}"
-                            Height="{Binding Height}"/>
-                    </Viewbox>
+                            Height="{Binding Height}"
+                            Stretch="Uniform">
+                            <controls:PagePreviewControl 
+                                Margin="10"
+                                DataContext="{Binding PageViewModel}"
+                                Width="{Binding Width}"
+                                Height="{Binding Height}"/>
+                        </Viewbox>
                     
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+        </ScrollViewer>
     </Grid>
     
 </UserControl>
