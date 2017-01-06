@@ -51,6 +51,17 @@
                 Padding="0"
                 VerticalAlignment="Stretch"
                 VerticalContentAlignment="Top">
+
+                <ToggleButton.Template>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter 
+                                Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </ToggleButton.Template>
+
                 <StackPanel 
                     Orientation="Vertical">
 
@@ -59,6 +70,7 @@
                         Width="48"
                         Height="48"
                         Stretch="Uniform"
+                        HorizontalAlignment="Left"
                         Source="Assets/hamburger.bmp"/>
 
                     <ItemsControl

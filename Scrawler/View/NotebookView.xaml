@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Scrawler.View"
     xmlns:vm="using:Scrawler.ViewModel"
+    xmlns:converters="using:Utils.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -12,6 +13,9 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
+
+            <converters:BoolToVisibilityConverter x:Key="VisibleIfTrue"/>
+            <converters:BoolToVisibilityConverter x:Key="VisibleIfFalse" Invert="True"/>
 
             <Style TargetType="Button">
                 <Setter Property="Margin" Value="5" />
@@ -44,7 +48,8 @@
             MinZoomFactor="0.1"
             MaxZoomFactor="5"
             ZoomSnapPointsType="Mandatory"
-            ViewChanged="PageScroller_ViewChanged">
+            ViewChanged="PageScroller_ViewChanged"
+            Visibility="{Binding PageGridVisible, Converter={StaticResource VisibleIfFalse}}">
 
             <local:PageView 
                 x:Name="PageViewElement"
@@ -54,7 +59,13 @@
                 DataContext="{Binding CurrentPage}"/>
 
         </ScrollViewer>
-        
+
+        <local:PageGridView
+            DataContext="{Binding PageGridViewModel}"
+            Visibility="{Binding DataContext.PageGridVisible, 
+                ElementName=NotebookViewElement,
+                Converter={StaticResource VisibleIfTrue}}"/>
+
         <StackPanel 
             Background="CadetBlue"
             HorizontalAlignment="Center"
@@ -95,6 +106,12 @@
                 Width="75"
                 Content="&gt;"
                 Command="{Binding NextPageCommand}"/>
+
+            <Button 
+                Width="30"
+                Height="30"
+                Background="White"
+                Command="{Binding ShowPageGridCommand}"/>
 
         </StackPanel>
         

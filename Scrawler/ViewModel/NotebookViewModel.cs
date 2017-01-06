@@ -10,6 +10,7 @@ using Utils.Commands;
 using Utils.ViewModel;
 using System.Threading.Tasks;
 using Windows.UI;
+using System.ComponentModel;
 
 namespace Scrawler.ViewModel
 {
@@ -23,9 +24,12 @@ namespace Scrawler.ViewModel
         private NotebookSerializer _notebookSerializer;
         private float _zoom = 1f;
         private PenOptionsViewModel _penOptionsViewModel;
+        private PageGridViewModel _pageGridViewModel;
+        private bool _pageGridVisible;
 
-        private RelayCommand _prevPageCommand;
-        private RelayCommand _nextPageCommand;
+        private RelayCommand _prevPageCommand, 
+            _nextPageCommand,
+            _showPageGridCommand;
 
         public NotebookViewModel(NotebookSerializer notebookSerializer)
         {
@@ -130,6 +134,26 @@ namespace Scrawler.ViewModel
             }
         }
 
+        public PageGridViewModel PageGridViewModel
+        {
+            get { return _pageGridViewModel; }
+            set
+            {
+                _pageGridViewModel = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool PageGridVisible
+        {
+            get { return _pageGridVisible; }
+            set
+            {
+                _pageGridVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
         public RelayCommand PreviousPageCommand
         {
             get
@@ -161,6 +185,31 @@ namespace Scrawler.ViewModel
                             CreateNewPage();
                         }
                     }));
+            }
+        }
+
+        public RelayCommand ShowPageGridCommand
+        {
+            get { return _showPageGridCommand ?? (_showPageGridCommand = new RelayCommand(_ => ShowPageGrid())); }
+        }
+
+        public void ShowPageGrid()
+        {
+            PageGridVisible = !PageGridVisible;
+            if (PageGridVisible)
+            {
+                PageGridViewModel = new PageGridViewModel(Pages, CurrentPageNumber - 1);
+                PageGridViewModel.PropertyChanged += PageGridViewModel_PropertyChanged;
+            }
+        }
+
+        private void PageGridViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "SelectedPageIndex":
+                    CurrentPageNumber = PageGridViewModel.SelectedPageIndex + 1;
+                    break;
             }
         }
 

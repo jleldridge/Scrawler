@@ -79,8 +79,10 @@ namespace Scrawler.ViewModel
             picker.FileTypeChoices.Add(new KeyValuePair<string, IList<string>>("Bitmap file", new List<string>() { ".bmp" }));
             picker.SuggestedFileName = "PageImage";
             var file = await picker.PickSaveFileAsync();
-
-            await CurrentNotebook.CurrentPage.CreatePageImage(file);
+            if (file != null)
+            {
+                await CurrentNotebook.CurrentPage.CreatePageImage(file);
+            }
         }
 
         private void CreateNewNotebook()

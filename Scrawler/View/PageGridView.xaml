@@ -1,0 +1,44 @@
+﻿<UserControl
+    x:Class="Scrawler.View.PageGridView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Scrawler.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Scrawler.ViewModel"
+    xmlns:controls="using:Scrawler.Controls"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance vm:PageGridViewModel}">
+
+    <Grid Background="Transparent">
+        <ScrollViewer
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto">
+
+            <GridView
+                x:Name="PageGridItemsControl"
+                ItemsSource="{Binding Pages}"
+                SelectedIndex="{Binding SelectedPageIndex, Mode=TwoWay}">
+
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                    
+                        <Viewbox
+                            Width="{Binding Width}"
+                            Height="{Binding Height}"
+                            Stretch="Uniform">
+                            <controls:PagePreviewControl 
+                                Margin="10"
+                                DataContext="{Binding PageViewModel}"
+                                Width="{Binding Width}"
+                                Height="{Binding Height}"/>
+                        </Viewbox>
+                    
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+            
+        </ScrollViewer>
+    </Grid>
+    
+</UserControl>
