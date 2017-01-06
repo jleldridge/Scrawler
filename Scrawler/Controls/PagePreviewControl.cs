@@ -1,34 +1,37 @@
-﻿using Scrawler.Renderers;
+﻿using Microsoft.Graphics.Canvas.UI.Xaml;
 using Scrawler.ViewModel;
-using System;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
-using Windows.Graphics.Imaging;
 using Windows.UI;
-using Windows.UI.Input.Inking;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace Scrawler.Controls
 {
     public class PagePreviewControl : Canvas
     {
         private BackgroundControl _background;
-        private InkCanvas _ink;
+        private CanvasControl _ink;
 
         public PagePreviewControl()
         {
             Background = new SolidColorBrush(Colors.White);
             _background = new BackgroundControl();
-            _ink = new InkCanvas();
-            _ink.InkPresenter.InputProcessingConfiguration.Mode = InkInputProcessingMode.None;
+            _ink = new CanvasControl();
 
             Children.Add(_background);
             Children.Add(_ink);
 
             Loaded += PagePreview_Loaded;
+            _ink.Draw += DrawInk;
+        }
+
+        private void DrawInk(CanvasControl sender, CanvasDrawEventArgs args)
+        {
+            var pageVm = DataContext as PageViewModel;
+            if (pageVm != null)
+            {
+                args.DrawingSession.DrawInk(pageVm.StrokeContainer.GetStrokes());
+            }
         }
 
         private void PagePreview_Loaded(object sender, RoutedEventArgs e)
@@ -39,15 +42,10 @@ namespace Scrawler.Controls
                 _background.Width = pageVm.Width;
                 _background.Height = pageVm.Height;
                 _background.BackgroundViewModel = pageVm.BackgroundViewModel;
-                DrawInk(pageVm);
+                _ink.Width = pageVm.Width;
+                _ink.Height = pageVm.Height;
+                _ink.Invalidate();
             }
-        }
-
-        private void DrawInk(PageViewModel pageVm)
-        {
-            _ink.Height = pageVm.Height;
-            _ink.Width = pageVm.Width;
-            _ink.InkPresenter.StrokeContainer = pageVm.StrokeContainer;
         }
     }
 }
