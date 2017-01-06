@@ -29,7 +29,7 @@ namespace Scrawler.Controls
             DataContextChanged += PagePreview_DataContextChanged;
         }
 
-        private void PagePreview_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        private async void PagePreview_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             var pageVm = DataContext as PageViewModel;
             if (pageVm != null)
@@ -37,7 +37,7 @@ namespace Scrawler.Controls
                 _background.Width = pageVm.Width;
                 _background.Height = pageVm.Height;
                 _background.BackgroundViewModel = pageVm.BackgroundViewModel;
-                DrawInk(pageVm);
+                await DrawInk(pageVm);
             }
         }
 
