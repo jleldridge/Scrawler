@@ -26,10 +26,10 @@ namespace Scrawler.Controls
             Children.Add(_background);
             Children.Add(_ink);
 
-            DataContextChanged += PagePreview_DataContextChanged;
+            Loaded += PagePreview_Loaded;
         }
 
-        private async void PagePreview_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        private async void PagePreview_Loaded(object sender, RoutedEventArgs e)
         {
             var pageVm = DataContext as PageViewModel;
             if (pageVm != null)

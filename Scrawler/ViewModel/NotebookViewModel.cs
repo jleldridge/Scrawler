@@ -10,6 +10,7 @@ using Utils.Commands;
 using Utils.ViewModel;
 using System.Threading.Tasks;
 using Windows.UI;
+using System.ComponentModel;
 
 namespace Scrawler.ViewModel
 {
@@ -197,7 +198,18 @@ namespace Scrawler.ViewModel
             PageGridVisible = !PageGridVisible;
             if (PageGridVisible)
             {
-                PageGridViewModel = new PageGridViewModel(Pages);
+                PageGridViewModel = new PageGridViewModel(Pages, CurrentPageNumber - 1);
+                PageGridViewModel.PropertyChanged += PageGridViewModel_PropertyChanged;
+            }
+        }
+
+        private void PageGridViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "SelectedPageIndex":
+                    CurrentPageNumber = PageGridViewModel.SelectedPageIndex + 1;
+                    break;
             }
         }
 

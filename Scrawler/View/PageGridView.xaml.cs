@@ -1,4 +1,5 @@
 ﻿using Scrawler.ViewModel;
+using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -33,7 +34,7 @@ namespace Scrawler.View
 
         private void SetPageSizes(PageGridViewModel vm)
         {
-            double itemWidth = ActualWidth / 5;
+            double itemWidth = Math.Max((ActualWidth / 5) - 10, 50);
             double itemHeight = itemWidth;
             foreach (var page in vm.Pages)
             {

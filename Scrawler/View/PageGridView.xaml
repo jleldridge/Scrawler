@@ -14,19 +14,13 @@
         <ScrollViewer
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Auto">
-            
-            <ItemsControl
-                x:Name="PageGridItemsControl"
-                ItemsSource="{Binding Pages}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <ItemsWrapGrid 
-                            MaximumRowsOrColumns="5"
-                            Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
 
-                <ItemsControl.ItemTemplate>
+            <GridView
+                x:Name="PageGridItemsControl"
+                ItemsSource="{Binding Pages}"
+                SelectedIndex="{Binding SelectedPageIndex, Mode=TwoWay}">
+
+                <GridView.ItemTemplate>
                     <DataTemplate>
                     
                         <Viewbox
@@ -41,8 +35,8 @@
                         </Viewbox>
                     
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                </GridView.ItemTemplate>
+            </GridView>
             
         </ScrollViewer>
     </Grid>

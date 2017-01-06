@@ -7,14 +7,16 @@ namespace Scrawler.ViewModel
     public class PageGridViewModel : ViewModelBase
     {
         private ObservableCollection<PageGridPageViewModel> _pages;
+        private int _selectedPageIndex;
 
-        public PageGridViewModel(IEnumerable<PageViewModel> pages)
+        public PageGridViewModel(IEnumerable<PageViewModel> pages, int pageIndex)
         {
             _pages = new ObservableCollection<PageGridPageViewModel>();
             foreach (var page in pages)
             {
                 _pages.Add(new PageGridPageViewModel(page));
             }
+            _selectedPageIndex = pageIndex;
         }
 
         public ObservableCollection<PageGridPageViewModel> Pages
@@ -23,6 +25,16 @@ namespace Scrawler.ViewModel
             set
             {
                 _pages = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int SelectedPageIndex
+        {
+            get { return _selectedPageIndex; }
+            set
+            {
+                _selectedPageIndex = value;
                 OnPropertyChanged();
             }
         }
