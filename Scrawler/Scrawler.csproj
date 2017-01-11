@@ -138,6 +138,7 @@
     <Content Include="Assets\hamburger.bmp" />
     <Content Include="Assets\new_notebook.bmp" />
     <Content Include="Assets\open_notebook.bmp" />
+    <Content Include="Assets\page_grid.bmp" />
     <Content Include="Assets\page_options.bmp" />
     <Content Include="Assets\save_notebook.bmp" />
     <Content Include="Properties\Default.rd.xml" />

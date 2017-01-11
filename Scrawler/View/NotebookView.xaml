@@ -108,10 +108,14 @@
                 Command="{Binding NextPageCommand}"/>
 
             <Button 
-                Width="30"
-                Height="30"
-                Background="White"
-                Command="{Binding ShowPageGridCommand}"/>
+                Background="Transparent"
+                Command="{Binding ShowPageGridCommand}">
+                <Image 
+                    Width="48"
+                    Height="48"
+                    Source="ms-appx:///Assets/page_grid.bmp"
+                    Stretch="Uniform"/>
+            </Button>
 
         </StackPanel>
         

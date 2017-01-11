@@ -39,12 +39,19 @@ namespace Scrawler.View
             if (args.CurrentPoint.Properties.IsEraser && args.CurrentPoint.IsInContact)
             {
                 var point = args.CurrentPoint.Position;
-                var eraseRect = new Rect(new Point(point.X - 3, point.Y - 3), new Point(point.X + 3, point.Y + 3));
+                var eraseRect = new Rect(new Point(point.X - 2.5, point.Y - 2.5), new Point(point.X + 2.5, point.Y + 2.5));
                 foreach (var stroke in ViewModel.StrokeContainer.GetStrokes())
                 {
                     if (RectHelper.Intersect(stroke.BoundingRect, eraseRect) != Rect.Empty)
                     {
-                        stroke.Selected = true;
+                        foreach (var ipoint in stroke.GetInkPoints())
+                        {
+                            if (eraseRect.Contains(ipoint.Position))
+                            {
+                                stroke.Selected = true;
+                                break;
+                            }
+                        }
                     }
                 }
 
