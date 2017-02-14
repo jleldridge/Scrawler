@@ -79,9 +79,10 @@
                             <DataTemplate x:DataType="vm:SplitMenuCommandViewModel">
 
                                 <Button 
-                                    Style="{StaticResource MenuButtonWithIcon}"
                                     x:Name="ButtonElement"
-                                    Command="{Binding RelayCommand}">
+                                    Style="{StaticResource MenuButtonWithIcon}"
+                                    Command="{Binding RelayCommand}"
+                                    Visibility="{Binding Visible, Converter={StaticResource VisibleIfTrue}}">
                                     <StackPanel Orientation="Horizontal">
                                         <Image 
                                             Stretch="Uniform"

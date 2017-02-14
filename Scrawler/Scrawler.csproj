@@ -141,6 +141,7 @@
     <Content Include="Assets\page_grid.bmp" />
     <Content Include="Assets\page_options.bmp" />
     <Content Include="Assets\save_notebook.bmp" />
+    <Content Include="Assets\unsaved_changes.bmp" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

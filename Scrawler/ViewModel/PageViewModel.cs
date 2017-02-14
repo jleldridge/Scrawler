@@ -19,6 +19,7 @@ namespace Scrawler.ViewModel
         private Page _page;
         private NotebookSerializer _notebookSerializer;
         private BackgroundViewModelBase _backgroundViewModel;
+        private bool _unsavedChanges;
 
         public PageViewModel(Page page, NotebookSerializer notebookSerializer)
         {
@@ -55,6 +56,16 @@ namespace Scrawler.ViewModel
             set
             {
                 _page.Height = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool UnsavedChanges
+        {
+            get { return _unsavedChanges; }
+            set
+            {
+                _unsavedChanges = value;
                 OnPropertyChanged();
             }
         }

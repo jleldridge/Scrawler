@@ -57,6 +57,7 @@ namespace Scrawler.View
 
                 ViewModel.StrokeContainer.DeleteSelected();
                 DrawingCanvasElement.Invalidate();
+                ViewModel.UnsavedChanges = true;
             }
         }
 
@@ -76,6 +77,7 @@ namespace Scrawler.View
             _inkSynchronizer.EndDry();
 
             DrawingCanvasElement.Invalidate();
+            ViewModel.UnsavedChanges = true;
         }
 
         private void DrawingCanvas_OnDraw(CanvasControl sender, CanvasDrawEventArgs args)

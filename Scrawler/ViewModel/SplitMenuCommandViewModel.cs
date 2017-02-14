@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.UI.Xaml.Data;
 
 namespace Scrawler.ViewModel
 {
@@ -6,15 +7,18 @@ namespace Scrawler.ViewModel
     {
         private string _iconPath;
         private bool _isExpanded;
+        private bool _visible;
 
         public SplitMenuCommandViewModel(
             string label,
             string iconPath,
-            Action<object> execute) 
+            Action<object> execute,
+            bool startsVisible = true) 
             : base(label, execute)
         {
             _iconPath = iconPath;
             _isExpanded = false;
+            Visible = startsVisible;
         }
 
         public string IconPath
@@ -33,6 +37,16 @@ namespace Scrawler.ViewModel
             set
             {
                 _isExpanded = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool Visible
+        {
+            get { return _visible; }
+            set
+            {
+                _visible = value;
                 OnPropertyChanged();
             }
         }

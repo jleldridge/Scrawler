@@ -13,6 +13,8 @@ using Scrawler.Dialogs;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace Scrawler.ViewModel
 {
@@ -28,7 +30,8 @@ namespace Scrawler.ViewModel
             {
                 new SplitMenuCommandViewModel("New Notebook", "ms-appx:///Assets/new_notebook.bmp", _ => CreateNewNotebook()),
                 new SplitMenuCommandViewModel("Open Notebook", "ms-appx:///Assets/open_notebook.bmp", _ => LoadNotebook()),
-                new SplitMenuCommandViewModel("Save Notebook", "ms-appx:///Assets/save_notebook.bmp", _ => SaveNotebook()),
+                new SplitMenuCommandViewModel("Save Notebook", "ms-appx:///Assets/save_notebook.bmp", _ => SaveNotebook(), true),
+                new SplitMenuCommandViewModel("Unsaved Changes", "ms-appx:///Assets/unsaved_changes.bmp", _ => SaveNotebook(), false),
                 new SplitMenuCommandViewModel("Page Options", "ms-appx:///Assets/page_options.bmp", _ => ShowNotebookOptions()),
                 new SplitMenuCommandViewModel("Create Page Image", "ms-appx:///Assets/create_page_image.bmp", _ => CreatePageImage()),
             };
@@ -91,6 +94,26 @@ namespace Scrawler.ViewModel
             notebook.AddPage();
             var notebookSerializer = new NotebookSerializer(notebook);
             CurrentNotebook = new NotebookViewModel(notebookSerializer);
+            CurrentNotebook.PropertyChanged += CurrentNotebook_PropertyChanged;
+        }
+
+        private void CurrentNotebook_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "UnsavedChanges":
+                    if (CurrentNotebook.UnsavedChanges)
+                    {
+                        _menuCommands.First(m => m.Label == "Save Notebook").Visible = false;
+                        _menuCommands.First(m => m.Label == "Unsaved Changes").Visible = true;
+                    }
+                    else
+                    {
+                        _menuCommands.First(m => m.Label == "Save Notebook").Visible = true;
+                        _menuCommands.First(m => m.Label == "Unsaved Changes").Visible = false;
+                    }
+                    break;
+            }
         }
 
         private async Task SaveNotebook()
@@ -113,6 +136,7 @@ namespace Scrawler.ViewModel
             {
                 await notebookSerializer.LoadNotebookArchive(file);
                 CurrentNotebook = new NotebookViewModel(notebookSerializer);
+                CurrentNotebook.PropertyChanged += CurrentNotebook_PropertyChanged;
             }
         }
 

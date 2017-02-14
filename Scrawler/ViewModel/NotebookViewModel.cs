@@ -26,6 +26,7 @@ namespace Scrawler.ViewModel
         private PenOptionsViewModel _penOptionsViewModel;
         private PageGridViewModel _pageGridViewModel;
         private bool _pageGridVisible;
+        private bool _unsavedChanges;
 
         private RelayCommand _prevPageCommand, 
             _nextPageCommand,
@@ -38,7 +39,9 @@ namespace Scrawler.ViewModel
             Pages = new ObservableCollection<PageViewModel>();
             foreach (var page in _notebook.Pages)
             {
-                Pages.Add(new PageViewModel(page, _notebookSerializer));
+                var pageVm = new PageViewModel(page, _notebookSerializer);
+                pageVm.PropertyChanged += PageVm_PropertyChanged;
+                Pages.Add(pageVm);
             }
 
             PenOptionsViewModel = new PenOptionsViewModel(this);
@@ -154,6 +157,16 @@ namespace Scrawler.ViewModel
             }
         }
 
+        public bool UnsavedChanges
+        {
+            get { return _unsavedChanges; }
+            set
+            {
+                _unsavedChanges = value;
+                OnPropertyChanged();
+            }
+        }
+
         public RelayCommand PreviousPageCommand
         {
             get
@@ -203,6 +216,22 @@ namespace Scrawler.ViewModel
             }
         }
 
+        private void PageVm_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var pageVm = sender as PageViewModel;
+            if (pageVm == null) return;
+
+            switch (e.PropertyName)
+            {
+                case "UnsavedChanges":
+                    if (pageVm.UnsavedChanges)
+                    {
+                        UnsavedChanges = true;
+                    }
+                    break;
+            }
+        }
+
         private void PageGridViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
@@ -219,9 +248,10 @@ namespace Scrawler.ViewModel
             var page = new PageViewModel(_notebook.Pages.Last(), _notebookSerializer);
             Pages.Add(page);
             CurrentPageNumber = _notebook.Pages.Count;
+            UnsavedChanges = true;
         }
 
-        public async Task SaveNotebookAs()
+        private async Task SaveNotebookAs()
         {
             var picker = new Windows.Storage.Pickers.FileSavePicker();
             picker.FileTypeChoices.Add(new KeyValuePair<string, IList<string>>("Notebook file", new List<string>() {".note"}));
@@ -238,6 +268,11 @@ namespace Scrawler.ViewModel
                 await SaveNotebookAs();
             }
             await _notebookSerializer.SaveNotebook();
+            UnsavedChanges = false;
+            foreach(var page in Pages)
+            {
+                page.UnsavedChanges = false;
+            }
         }
     }
 }
