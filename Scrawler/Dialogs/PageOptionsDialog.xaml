@@ -412,6 +412,7 @@
                     Text="Width"
                     Width="50"/>
                 <TextBox
+                    Margin="0,5,0,5"
                     Width="100"
                     Height="30"
                     FontWeight="Bold"
@@ -429,6 +430,7 @@
                 <TextBox
                     Width="100"
                     Height="30"
+                    Margin="0,5,0,5"
                     FontWeight="Bold"
                     Text="{Binding Height, 
                         Mode=TwoWay, 
