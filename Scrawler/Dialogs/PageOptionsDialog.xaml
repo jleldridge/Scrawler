@@ -35,7 +35,7 @@
 
             <Style TargetType="TextBox" x:Key="NumericTextBoxStyle">
                 <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="Width" Value="50" />
+                
                 <Setter Property="Margin" Value="5" />
             </Style>
 
@@ -414,7 +414,6 @@
                 <TextBox
                     Margin="0,5,0,5"
                     Width="100"
-                    Height="30"
                     FontWeight="Bold"
                     Text="{Binding Width, 
                         Mode=TwoWay, 
@@ -429,7 +428,6 @@
                     Width="50"/>
                 <TextBox
                     Width="100"
-                    Height="30"
                     Margin="0,5,0,5"
                     FontWeight="Bold"
                     Text="{Binding Height, 
