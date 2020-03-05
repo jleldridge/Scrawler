@@ -95,12 +95,12 @@
     <Compile Include="Controls\BackgroundControl.cs" />
     <Compile Include="Controls\PagePreviewControl.cs" />
     <Compile Include="Controls\SavedBackgroundThumbnail.cs" />
-    <Compile Include="Dialogs\PageOptionsDialog.xaml.cs">
+    <Compile Include="View\PageOptionsDialog.xaml.cs">
       <DependentUpon>PageOptionsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Renderers\InkRenderer.cs" />
     <Compile Include="ViewModel\BackgroundViewModel.cs" />
-    <Compile Include="DialogViewModels\PageOptionsViewModel.cs" />
+    <Compile Include="ViewModel\PageOptionsViewModel.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -154,7 +154,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Dialogs\PageOptionsDialog.xaml">
+    <Page Include="View\PageOptionsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

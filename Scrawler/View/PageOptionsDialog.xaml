@@ -1,11 +1,11 @@
 ﻿<ContentDialog
-    x:Class="Scrawler.Dialogs.PageOptionsDialog"
+    x:Class="Scrawler.View.PageOptionsDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Scrawler.Dialogs"
+    xmlns:local="using:Scrawler.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:dvm="using:Scrawler.DialogViewModels"
+    xmlns:vm="using:Scrawler.ViewModel"
     xmlns:controls="using:Scrawler.Controls"
     xmlns:viewModel="using:Scrawler.ViewModel"
     mc:Ignorable="d"
@@ -15,7 +15,7 @@
     PrimaryButtonClick="ContentDialog_OkButtonClick"
     SecondaryButtonClick="ContentDialog_CancelButtonClick"
     MaxWidth="600"
-    d:DataContext="{d:DesignInstance dvm:PageOptionsViewModel}"
+    d:DataContext="{d:DesignInstance vm:PageOptionsViewModel}"
     x:Name="PageOptionsViewElement">
 
     <ContentDialog.Resources>

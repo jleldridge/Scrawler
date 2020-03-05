@@ -8,7 +8,7 @@ using Scrawler.Data.Serialization;
 using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
-using Scrawler.DialogViewModels;
+using Scrawler.ViewModel;
 using Scrawler.Renderers;
 using Windows.Graphics.Imaging;
 

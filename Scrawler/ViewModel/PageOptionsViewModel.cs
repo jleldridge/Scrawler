@@ -6,7 +6,7 @@ using System.Windows.Input;
 using Utils.Commands;
 using Utils.ViewModel;
 
-namespace Scrawler.DialogViewModels
+namespace Scrawler.ViewModel
 {
     public class PageOptionsViewModel : ViewModelBase
     {
