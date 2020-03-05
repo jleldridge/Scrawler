@@ -15,6 +15,7 @@ namespace Scrawler.Data.Data
             Pages = new List<Page>();
             Guid = Guid.NewGuid();
             SavedColors = new List<Color>() { new Color() { A = 255 } };
+            SavedPageBackgrounds = new List<BackgroundBase>();
             Defaults = new Defaults();
         }
 
@@ -24,6 +25,10 @@ namespace Scrawler.Data.Data
             if (SavedColors == null)
             {
                 SavedColors = new List<Color>() { new Color() { A = 255 } };
+            }
+            if (SavedPageBackgrounds == null)
+            {
+                SavedPageBackgrounds = new List<BackgroundBase>();
             }
             if (Defaults == null)
             {
@@ -39,6 +44,9 @@ namespace Scrawler.Data.Data
 
         [DataMember]
         public List<Page> Pages { get; set; }
+
+        [DataMember]
+        public List<BackgroundBase> SavedPageBackgrounds { get; set; }
 
         [DataMember]
         public List<Color> SavedColors { get; set; }

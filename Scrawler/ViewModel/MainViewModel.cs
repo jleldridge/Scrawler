@@ -142,7 +142,7 @@ namespace Scrawler.ViewModel
 
         public async Task ShowNotebookOptions()
         {
-            PageOptionsViewModel options = new PageOptionsViewModel(CurrentNotebook.CurrentPage);
+            PageOptionsViewModel options = new PageOptionsViewModel(CurrentNotebook.CurrentPage, CurrentNotebook);
             var dlg = new PageOptionsDialog(options);
             var result = await dlg.ShowAsync();
             if (result == ContentDialogResult.Primary)

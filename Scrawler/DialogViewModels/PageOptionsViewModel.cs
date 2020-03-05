@@ -2,9 +2,9 @@
 using Scrawler.Data.Serialization;
 using Scrawler.ViewModel;
 using System.Collections.Generic;
+using System.Windows.Input;
+using Utils.Commands;
 using Utils.ViewModel;
-using Windows.UI;
-using Windows.UI.Xaml.Media;
 
 namespace Scrawler.DialogViewModels
 {
@@ -13,12 +13,16 @@ namespace Scrawler.DialogViewModels
         private double _height, _width;
         private BackgroundType _selectedType;
         private BackgroundViewModelBase _backgroundDataViewModel;
+        private NotebookViewModel _notebook;
+        private ICommand _saveBackgroundCommand;
+        private ICommand _setBackgroundCommand;
 
-        public PageOptionsViewModel(PageViewModel page)
+        public PageOptionsViewModel(PageViewModel page, NotebookViewModel notebook)
         {
             Width = page.Width;
             Height = page.Height;
             var backgroundData = DataContractHelper.Clone(page.BackgroundViewModel.BackgroundData);
+            _notebook = notebook;
             
             if (backgroundData is SolidBackground)
             {
@@ -103,6 +107,58 @@ namespace Scrawler.DialogViewModels
             {
                 _width = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public List<BackgroundBase> SavedBackgrounds
+        {
+            get { return _notebook.SavedPageBackgrounds; }
+            set 
+            { 
+                _notebook.SavedPageBackgrounds = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ICommand SaveBackgroundCommand
+        {
+            get { return _saveBackgroundCommand ?? (_saveBackgroundCommand = new RelayCommand(_ => SaveBackground())); }
+        }
+
+        public ICommand SetBackgroundCommand
+        {
+            get { return _setBackgroundCommand ?? (_setBackgroundCommand = new RelayCommand(SetBackground)); }
+        }
+
+        public void SaveBackground()
+        {
+            var backgroundToBeSaved = DataContractHelper.Clone(BackgroundDataViewModel.BackgroundData);
+            SavedBackgrounds.Add(backgroundToBeSaved);
+            SavedBackgrounds = new List<BackgroundBase>(SavedBackgrounds);
+        }
+
+        public void SetBackground(object param)
+        {
+            var backgroundData = param as BackgroundBase;
+            if (backgroundData != null)
+            {
+                var newBackgroundData = DataContractHelper.Clone(backgroundData);
+                if (newBackgroundData is SolidBackground)
+                {
+                    _selectedType = BackgroundType.Solid;
+                    BackgroundDataViewModel = new SolidBackgroundViewModel(newBackgroundData as SolidBackground);
+                }
+                else if (newBackgroundData is GridLineBackground)
+                {
+                    _selectedType = BackgroundType.Grid;
+                    BackgroundDataViewModel = new GridLineBackgroundViewModel(newBackgroundData as GridLineBackground);
+                }
+                else if (newBackgroundData is ImageBackground)
+                {
+                    _selectedType = BackgroundType.Image;
+                    BackgroundDataViewModel = new ImageBackgroundViewModel(newBackgroundData as ImageBackground);
+                }
+                OnPropertyChanged("SelectedType");
             }
         }
     }
