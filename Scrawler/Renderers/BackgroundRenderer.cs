@@ -2,6 +2,7 @@
 using Microsoft.Graphics.Canvas.Brushes;
 using Scrawler.Data.Data;
 using Windows.Foundation;
+using Windows.Graphics.Imaging;
 
 namespace Scrawler.Renderers
 {
@@ -20,6 +21,12 @@ namespace Scrawler.Renderers
                 {
                     var glBackground = background as GridLineBackground;
                     DrawGridLineBackground(glBackground, bitmap, session);
+                }
+
+                if (background is ImageBackground)
+                {
+                    var imageBackground = background as ImageBackground;
+                    DrawImageBackground(imageBackground, bitmap, session);
                 }
             }
 
@@ -62,6 +69,14 @@ namespace Scrawler.Renderers
 
                     x += background.VerticalLineSpacing;
                 }
+            }
+        }
+
+        private static void DrawImageBackground(ImageBackground background, CanvasBitmap bitmap, CanvasDrawingSession session)
+        {
+            if (background.Image != null)
+            {
+                session.DrawImage(background.Image);
             }
         }
     }

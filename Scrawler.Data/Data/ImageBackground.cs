@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using Microsoft.Graphics.Canvas;
+using System.Runtime.Serialization;
 
 namespace Scrawler.Data.Data
 {
@@ -17,6 +18,8 @@ namespace Scrawler.Data.Data
 
 
         [DataMember]
-        public string ImageFilePath { get; set; }
+        public string ImageFileName { get; set; }
+
+        public CanvasBitmap Image { get; set; }
     }
 }

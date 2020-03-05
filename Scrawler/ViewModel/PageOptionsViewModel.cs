@@ -1,10 +1,12 @@
-﻿using Scrawler.Data.Data;
+﻿using Microsoft.Graphics.Canvas;
+using Scrawler.Data.Data;
 using Scrawler.Data.Serialization;
 using Scrawler.ViewModel;
 using System.Collections.Generic;
 using System.Windows.Input;
 using Utils.Commands;
 using Utils.ViewModel;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Scrawler.ViewModel
 {
@@ -160,6 +162,18 @@ namespace Scrawler.ViewModel
                 }
                 OnPropertyChanged("SelectedType");
             }
+        }
+
+        public void LoadImageForBackground(CanvasBitmap image)
+        {
+            var backgroundData = new ImageBackground();
+            backgroundData.Image = image;
+
+            // make sure we have image as our background type
+            _selectedType = BackgroundType.Image;
+            OnPropertyChanged("SelectedType");
+
+            BackgroundDataViewModel = new ImageBackgroundViewModel(backgroundData);
         }
     }
 

@@ -333,9 +333,18 @@
 
             <DataTemplate x:DataType="viewModel:ImageBackgroundViewModel" x:Key="ImageBackgroundTemplate">
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Button 
+                        Content="Open..."
+                        Click="OpenImageButton_Click"/>
 
                     <Button
-                        Content="Background Color">
+                        Content="Background Color"
+                        Grid.Row="1">
                         <Button.Flyout>
                             <Flyout>
                                 <Grid>
