@@ -436,7 +436,10 @@
                         UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
 
-            <ItemsControl
+            <StackPanel>
+                <TextBlock
+                    Text="Saved Backgrounds" />
+                <ItemsControl
                 Grid.ColumnSpan="3"
                 ItemsSource="{Binding SavedBackgrounds}">
 
@@ -452,18 +455,30 @@
                     <DataTemplate>
 
                         <Button
-                            Width="25"
-                            Height="25"
+                            Width="75"
+                            Height="75"
                             BorderBrush="Black"
                             BorderThickness="1"
                             Margin="1"
+                            Padding="0"
+                            Background="Transparent"
                             Command="{Binding DataContext.SetBackgroundCommand, ElementName=PageOptionsViewElement}"
-                            CommandParameter="{Binding}"/>
+                            CommandParameter="{Binding}">
+                            <Viewbox 
+                                Width="75" 
+                                Height="75">
+                                <controls:SavedBackgroundThumbnail
+                                    Width="100"
+                                    Height="100"
+                                    BackgroundData="{Binding}"/>
+                            </Viewbox>
+                        </Button>
 
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
 
             </ItemsControl>
+            </StackPanel>
 
             <StackPanel
                 Margin="5,10,5,5"
@@ -489,11 +504,15 @@
                     Height="127"
                     BorderBrush="Black"
                     BorderThickness="1">
-                    <controls:BackgroundControl 
-                        Width="125"
-                        Height="125"
-                        VerticalAlignment="Center"
-                        BackgroundViewModel="{Binding BackgroundDataViewModel}" />
+                    <Viewbox 
+                        Width="127"
+                        Height="127">
+                        <controls:BackgroundControl 
+                            Width="500"
+                            Height="500"
+                            VerticalAlignment="Center"
+                            BackgroundViewModel="{Binding BackgroundDataViewModel}" />
+                    </Viewbox>
                 </Border>
 
                 <Button
