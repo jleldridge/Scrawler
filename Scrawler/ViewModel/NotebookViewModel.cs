@@ -127,6 +127,16 @@ namespace Scrawler.ViewModel
             }
         }
 
+        public List<BackgroundBase> SavedPageBackgrounds
+        {
+            get { return _notebook.SavedPageBackgrounds; }
+            set 
+            {
+                _notebook.SavedPageBackgrounds = value;
+                OnPropertyChanged();
+            }
+        }
+
         public PenOptionsViewModel PenOptionsViewModel
         {
             get { return _penOptionsViewModel; }
