@@ -11,6 +11,7 @@ using System.IO.Compression;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Microsoft.Graphics.Canvas;
 
 namespace Scrawler.Data.Serialization
 {
@@ -110,14 +111,34 @@ namespace Scrawler.Data.Serialization
             var inkFile = archive.CreateEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
             await SerializeInkCanvas(page.StrokeContainer, inkFile);
             //todo: serialize background file
+            if (page.Background is ImageBackground)
+            {
+                var imageBackground = page.Background as ImageBackground;
+                if (imageBackground.Image != null)
+                {
+                    var backgroundImageFile = archive.CreateEntry(BackgroundMetadataSubfolderName + "/" + imageBackground.ImageFileName);
+                    await SerializeBackgroundImage(imageBackground.Image, backgroundImageFile);
+                }
+            }
         }
 
         private async Task LoadPage(Page page, ZipArchive archive)
         {
             var inkFile = archive.GetEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
-            if (inkFile == null) return;
+            if (inkFile != null)
+            {
+                await DeserializeInkCanvas(inkFile, page.StrokeContainer);
+            }
 
-            await DeserializeInkCanvas(inkFile, page.StrokeContainer);
+            if (page.Background is ImageBackground)
+            {
+                var imageBackground = page.Background as ImageBackground;
+                var backgroundFile = archive.GetEntry(BackgroundMetadataSubfolderName + "/" + imageBackground.ImageFileName);
+                if (backgroundFile != null)
+                {
+                    imageBackground.Image = await DeserializeBackgroundImage(backgroundFile);
+                }
+            }
         }
 
         #endregion
@@ -176,6 +197,28 @@ namespace Scrawler.Data.Serialization
                     await container.LoadAsync(inputStream);
                 }
             }
+        }
+
+        private static async Task SerializeBackgroundImage(CanvasBitmap background, ZipArchiveEntry file)
+        {
+            // Open a file stream for writing.
+            using (var stream = file.Open().AsRandomAccessStream())
+            {
+                await background.SaveAsync(stream, CanvasBitmapFileFormat.Png);
+            }
+        }
+
+        private static async Task<CanvasBitmap> DeserializeBackgroundImage(ZipArchiveEntry file)
+        {
+            using (var stream = file.Open().AsRandomAccessStream())
+            {
+                if (stream.Size > 0)
+                {
+                    return await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), stream);
+                }
+            }
+
+            return null;
         }
 
         private void ClearArchive(ZipArchive archive)

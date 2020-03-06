@@ -1,4 +1,5 @@
 ﻿using Microsoft.Graphics.Canvas;
+using System;
 using System.Runtime.Serialization;
 
 namespace Scrawler.Data.Data
@@ -8,6 +9,7 @@ namespace Scrawler.Data.Data
     {
         public ImageBackground()
         {
+            ImageFileName = Guid.NewGuid().ToString();
         }
 
         [OnDeserialized]
