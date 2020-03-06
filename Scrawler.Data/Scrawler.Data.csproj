@@ -114,6 +114,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\DataContractHelper.cs" />
     <Compile Include="Serialization\ImageSerializer.cs" />
+    <Compile Include="Serialization\NotebookDeserializer.cs" />
     <Compile Include="Serialization\NotebookSerializer.cs" />
     <EmbeddedResource Include="Properties\Scrawler.Data.rd.xml" />
   </ItemGroup>

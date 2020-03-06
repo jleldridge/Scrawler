@@ -17,14 +17,12 @@ namespace Scrawler.ViewModel
     public class PageViewModel : ViewModelBase
     {
         private Page _page;
-        private NotebookSerializer _notebookSerializer;
         private BackgroundViewModelBase _backgroundViewModel;
         private bool _unsavedChanges;
 
-        public PageViewModel(Page page, NotebookSerializer notebookSerializer)
+        public PageViewModel(Page page)
         {
             _page = page;
-            _notebookSerializer = notebookSerializer;
             if (_page.Background is SolidBackground)
             {
                 _backgroundViewModel = new SolidBackgroundViewModel((SolidBackground)_page.Background);

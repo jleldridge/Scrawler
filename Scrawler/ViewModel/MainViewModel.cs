@@ -92,8 +92,7 @@ namespace Scrawler.ViewModel
         {
             var notebook = new Notebook("NewNotebook");
             notebook.AddPage();
-            var notebookSerializer = new NotebookSerializer(notebook);
-            CurrentNotebook = new NotebookViewModel(notebookSerializer);
+            CurrentNotebook = new NotebookViewModel(notebook, null);
             CurrentNotebook.PropertyChanged += CurrentNotebook_PropertyChanged;
         }
 
@@ -134,8 +133,8 @@ namespace Scrawler.ViewModel
             var file = await picker.PickSingleFileAsync();
             if (file != null)
             {
-                await notebookSerializer.LoadNotebookArchive(file);
-                CurrentNotebook = new NotebookViewModel(notebookSerializer);
+                var notebook = await NotebookSerializer.LoadNotebookArchive(file);
+                CurrentNotebook = new NotebookViewModel(notebook, file);
                 CurrentNotebook.PropertyChanged += CurrentNotebook_PropertyChanged;
             }
         }

@@ -17,10 +17,8 @@ namespace Scrawler.Tests
             notebook.AddPage();
             notebook.AddPage();
 
-            var notebookSerializer = new NotebookSerializer(notebook);
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(notebook.Name);
-            notebookSerializer.InitializeNotebookArchive(file);
-            await notebookSerializer.SaveNotebook();
+            await NotebookSerializer.SaveNotebook(notebook, file);
 
             await file.DeleteAsync();
         }
@@ -32,13 +30,11 @@ namespace Scrawler.Tests
             notebook.AddPage();
             notebook.AddPage();
 
-            var notebookSerializer = new NotebookSerializer(notebook);
             var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(notebook.Name);
-            notebookSerializer.InitializeNotebookArchive(file);
-            await notebookSerializer.SaveNotebook();
+            await NotebookSerializer.SaveNotebook(notebook, file);
 
-            var newNotebookSerializer = new NotebookSerializer();
-            await newNotebookSerializer.LoadNotebookArchive(file);
+            await file.DeleteAsync();
+            await NotebookSerializer.LoadNotebookArchive(file);
 
             await file.DeleteAsync();
         }
