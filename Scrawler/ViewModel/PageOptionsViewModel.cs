@@ -1,11 +1,14 @@
-﻿using Microsoft.Graphics.Canvas;
+﻿using System;
+using Microsoft.Graphics.Canvas;
 using Scrawler.Data.Data;
 using Scrawler.Data.Serialization;
 using Scrawler.ViewModel;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Utils.Commands;
 using Utils.ViewModel;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace Scrawler.ViewModel
@@ -164,16 +167,28 @@ namespace Scrawler.ViewModel
             }
         }
 
-        public void LoadImageForBackground(CanvasBitmap image)
+        public async Task LoadImageForBackground()
         {
-            var backgroundData = new ImageBackground();
-            backgroundData.Image = image;
+            var picker = new FileOpenPicker();
+            picker.FileTypeFilter.Add(".png");
 
-            // make sure we have image as our background type
-            _selectedType = BackgroundType.Image;
-            OnPropertyChanged("SelectedType");
+            var file = await picker.PickSingleFileAsync();
+            if (file == null) return;
 
-            BackgroundDataViewModel = new ImageBackgroundViewModel(backgroundData);
+            // Ensure the stream is disposed once the image is loaded
+            using (var fileStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
+            {
+                var device = CanvasDevice.GetSharedDevice();
+                var image = await CanvasBitmap.LoadAsync(device, fileStream);
+                var backgroundData = new ImageBackground();
+                backgroundData.Image = image;
+
+                // make sure we have image as our background type
+                _selectedType = BackgroundType.Image;
+                OnPropertyChanged("SelectedType");
+
+                BackgroundDataViewModel = new ImageBackgroundViewModel(backgroundData);
+            }
         }
     }
 
