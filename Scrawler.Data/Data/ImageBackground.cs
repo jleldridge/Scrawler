@@ -23,8 +23,17 @@ namespace Scrawler.Data.Data
         public string ImageFileName { get; set; }
 
         [DataMember]
-        public bool ScaleImageToPage { get; set; }
+        public ImageScaleSetting ImageScaleSetting { get; set; }
+
+        [DataMember]
+        public float PageScale { get; set; }
 
         public CanvasBitmap Image { get; set; }
+    }
+
+    public enum ImageScaleSetting
+    {
+        ScaleImageToPage,
+        ScalePageToImage
     }
 }

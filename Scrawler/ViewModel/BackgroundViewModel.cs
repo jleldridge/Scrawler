@@ -3,6 +3,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Scrawler.Data.Data;
 using Utils.ViewModel;
+using Microsoft.Graphics.Canvas;
 
 namespace Scrawler.ViewModel
 {
@@ -237,6 +238,61 @@ namespace Scrawler.ViewModel
         public ImageBackground ImageBackground
         {
             get { return BackgroundData as ImageBackground; }
+        }
+
+        public CanvasBitmap Image
+        {
+            get { return ImageBackground.Image; }
+            set 
+            { 
+                ImageBackground.Image = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ScaleImageToPage
+        {
+            get { return ImageBackground.ImageScaleSetting == ImageScaleSetting.ScaleImageToPage; }
+            set 
+            {
+                if(value)
+                {
+                    ImageBackground.ImageScaleSetting = ImageScaleSetting.ScaleImageToPage;
+                } else
+                {
+                    ImageBackground.ImageScaleSetting = ImageScaleSetting.ScalePageToImage;
+                }
+                OnPropertyChanged();
+                OnPropertyChanged("ScalePageToImage");
+            }
+        }
+
+        public bool ScalePageToImage
+        {
+            get { return ImageBackground.ImageScaleSetting == ImageScaleSetting.ScalePageToImage; }
+            set
+            {
+                if (value)
+                {
+                    ImageBackground.ImageScaleSetting = ImageScaleSetting.ScalePageToImage;
+                }
+                else
+                {
+                    ImageBackground.ImageScaleSetting = ImageScaleSetting.ScaleImageToPage;
+                }
+                OnPropertyChanged();
+                OnPropertyChanged("ScaleImageToPage");
+            }
+        }
+
+        public float PageScale
+        {
+            get { return ImageBackground.PageScale; }
+            set
+            {
+                ImageBackground.PageScale = value;
+                OnPropertyChanged();
+            }
         }
     }
 }

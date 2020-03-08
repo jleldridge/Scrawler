@@ -76,7 +76,12 @@ namespace Scrawler.Renderers
         {
             if (background.Image != null)
             {
-                session.DrawImage(background.Image);
+                var rect = background.ImageScaleSetting == ImageScaleSetting.ScaleImageToPage
+                    ? bitmap.Bounds
+                    : new Rect(new Point(0, 0), 
+                        new Size(background.Image.SizeInPixels.Width * background.PageScale, 
+                            background.Image.SizeInPixels.Height * background.PageScale));
+                session.DrawImage(background.Image, rect);
             }
         }
     }
