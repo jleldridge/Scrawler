@@ -1,20 +1,15 @@
 ﻿using System;
 using Scrawler.Data.Data;
-using System.Windows.Input;
-using Windows.Storage;
 using Scrawler.Data.Serialization;
-using Utils.Commands;
 using Utils.ViewModel;
 using System.Threading.Tasks;
 using Windows.Storage.Pickers;
-using Windows.UI;
-using Scrawler.ViewModel;
 using Scrawler.View;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Microsoft.Graphics.Canvas;
 
 namespace Scrawler.ViewModel
 {
@@ -92,8 +87,7 @@ namespace Scrawler.ViewModel
         {
             var notebook = new Notebook("NewNotebook");
             notebook.AddPage();
-            var notebookSerializer = new NotebookSerializer(notebook);
-            CurrentNotebook = new NotebookViewModel(notebookSerializer);
+            CurrentNotebook = new NotebookViewModel(notebook, null);
             CurrentNotebook.PropertyChanged += CurrentNotebook_PropertyChanged;
         }
 
@@ -134,8 +128,8 @@ namespace Scrawler.ViewModel
             var file = await picker.PickSingleFileAsync();
             if (file != null)
             {
-                await notebookSerializer.LoadNotebookArchive(file);
-                CurrentNotebook = new NotebookViewModel(notebookSerializer);
+                var notebook = await NotebookSerializer.LoadNotebookArchive(file);
+                CurrentNotebook = new NotebookViewModel(notebook, file);
                 CurrentNotebook.PropertyChanged += CurrentNotebook_PropertyChanged;
             }
         }
@@ -153,7 +147,7 @@ namespace Scrawler.ViewModel
 
                 CurrentNotebook.Defaults = new Defaults()
                 {
-                    Background = options.BackgroundDataViewModel.BackgroundData,
+                    Background = options.BackgroundDataViewModel.BackgroundData.GetDeepCopy(),
                     PageWidth = options.Width,
                     PageHeight = options.Height
                 };

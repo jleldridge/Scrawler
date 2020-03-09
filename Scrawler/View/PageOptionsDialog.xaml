@@ -333,9 +333,27 @@
 
             <DataTemplate x:DataType="viewModel:ImageBackgroundViewModel" x:Key="ImageBackgroundTemplate">
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
 
                     <Button
-                        Content="Background Color">
+                        Margin="3"
+                        Content="Open..."
+                        Click="OpenImageButton_Click"/>
+
+                    <Button
+                        Margin="3"
+                        Grid.Row="1"
+                        Content="Set Page to Image Size"
+                        Click="SetPageToImageSizeButton_Click"/>
+
+                    <Button
+                        Margin="3"
+                        Content="Background Color"
+                        Grid.Row="2">
                         <Button.Flyout>
                             <Flyout>
                                 <Grid>
@@ -507,9 +525,9 @@
                     <Viewbox 
                         Width="127"
                         Height="127">
-                        <controls:BackgroundControl 
-                            Width="500"
-                            Height="500"
+                        <controls:BackgroundControl
+                            Width="{Binding Width}"
+                            Height="{Binding Height}"
                             VerticalAlignment="Center"
                             BackgroundViewModel="{Binding BackgroundDataViewModel}" />
                     </Viewbox>

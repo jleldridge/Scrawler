@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using Scrawler.Data.Serialization;
+using System.Runtime.Serialization;
 using Windows.UI;
 
 namespace Scrawler.Data.Data
@@ -7,7 +8,7 @@ namespace Scrawler.Data.Data
     [KnownType(typeof(SolidBackground))]
     [KnownType(typeof(ImageBackground))]
     [KnownType(typeof(GridLineBackground))]
-    public abstract class BackgroundBase
+    public abstract class BackgroundBase : IDeepCopyable<BackgroundBase>
     {
         public BackgroundBase()
         {
@@ -20,5 +21,7 @@ namespace Scrawler.Data.Data
 
         [DataMember]
         public Color BackgroundColor { get; set; }
+
+        public abstract BackgroundBase GetDeepCopy();
     }
 }

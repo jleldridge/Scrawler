@@ -1,10 +1,14 @@
-﻿using Scrawler.Data.Data;
+﻿using System;
+using Microsoft.Graphics.Canvas;
+using Scrawler.Data.Data;
 using Scrawler.Data.Serialization;
-using Scrawler.ViewModel;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Utils.Commands;
 using Utils.ViewModel;
+using Windows.Storage.Pickers;
+using System.ComponentModel;
 
 namespace Scrawler.ViewModel
 {
@@ -21,7 +25,7 @@ namespace Scrawler.ViewModel
         {
             Width = page.Width;
             Height = page.Height;
-            var backgroundData = DataContractHelper.Clone(page.BackgroundViewModel.BackgroundData);
+            var backgroundData = page.BackgroundViewModel.BackgroundData.GetDeepCopy();
             _notebook = notebook;
             
             if (backgroundData is SolidBackground)
@@ -132,7 +136,7 @@ namespace Scrawler.ViewModel
 
         public void SaveBackground()
         {
-            var backgroundToBeSaved = DataContractHelper.Clone(BackgroundDataViewModel.BackgroundData);
+            var backgroundToBeSaved = BackgroundDataViewModel.BackgroundData.GetDeepCopy();
             SavedBackgrounds.Add(backgroundToBeSaved);
             SavedBackgrounds = new List<BackgroundBase>(SavedBackgrounds);
         }
@@ -142,7 +146,7 @@ namespace Scrawler.ViewModel
             var backgroundData = param as BackgroundBase;
             if (backgroundData != null)
             {
-                var newBackgroundData = DataContractHelper.Clone(backgroundData);
+                var newBackgroundData = backgroundData.GetDeepCopy();
                 if (newBackgroundData is SolidBackground)
                 {
                     _selectedType = BackgroundType.Solid;
@@ -159,6 +163,40 @@ namespace Scrawler.ViewModel
                     BackgroundDataViewModel = new ImageBackgroundViewModel(newBackgroundData as ImageBackground);
                 }
                 OnPropertyChanged("SelectedType");
+            }
+        }
+
+        public async Task LoadImageForBackground()
+        {
+            var picker = new FileOpenPicker();
+            picker.FileTypeFilter.Add(".png");
+
+            var file = await picker.PickSingleFileAsync();
+            if (file == null) return;
+
+            // Ensure the stream is disposed once the image is loaded
+            using (var fileStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
+            {
+                var device = CanvasDevice.GetSharedDevice();
+                var image = await CanvasBitmap.LoadAsync(device, fileStream);
+                var backgroundData = new ImageBackground();
+                backgroundData.Image = image;
+
+                // make sure we have image as our background type
+                _selectedType = BackgroundType.Image;
+                OnPropertyChanged("SelectedType");
+
+                BackgroundDataViewModel = new ImageBackgroundViewModel(backgroundData);
+            }
+        }
+
+        public void SetPageToImageSize()
+        {
+            var imageBackground = BackgroundDataViewModel.BackgroundData as ImageBackground;
+            if (imageBackground != null)
+            {
+                Width = imageBackground.Image.SizeInPixels.Width;
+                Height = imageBackground.Image.SizeInPixels.Height;
             }
         }
     }

@@ -11,6 +11,7 @@ using Utils.ViewModel;
 using System.Threading.Tasks;
 using Windows.UI;
 using System.ComponentModel;
+using Windows.Storage;
 
 namespace Scrawler.ViewModel
 {
@@ -21,25 +22,25 @@ namespace Scrawler.ViewModel
 
         private Notebook _notebook;
         private int _currentPageNumber;
-        private NotebookSerializer _notebookSerializer;
         private float _zoom = 1f;
         private PenOptionsViewModel _penOptionsViewModel;
         private PageGridViewModel _pageGridViewModel;
         private bool _pageGridVisible;
         private bool _unsavedChanges;
+        private StorageFile _file;
 
         private RelayCommand _prevPageCommand, 
             _nextPageCommand,
             _showPageGridCommand;
 
-        public NotebookViewModel(NotebookSerializer notebookSerializer)
+        public NotebookViewModel(Notebook notebook, StorageFile file)
         {
-            _notebookSerializer = notebookSerializer;
-            _notebook = notebookSerializer.Notebook;
+            _notebook = notebook;
+            _file = file;
             Pages = new ObservableCollection<PageViewModel>();
             foreach (var page in _notebook.Pages)
             {
-                var pageVm = new PageViewModel(page, _notebookSerializer);
+                var pageVm = new PageViewModel(page);
                 pageVm.PropertyChanged += PageVm_PropertyChanged;
                 Pages.Add(pageVm);
             }
@@ -255,29 +256,22 @@ namespace Scrawler.ViewModel
         public void CreateNewPage()
         {
             _notebook.AddPage();
-            var page = new PageViewModel(_notebook.Pages.Last(), _notebookSerializer);
+            var page = new PageViewModel(_notebook.Pages.Last());
             Pages.Add(page);
             CurrentPageNumber = _notebook.Pages.Count;
             UnsavedChanges = true;
         }
 
-        private async Task SaveNotebookAs()
-        {
-            var picker = new Windows.Storage.Pickers.FileSavePicker();
-            picker.FileTypeChoices.Add(new KeyValuePair<string, IList<string>>("Notebook file", new List<string>() {".note"}));
-            picker.SuggestedFileName = "Notebook";
-            var file = await picker.PickSaveFileAsync();
-
-            _notebookSerializer.InitializeNotebookArchive(file);
-        }
-
         public async Task SaveNotebook()
         {
-            if (_notebookSerializer.NotebookArchiveFile == null)
+            if (_file == null)
             {
-                await SaveNotebookAs();
+                var picker = new Windows.Storage.Pickers.FileSavePicker();
+                picker.FileTypeChoices.Add(new KeyValuePair<string, IList<string>>("Notebook file", new List<string>() { ".note" }));
+                picker.SuggestedFileName = "Notebook";
+                _file = await picker.PickSaveFileAsync();
             }
-            await _notebookSerializer.SaveNotebook();
+            await NotebookSerializer.SaveNotebook(_notebook, _file);
             UnsavedChanges = false;
             foreach(var page in Pages)
             {

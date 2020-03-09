@@ -3,6 +3,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Scrawler.Data.Data;
 using Utils.ViewModel;
+using Microsoft.Graphics.Canvas;
 
 namespace Scrawler.ViewModel
 {
@@ -237,6 +238,16 @@ namespace Scrawler.ViewModel
         public ImageBackground ImageBackground
         {
             get { return BackgroundData as ImageBackground; }
+        }
+
+        public CanvasBitmap Image
+        {
+            get { return ImageBackground.Image; }
+            set 
+            { 
+                ImageBackground.Image = value;
+                OnPropertyChanged();
+            }
         }
     }
 }
