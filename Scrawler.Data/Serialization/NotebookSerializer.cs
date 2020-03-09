@@ -40,6 +40,16 @@ namespace Scrawler.Data.Serialization
                             await LoadPage(page, archive);
                         }
 
+                        foreach (var background in notebook.SavedPageBackgrounds)
+                        {
+                            if (background is ImageBackground)
+                            {
+                                var imageBackground = (ImageBackground)background;
+                                imageBackground.Image = await DeserializeBackgroundImage(
+                                    archive.GetEntry(BackgroundMetadataSubfolderName + "/" + imageBackground.ImageFileName));
+                            }
+                        }
+
                         return notebook;
                     }
                 }
@@ -67,6 +77,16 @@ namespace Scrawler.Data.Serialization
                         foreach (var page in notebook.Pages)
                         {
                             await SavePage(page, archive);
+                        }
+
+                        foreach (var background in notebook.SavedPageBackgrounds)
+                        {
+                            if (background is ImageBackground)
+                            {
+                                var imageBackground = (ImageBackground)background;
+                                var backgroundImageFile = archive.CreateEntry(BackgroundMetadataSubfolderName + "/" + imageBackground.ImageFileName);
+                                await SerializeBackgroundImage(imageBackground.Image, backgroundImageFile);
+                            }
                         }
                     }
                 }

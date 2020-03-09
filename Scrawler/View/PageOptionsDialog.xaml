@@ -486,8 +486,8 @@
                                 Width="75" 
                                 Height="75">
                                 <controls:SavedBackgroundThumbnail
-                                    Width="100"
-                                    Height="100"
+                                    Width="{Binding DataContext.Width, ElementName=PageOptionsViewElement}"
+                                    Height="{Binding DataContext.Height, ElementName=PageOptionsViewElement}"
                                     BackgroundData="{Binding}"/>
                             </Viewbox>
                         </Button>
