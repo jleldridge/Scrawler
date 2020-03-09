@@ -50,6 +50,13 @@ namespace Scrawler.Data.Serialization
                             }
                         }
 
+                        if (notebook.Defaults.Background is ImageBackground)
+                        {
+                            var imageBackground = (ImageBackground)notebook.Defaults.Background;
+                            imageBackground.Image = await DeserializeBackgroundImage(
+                                    archive.GetEntry(BackgroundMetadataSubfolderName + "/" + imageBackground.ImageFileName));
+                        }
+
                         return notebook;
                     }
                 }
@@ -87,6 +94,13 @@ namespace Scrawler.Data.Serialization
                                 var backgroundImageFile = archive.CreateEntry(BackgroundMetadataSubfolderName + "/" + imageBackground.ImageFileName);
                                 await SerializeBackgroundImage(imageBackground.Image, backgroundImageFile);
                             }
+                        }
+
+                        if (notebook.Defaults.Background is ImageBackground)
+                        {
+                            var imageBackground = (ImageBackground)notebook.Defaults.Background;
+                            var backgroundImageFile = archive.CreateEntry(BackgroundMetadataSubfolderName + "/" + imageBackground.ImageFileName);
+                            await SerializeBackgroundImage(imageBackground.Image, backgroundImageFile);
                         }
                     }
                 }
