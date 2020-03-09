@@ -3,7 +3,7 @@
 namespace Scrawler.Data.Data
 {
     [DataContract]
-    public class Defaults
+    public class Defaults : IDeepCopiable<Defaults>
     {
         public Defaults()
         {
@@ -37,5 +37,15 @@ namespace Scrawler.Data.Data
 
         [DataMember]
         public double PageHeight { get; set; }
+
+        public Defaults GetDeepCopy()
+        {
+            var copy = new Defaults();
+            copy.Background = Background.GetDeepCopy();
+            copy.PageWidth = PageWidth;
+            copy.PageHeight = PageHeight;
+
+            return copy;
+        }
     }
 }

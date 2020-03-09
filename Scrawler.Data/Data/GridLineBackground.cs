@@ -36,5 +36,20 @@ namespace Scrawler.Data.Data
 
         [DataMember]
         public Color LineColor { get; set; }
+
+        public override BackgroundBase GetDeepCopy()
+        {
+            var copy = new GridLineBackground();
+            copy.BackgroundColor = BackgroundColor;
+            copy.HorizontalLineThickness = HorizontalLineThickness;
+            copy.HorizontalLineSpacing = HorizontalLineSpacing;
+
+            copy.VerticalLineThickness = VerticalLineThickness;
+            copy.VerticalLineSpacing = VerticalLineSpacing;
+
+            copy.LineColor = LineColor;
+
+            return copy;
+        }
     }
 }

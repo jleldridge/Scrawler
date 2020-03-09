@@ -10,5 +10,12 @@ namespace Scrawler.Data.Data
         {
             OnDeserializedBase(context);
         }
+
+        public override BackgroundBase GetDeepCopy()
+        {
+            var copy = new SolidBackground();
+            copy.BackgroundColor = BackgroundColor;
+            return copy;
+        }
     }
 }

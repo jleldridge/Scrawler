@@ -25,7 +25,7 @@ namespace Scrawler.ViewModel
         {
             Width = page.Width;
             Height = page.Height;
-            var backgroundData = DataContractHelper.Clone(page.BackgroundViewModel.BackgroundData);
+            var backgroundData = page.BackgroundViewModel.BackgroundData.GetDeepCopy();
             _notebook = notebook;
             
             if (backgroundData is SolidBackground)
@@ -163,11 +163,7 @@ namespace Scrawler.ViewModel
 
         public void SaveBackground()
         {
-            var backgroundToBeSaved = DataContractHelper.Clone(BackgroundDataViewModel.BackgroundData);
-            if (backgroundToBeSaved is ImageBackground)
-            {
-                ((ImageBackground)backgroundToBeSaved).ImageFileName = Guid.NewGuid().ToString();
-            }
+            var backgroundToBeSaved = BackgroundDataViewModel.BackgroundData.GetDeepCopy();
             SavedBackgrounds.Add(backgroundToBeSaved);
             SavedBackgrounds = new List<BackgroundBase>(SavedBackgrounds);
         }
@@ -177,7 +173,7 @@ namespace Scrawler.ViewModel
             var backgroundData = param as BackgroundBase;
             if (backgroundData != null)
             {
-                var newBackgroundData = DataContractHelper.Clone(backgroundData);
+                var newBackgroundData = backgroundData.GetDeepCopy();
                 if (newBackgroundData is SolidBackground)
                 {
                     _selectedType = BackgroundType.Solid;

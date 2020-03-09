@@ -1,20 +1,15 @@
 ﻿using System;
 using Scrawler.Data.Data;
-using System.Windows.Input;
-using Windows.Storage;
 using Scrawler.Data.Serialization;
-using Utils.Commands;
 using Utils.ViewModel;
 using System.Threading.Tasks;
 using Windows.Storage.Pickers;
-using Windows.UI;
-using Scrawler.ViewModel;
 using Scrawler.View;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Microsoft.Graphics.Canvas;
 
 namespace Scrawler.ViewModel
 {
@@ -152,7 +147,7 @@ namespace Scrawler.ViewModel
 
                 CurrentNotebook.Defaults = new Defaults()
                 {
-                    Background = options.BackgroundDataViewModel.BackgroundData,
+                    Background = options.BackgroundDataViewModel.BackgroundData.GetDeepCopy(),
                     PageWidth = options.Width,
                     PageHeight = options.Height
                 };

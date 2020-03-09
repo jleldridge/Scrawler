@@ -29,6 +29,15 @@ namespace Scrawler.Data.Data
         public float PageScale { get; set; }
 
         public CanvasBitmap Image { get; set; }
+
+        public override BackgroundBase GetDeepCopy()
+        {
+            var copy = new ImageBackground();
+            copy.BackgroundColor = BackgroundColor;
+            copy.ImageFileName = Guid.NewGuid().ToString();
+            copy.Image = CanvasBitmap.CreateFromDirect3D11Surface(CanvasDevice.GetSharedDevice(), Image);
+            return copy;
+        }
     }
 
     public enum ImageScaleSetting

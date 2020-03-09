@@ -6,7 +6,7 @@ using Windows.UI;
 namespace Scrawler.Data.Data
 {
     [DataContract]
-    public class Notebook : IEquatable<Notebook>
+    public class Notebook : IEquatable<Notebook>, IDeepCopiable<Notebook>
     {
         public Notebook(string name)
         {
@@ -65,6 +65,31 @@ namespace Scrawler.Data.Data
         {
             return other.Guid.Equals(Guid) 
                 && other.Name.Equals(Name);
+        }
+
+        public Notebook GetDeepCopy()
+        {
+            var copy = new Notebook(Name);
+
+            foreach (var page in Pages)
+            {
+                copy.Pages.Add(page.GetDeepCopy());
+            }
+
+            foreach (var background in SavedPageBackgrounds)
+            {
+                copy.SavedPageBackgrounds.Add(background.GetDeepCopy());
+            }
+
+            copy.SavedColors.Clear();
+            foreach (var color in SavedColors)
+            {
+                copy.SavedColors.Add(color);
+            }
+
+            copy.Defaults = Defaults.GetDeepCopy();
+
+            return copy;
         }
     }
 }
