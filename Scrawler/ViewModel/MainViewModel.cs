@@ -9,13 +9,15 @@ using Windows.UI.Xaml.Controls;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Microsoft.Graphics.Canvas;
+using Utils.Commands;
+using System.Windows.Input;
 
 namespace Scrawler.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
         private List<SplitMenuCommandViewModel> _menuCommands;
+        private ICommand _zoomOutCommand, _zoomInCommand;
         private NotebookViewModel _currentNotebook;
         private bool _isSaving, _menuExpanded;
 
@@ -69,6 +71,16 @@ namespace Scrawler.ViewModel
         public List<SplitMenuCommandViewModel> MenuCommands
         {
             get { return _menuCommands; }
+        }
+
+        public ICommand ZoomInCommand
+        {
+            get { return _zoomInCommand ?? (_zoomInCommand = new RelayCommand(_ => ZoomIn())); }
+        }
+
+        public ICommand ZoomOutCommand
+        {
+            get { return _zoomOutCommand ?? (_zoomOutCommand = new RelayCommand(_ => ZoomOut())); }
         }
 
         private async Task CreatePageImage()
