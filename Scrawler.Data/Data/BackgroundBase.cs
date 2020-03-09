@@ -8,7 +8,7 @@ namespace Scrawler.Data.Data
     [KnownType(typeof(SolidBackground))]
     [KnownType(typeof(ImageBackground))]
     [KnownType(typeof(GridLineBackground))]
-    public abstract class BackgroundBase : IDeepCopiable<BackgroundBase>
+    public abstract class BackgroundBase : IDeepCopyable<BackgroundBase>
     {
         public BackgroundBase()
         {

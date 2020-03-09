@@ -6,7 +6,7 @@ using Windows.UI;
 namespace Scrawler.Data.Data
 {
     [DataContract]
-    public class Notebook : IEquatable<Notebook>, IDeepCopiable<Notebook>
+    public class Notebook : IEquatable<Notebook>, IDeepCopyable<Notebook>
     {
         public Notebook(string name)
         {

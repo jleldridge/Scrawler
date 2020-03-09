@@ -8,7 +8,7 @@ using Scrawler.Data.Serialization;
 namespace Scrawler.Data.Data
 {
     [DataContract]
-    public class Page : IEquatable<Page>, IDeepCopiable<Page>
+    public class Page : IEquatable<Page>, IDeepCopyable<Page>
     {
         internal Page(Defaults defaults)
         {

@@ -107,7 +107,7 @@
     <Compile Include="Data\BackgroundBase.cs" />
     <Compile Include="Data\Defaults.cs" />
     <Compile Include="Data\GridLineBackground.cs" />
-    <Compile Include="Data\IDeepCopiable.cs" />
+    <Compile Include="Data\IDeepCopyable.cs" />
     <Compile Include="Data\ImageBackground.cs" />
     <Compile Include="Data\Notebook.cs" />
     <Compile Include="Data\Page.cs" />

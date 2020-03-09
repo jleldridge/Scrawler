@@ -3,7 +3,7 @@
 namespace Scrawler.Data.Data
 {
     [DataContract]
-    public class Defaults : IDeepCopiable<Defaults>
+    public class Defaults : IDeepCopyable<Defaults>
     {
         public Defaults()
         {

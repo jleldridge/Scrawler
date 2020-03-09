@@ -2,7 +2,7 @@
 
 namespace Scrawler.Data.Data
 {
-    public interface IDeepCopiable<T>
+    public interface IDeepCopyable<T>
     {
         T GetDeepCopy();
     }
