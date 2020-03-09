@@ -22,12 +22,6 @@ namespace Scrawler.Data.Data
         [DataMember]
         public string ImageFileName { get; set; }
 
-        [DataMember]
-        public ImageScaleSetting ImageScaleSetting { get; set; }
-
-        [DataMember]
-        public float PageScale { get; set; }
-
         public CanvasBitmap Image { get; set; }
 
         public override BackgroundBase GetDeepCopy()
@@ -36,6 +30,7 @@ namespace Scrawler.Data.Data
             copy.BackgroundColor = BackgroundColor;
             copy.ImageFileName = Guid.NewGuid().ToString();
             copy.Image = CanvasBitmap.CreateFromDirect3D11Surface(CanvasDevice.GetSharedDevice(), Image);
+            
             return copy;
         }
     }

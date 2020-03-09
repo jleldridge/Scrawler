@@ -37,5 +37,14 @@ namespace Scrawler.View
                 viewModel.LoadImageForBackground();
             }
         }
+
+        private void SetPageToImageSizeButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            var viewModel = DataContext as PageOptionsViewModel;
+            if (viewModel != null)
+            {
+                viewModel.SetPageToImageSize();
+            }
+        }
     }
 }

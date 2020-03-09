@@ -43,7 +43,6 @@ namespace Scrawler.ViewModel
                 _backgroundDataViewModel = new ImageBackgroundViewModel(backgroundData as ImageBackground);
                 _selectedType = BackgroundType.Image;
             }
-            _backgroundDataViewModel.PropertyChanged += Background_PropertyChanged;
         }
 
         public List<BackgroundType> BackgroundTypes
@@ -90,34 +89,8 @@ namespace Scrawler.ViewModel
             get { return _backgroundDataViewModel; }
             set
             {
-                if (_backgroundDataViewModel != value)
-                {
-                    value.PropertyChanged += Background_PropertyChanged;
-                    if (_backgroundDataViewModel != null)
-                    {
-                        _backgroundDataViewModel.PropertyChanged -= Background_PropertyChanged;
-                    }
-                }
                 _backgroundDataViewModel = value;
                 OnPropertyChanged();
-            }
-        }
-
-        private void Background_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName) {
-                case "PageScale":
-                case "Image":
-                case "ScalePageToImage":
-                    var imageBackground = BackgroundDataViewModel as ImageBackgroundViewModel;
-                    if (imageBackground != null 
-                        && imageBackground.ScalePageToImage 
-                        && imageBackground.Image != null)
-                    {
-                        Width = imageBackground.Image.SizeInPixels.Width * imageBackground.PageScale;
-                        Height = imageBackground.Image.SizeInPixels.Height * imageBackground.PageScale;
-                    }
-                    break;
             }
         }
 
@@ -214,6 +187,16 @@ namespace Scrawler.ViewModel
                 OnPropertyChanged("SelectedType");
 
                 BackgroundDataViewModel = new ImageBackgroundViewModel(backgroundData);
+            }
+        }
+
+        public void SetPageToImageSize()
+        {
+            var imageBackground = BackgroundDataViewModel.BackgroundData as ImageBackground;
+            if (imageBackground != null)
+            {
+                Width = imageBackground.Image.SizeInPixels.Width;
+                Height = imageBackground.Image.SizeInPixels.Height;
             }
         }
     }
