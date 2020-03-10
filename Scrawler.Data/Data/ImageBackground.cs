@@ -28,8 +28,11 @@ namespace Scrawler.Data.Data
         {
             var copy = new ImageBackground();
             copy.BackgroundColor = BackgroundColor;
-            copy.ImageFileName = Guid.NewGuid().ToString();
-            copy.Image = CanvasBitmap.CreateFromDirect3D11Surface(CanvasDevice.GetSharedDevice(), Image);
+            // for ImageBackgrounds the image itself should be
+            // immutable, so we can reuse the file and in-memory
+            // bitmap to avoid memory or file-size bloat.
+            copy.ImageFileName = ImageFileName;
+            copy.Image = Image;
             
             return copy;
         }
