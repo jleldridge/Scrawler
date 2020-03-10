@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Graphics.Canvas;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Windows.UI;
@@ -17,6 +18,7 @@ namespace Scrawler.Data.Data
             SavedColors = new List<Color>() { new Color() { A = 255 } };
             SavedPageBackgrounds = new List<BackgroundBase>();
             Defaults = new Defaults();
+            BackgroundImages = new Dictionary<string, CanvasBitmap>();
         }
 
         [OnDeserialized]
@@ -34,6 +36,8 @@ namespace Scrawler.Data.Data
             {
                 Defaults = new Defaults();
             }
+
+            BackgroundImages = new Dictionary<string, CanvasBitmap>();
         }
 
         [DataMember]
@@ -53,6 +57,8 @@ namespace Scrawler.Data.Data
 
         [DataMember]
         public Defaults Defaults { get; set; }
+
+        public Dictionary<string, CanvasBitmap> BackgroundImages;
 
         public Page AddPage()
         {

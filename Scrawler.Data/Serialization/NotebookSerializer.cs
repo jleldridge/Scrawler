@@ -21,51 +21,7 @@ namespace Scrawler.Data.Serialization
 
         public static SemaphoreSlim NotebookFileSemaphore = new SemaphoreSlim(1,1);
 
-        #region Public Methods
-
-        public static async Task<Notebook> LoadNotebookArchive(StorageFile file)
-        {
-            await NotebookFileSemaphore.WaitAsync();
-            try
-            {
-                using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
-                {
-                    using (var archive = new ZipArchive(stream.AsStream(), ZipArchiveMode.Update))
-                    {
-                        var notebookFile = archive.GetEntry(NotebookFileName);
-                        var notebook = DeserializeNotebook(notebookFile);
-
-                        foreach (var page in notebook.Pages)
-                        {
-                            await LoadPage(page, archive);
-                        }
-
-                        foreach (var background in notebook.SavedPageBackgrounds)
-                        {
-                            if (background is ImageBackground)
-                            {
-                                var imageBackground = (ImageBackground)background;
-                                imageBackground.Image = await DeserializeBackgroundImage(
-                                    archive.GetEntry(BackgroundMetadataSubfolderName + "/" + imageBackground.ImageFileName));
-                            }
-                        }
-
-                        if (notebook.Defaults.Background is ImageBackground)
-                        {
-                            var imageBackground = (ImageBackground)notebook.Defaults.Background;
-                            imageBackground.Image = await DeserializeBackgroundImage(
-                                    archive.GetEntry(BackgroundMetadataSubfolderName + "/" + imageBackground.ImageFileName));
-                        }
-
-                        return notebook;
-                    }
-                }
-            }
-            finally
-            {
-                NotebookFileSemaphore.Release();
-            }
-        }
+        #region Save Notebook
 
         public static async Task SaveNotebook(Notebook notebook, StorageFile file)
         {
@@ -91,16 +47,14 @@ namespace Scrawler.Data.Serialization
                             if (background is ImageBackground)
                             {
                                 var imageBackground = (ImageBackground)background;
-                                var backgroundImageFile = archive.CreateEntry(BackgroundMetadataSubfolderName + "/" + imageBackground.ImageFileName);
-                                await SerializeBackgroundImage(imageBackground.Image, backgroundImageFile);
+                                await SerializeBackgroundImage(imageBackground, archive);
                             }
                         }
 
                         if (notebook.Defaults.Background is ImageBackground)
                         {
                             var imageBackground = (ImageBackground)notebook.Defaults.Background;
-                            var backgroundImageFile = archive.CreateEntry(BackgroundMetadataSubfolderName + "/" + imageBackground.ImageFileName);
-                            await SerializeBackgroundImage(imageBackground.Image, backgroundImageFile);
+                            await SerializeBackgroundImage(imageBackground, archive);
                         }
                     }
                 }
@@ -119,15 +73,98 @@ namespace Scrawler.Data.Serialization
             if (page.Background is ImageBackground)
             {
                 var imageBackground = page.Background as ImageBackground;
-                if (imageBackground.Image != null)
+                await SerializeBackgroundImage(imageBackground, archive);
+            }
+        }
+
+        private static async Task SerializeNotebook(Notebook notebook, ZipArchiveEntry file)
+        {
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Notebook));
+
+            var stream = file.Open();
+            serializer.WriteObject(stream, notebook);
+            await stream.FlushAsync();
+            stream.Dispose();
+        }
+
+        private static async Task SerializeInkCanvas(InkStrokeContainer strokeContainer, ZipArchiveEntry file)
+        {
+            if (strokeContainer.GetStrokes().Any())
+            {
+                // Open a file stream for writing.
+                using (var outputStream = file.Open().AsOutputStream())
                 {
-                    var backgroundImageFile = archive.CreateEntry(BackgroundMetadataSubfolderName + "/" + imageBackground.ImageFileName);
-                    await SerializeBackgroundImage(imageBackground.Image, backgroundImageFile);
+                    // Write the ink strokes to the output stream.
+                    await strokeContainer.SaveAsync(outputStream);
+                    await outputStream.FlushAsync();
                 }
             }
         }
 
-        private static async Task LoadPage(Page page, ZipArchive archive)
+        private static async Task SerializeBackgroundImage(ImageBackground background, ZipArchive archive)
+        {
+            var fileName = BackgroundMetadataSubfolderName + "/" + background.ImageFileName;
+            if (background.Image == null || archive.GetEntry(fileName) != null)
+            {
+                return;
+            }
+
+            var backgroundImageFile = archive.CreateEntry(fileName);
+
+            // Open a file stream for writing.
+            using (var stream = backgroundImageFile.Open().AsRandomAccessStream())
+            {
+                await background.Image.SaveAsync(stream, CanvasBitmapFileFormat.Png);
+            }
+        }
+
+        #endregion
+
+        #region Load Notebook
+
+        public static async Task<Notebook> LoadNotebookArchive(StorageFile file)
+        {
+            await NotebookFileSemaphore.WaitAsync();
+            try
+            {
+                using (var stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    using (var archive = new ZipArchive(stream.AsStream(), ZipArchiveMode.Update))
+                    {
+                        var notebookFile = archive.GetEntry(NotebookFileName);
+                        var notebook = DeserializeNotebook(notebookFile);
+
+                        foreach (var page in notebook.Pages)
+                        {
+                            await LoadPage(notebook, page, archive);
+                        }
+
+                        foreach (var background in notebook.SavedPageBackgrounds)
+                        {
+                            if (background is ImageBackground)
+                            {
+                                var imageBackground = (ImageBackground)background;
+                                imageBackground.Image = await DeserializeBackgroundImage(notebook, imageBackground, archive);
+                            }
+                        }
+
+                        if (notebook.Defaults.Background is ImageBackground)
+                        {
+                            var imageBackground = (ImageBackground)notebook.Defaults.Background;
+                            imageBackground.Image = await DeserializeBackgroundImage(notebook, imageBackground, archive);
+                        }
+
+                        return notebook;
+                    }
+                }
+            }
+            finally
+            {
+                NotebookFileSemaphore.Release();
+            }
+        }
+
+        private static async Task LoadPage(Notebook notebook, Page page, ZipArchive archive)
         {
             var inkFile = archive.GetEntry(InkMetadataSubfolderName + "/" + page.InkFileName);
             if (inkFile != null)
@@ -138,26 +175,8 @@ namespace Scrawler.Data.Serialization
             if (page.Background is ImageBackground)
             {
                 var imageBackground = page.Background as ImageBackground;
-                var backgroundFile = archive.GetEntry(BackgroundMetadataSubfolderName + "/" + imageBackground.ImageFileName);
-                if (backgroundFile != null)
-                {
-                    imageBackground.Image = await DeserializeBackgroundImage(backgroundFile);
-                }
+                imageBackground.Image = await DeserializeBackgroundImage(notebook, imageBackground, archive);
             }
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private static async Task SerializeNotebook(Notebook notebook, ZipArchiveEntry file)
-        {
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Notebook));
-
-            var stream = file.Open();
-            serializer.WriteObject(stream, notebook);
-            await stream.FlushAsync();
-            stream.Dispose();
         }
 
         private static Notebook DeserializeNotebook(ZipArchiveEntry file)
@@ -177,20 +196,6 @@ namespace Scrawler.Data.Serialization
             return notebook;
         }
 
-        private static async Task SerializeInkCanvas(InkStrokeContainer strokeContainer, ZipArchiveEntry file)
-        {
-            if (strokeContainer.GetStrokes().Any())
-            {    
-                // Open a file stream for writing.
-                using (var outputStream = file.Open().AsOutputStream())
-                {
-                    // Write the ink strokes to the output stream.
-                    await strokeContainer.SaveAsync(outputStream);
-                    await outputStream.FlushAsync();
-                }
-            }
-        }
-
         private static async Task DeserializeInkCanvas(ZipArchiveEntry file, InkStrokeContainer container)
         {
             // Open a file stream for reading.
@@ -204,27 +209,29 @@ namespace Scrawler.Data.Serialization
             }
         }
 
-        private static async Task SerializeBackgroundImage(CanvasBitmap background, ZipArchiveEntry file)
+        private static async Task<CanvasBitmap> DeserializeBackgroundImage(Notebook notebook, ImageBackground background, ZipArchive archive)
         {
-            // Open a file stream for writing.
-            using (var stream = file.Open().AsRandomAccessStream())
+            if (notebook.BackgroundImages.ContainsKey(background.ImageFileName))
             {
-                await background.SaveAsync(stream, CanvasBitmapFileFormat.Png);
+                return notebook.BackgroundImages[background.ImageFileName];
             }
-        }
+            var file = archive.GetEntry(BackgroundMetadataSubfolderName + "/" + background.ImageFileName);
+            if (file == null) return null;
 
-        private static async Task<CanvasBitmap> DeserializeBackgroundImage(ZipArchiveEntry file)
-        {
             using (var stream = file.Open().AsRandomAccessStream())
             {
                 if (stream.Size > 0)
                 {
-                    return await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), stream);
+                    var image = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), stream);
+                    notebook.BackgroundImages[background.ImageFileName] = image;
+                    return image;
                 }
             }
 
             return null;
         }
+
+        #endregion
 
         private static void ClearArchive(ZipArchive archive)
         {
@@ -234,7 +241,5 @@ namespace Scrawler.Data.Serialization
                 entry.Delete();
             }
         }
-
-        #endregion
     }
 }
